@@ -1,0 +1,16 @@
+{
+  "background_color": "#131313",
+  "description": "Gamedevjs 2024",
+  "display": "fullscreen",
+  "icons": [
+    {
+      "src": "logo.png",
+      "sizes": "3586x3586",
+      "type": "image/png"
+    }
+  ],
+  "name": "Gamedevjs 2024",
+  "short_name": "Gamedevjs 2024",
+  "start_url": "index.html",
+  "orientation": "portrait-primary"
+}

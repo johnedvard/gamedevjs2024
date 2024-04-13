@@ -1,0 +1,38 @@
+{
+  "name": "gamedevjs2024",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "start": "vite",
+    "build": "tsc && vite build --config vite.config.ts",
+    "lint": "eslint ."
+  },
+  "main": "./dist/gamedevjs2024.umd.cjs",
+  "module": "./dist/gamedevjs2024.js",
+  "exports": {
+    ".": {
+      "import": "./dist/gamedevjs2024.js",
+      "require": "./dist/gamedevjs2024.umd.cjs"
+    }
+  },
+  "author": "johnedvard",
+  "dependencies": {
+    "@esotericsoftware/spine-phaser": "^4.2.35",
+    "lodash": "^4.17.21",
+    "phaser": "^3.80.1",
+    "svg-to-phaser-path": "^0.3.0",
+    "typescript-eslint": "^7.6.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "@types/lodash": "^4.17.0",
+    "@types/node": "^20.12.7",
+    "eslint": "^8.56.0",
+    "typescript": "^5.4.5",
+    "vite": "^4.3.7"
+  }
+}

@@ -3,9 +3,8 @@ import { Bone } from '@esotericsoftware/spine-phaser';
 import { DepthGroup } from '~/enums/DepthGroup';
 import { SceneKey } from '~/enums/SceneKey';
 
-export const GAME_WIDTH = 590;
-export const GAME_HEIGHT = 844;
-export const FRAMES = 3;
+export const GAME_WIDTH = 750;
+export const GAME_HEIGHT = 1334;
 
 let backgroundGrapics;
 

@@ -1,3 +1,3 @@
 export enum Web3Event {
-  MODAL = 'web3Modal',
+  MODAL = "web3Modal",
 }

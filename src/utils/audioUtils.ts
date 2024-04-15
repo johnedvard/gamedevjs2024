@@ -1,1 +1,1 @@
-export function destroyMusicAndSfx(){}
+export function destroyMusicAndSfx() {}

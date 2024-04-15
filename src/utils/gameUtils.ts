@@ -1,7 +1,7 @@
-import { Scene } from 'phaser';
-import { Bone } from '@esotericsoftware/spine-phaser';
-import { DepthGroup } from '~/enums/DepthGroup';
-import { SceneKey } from '~/enums/SceneKey';
+import { Scene } from "phaser";
+import { Bone } from "@esotericsoftware/spine-phaser";
+import { DepthGroup } from "~/enums/DepthGroup";
+import { SceneKey } from "~/enums/SceneKey";
 
 export const GAME_WIDTH = 750;
 export const GAME_HEIGHT = 1334;
@@ -9,20 +9,28 @@ export const GAME_HEIGHT = 1334;
 let backgroundGrapics;
 
 export const getCanvas = (): HTMLCanvasElement => {
-  return document.querySelector('#my-game');
+  return document.querySelector("#my-game");
 };
 
 export const getCenter = (scene: Scene): Phaser.Math.Vector2 => {
-  return new Phaser.Math.Vector2(scene.cameras.main.centerX, scene.cameras.main.centerY);
+  return new Phaser.Math.Vector2(
+    scene.cameras.main.centerX,
+    scene.cameras.main.centerY,
+  );
 };
 
 export const updateAim = (aimBone: Bone, pos: Phaser.Math.Vector2) => {
   if (!aimBone) return;
-  aimBone.rotation = Phaser.Math.RadToDeg(Phaser.Math.Angle.BetweenPoints({ x: aimBone.x, y: aimBone.y }, pos)) + 65;
+  aimBone.rotation =
+    Phaser.Math.RadToDeg(
+      Phaser.Math.Angle.BetweenPoints({ x: aimBone.x, y: aimBone.y }, pos),
+    ) + 65;
 };
 
 export function getSquashedAddress(address: string) {
-  return address.substring(0, 5) + '...' + address.substring(address.length - 4);
+  return (
+    address.substring(0, 5) + "..." + address.substring(address.length - 4)
+  );
 }
 
 export function getFullWidth(scene: Scene) {
@@ -45,9 +53,14 @@ export function centerScene(scene: Scene) {
 export function isPointOutsideCircle(
   point: Phaser.Math.Vector2,
   circleCenter: Phaser.Math.Vector2,
-  circleRadius: number
+  circleRadius: number,
 ) {
-  const distance = Phaser.Math.Distance.Between(point.x, point.y, circleCenter.x, circleCenter.y);
+  const distance = Phaser.Math.Distance.Between(
+    point.x,
+    point.y,
+    circleCenter.x,
+    circleCenter.y,
+  );
 
   return distance > circleRadius;
 }
@@ -56,7 +69,12 @@ export const createBackground = (scene: Scene) => {
   if (backgroundGrapics) backgroundGrapics.clear();
   backgroundGrapics = scene.add.graphics().setDepth(DepthGroup.gameBackground);
   backgroundGrapics.fillGradientStyle(0x020202, 0x202020, 0x303030, 0x030303);
-  backgroundGrapics.fillRect(-window.innerWidth, -window.innerHeight, window.innerWidth * 4, window.innerHeight * 3);
+  backgroundGrapics.fillRect(
+    -window.innerWidth,
+    -window.innerHeight,
+    window.innerWidth * 4,
+    window.innerHeight * 3,
+  );
 };
 
 // TODO (john) convert to a subscription that can be cancelled instead
@@ -81,7 +99,7 @@ export function getSeconds(time) {
   const seconds = totalSeconds - 60 * minutes;
   const sec10 = Math.floor(seconds / 10);
   const sec = seconds % 10;
-  return `${sec10 > 0 ? sec10 : ''}${sec}`;
+  return `${sec10 > 0 ? sec10 : ""}${sec}`;
 }
 
 export function isWideScreen() {

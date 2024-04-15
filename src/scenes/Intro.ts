@@ -1,5 +1,5 @@
-import { Input } from 'phaser';
-import { SceneKey } from '~/enums/SceneKey';
+import { Input } from "phaser";
+import { SceneKey } from "~/enums/SceneKey";
 
 export class Intro extends Phaser.Scene {
   isIntroComplete = false;
@@ -21,11 +21,14 @@ export class Intro extends Phaser.Scene {
   }
 
   listenForInput() {
-    this.input.gamepad.on('down', (_pad: Input.Gamepad.Gamepad, button: Input.Gamepad.Button) => {
-      if (this.isStartMainMenu) return;
-      this.startMainMenu();
-    });
-    this.input.keyboard.on('keydown', (evt: KeyboardEvent) => {
+    this.input.gamepad.on(
+      "down",
+      (_pad: Input.Gamepad.Gamepad, button: Input.Gamepad.Button) => {
+        if (this.isStartMainMenu) return;
+        this.startMainMenu();
+      },
+    );
+    this.input.keyboard.on("keydown", (evt: KeyboardEvent) => {
       if (this.isStartMainMenu) return;
       this.startMainMenu();
     });

@@ -1,8 +1,8 @@
-import { WhoopHoop } from '~/Game';
+import { WhoopHoop } from "~/Game";
 
 const init = () => {
   new WhoopHoop();
-  postMessage({ payload: 'removeLoading' }, '*');
+  postMessage({ payload: "removeLoading" }, "*");
 };
 
 init();

@@ -1,21 +1,21 @@
-import { Game } from 'phaser';
-import { SpinePlugin } from '@esotericsoftware/spine-phaser';
+import { Game } from "phaser";
+import { SpinePlugin } from "@esotericsoftware/spine-phaser";
 
-import { MatterGravityFixPlugin } from '~/plugins/MatterGravityFixPlugin';
-import { MatterFixedStepPlugin } from '~/plugins/MatterFixStepPlugin';
+import { MatterGravityFixPlugin } from "~/plugins/MatterGravityFixPlugin";
+import { MatterFixedStepPlugin } from "~/plugins/MatterFixStepPlugin";
 
-import { setGame } from '~/gameManager';
-import { SceneKey } from '~/enums/SceneKey';
-import { GameEvent } from '~/enums/GameEvent';
-import { GAME_HEIGHT, GAME_WIDTH, getCanvas } from '~/utils/gameUtils';
-import { destroyMusicAndSfx } from '~/utils/audioUtils';
-import { emit } from '~/utils/eventEmitterUtils';
-import { Intro } from '~/scenes/Intro';
-import { MainMenu } from '~/scenes/MainMenu';
-import { UserInterface } from '~/scenes/UserInterface';
-import { Boot } from '~/scenes/Boot';
-import { Level } from '~/scenes/Level';
-import { GameOver } from '~/scenes/GameOver';
+import { setGame } from "~/gameManager";
+import { SceneKey } from "~/enums/SceneKey";
+import { GameEvent } from "~/enums/GameEvent";
+import { GAME_HEIGHT, GAME_WIDTH, getCanvas } from "~/utils/gameUtils";
+import { destroyMusicAndSfx } from "~/utils/audioUtils";
+import { emit } from "~/utils/eventEmitterUtils";
+import { Intro } from "~/scenes/Intro";
+import { MainMenu } from "~/scenes/MainMenu";
+import { UserInterface } from "~/scenes/UserInterface";
+import { Boot } from "~/scenes/Boot";
+import { Level } from "~/scenes/Level";
+import { GameOver } from "~/scenes/GameOver";
 
 const addScenes = (game: Game) => {
   game.scene.add(SceneKey.Intro, Intro);
@@ -38,9 +38,9 @@ export class WhoopHoop {
       canvas: getCanvas(),
       width: GAME_WIDTH, // smart phone vertical
       height: GAME_HEIGHT,
-      backgroundColor: '#131313',
+      backgroundColor: "#131313",
       physics: {
-        default: 'matter',
+        default: "matter",
         matter: {
           debug: true, // TODO (johnedvard) remove debug if production
           gravity: { x: 0, y: 0 },
@@ -52,15 +52,15 @@ export class WhoopHoop {
       },
       plugins: {
         scene: [
-          { key: 'spine.SpinePlugin', plugin: SpinePlugin, mapping: 'spine' },
+          { key: "spine.SpinePlugin", plugin: SpinePlugin, mapping: "spine" },
           {
-            key: 'MatterGravityFixPlugin',
+            key: "MatterGravityFixPlugin",
             plugin: MatterGravityFixPlugin,
-            mapping: 'matterGravityFix',
+            mapping: "matterGravityFix",
             start: true,
           },
           {
-            key: 'MatterFixedStepPlugin',
+            key: "MatterFixedStepPlugin",
             plugin: MatterFixedStepPlugin,
             start: true,
           },
@@ -76,12 +76,12 @@ export class WhoopHoop {
     this.preventScroll();
   }
   preventScroll() {
-    window.addEventListener('wheel', (event) => event.preventDefault(), {
+    window.addEventListener("wheel", (event) => event.preventDefault(), {
       passive: false,
     });
 
-    window.addEventListener('keydown', (event) => {
-      if (['ArrowUp', 'ArrowDown', ' '].includes(event.key)) {
+    window.addEventListener("keydown", (event) => {
+      if (["ArrowUp", "ArrowDown", " "].includes(event.key)) {
         event.preventDefault();
       }
     });

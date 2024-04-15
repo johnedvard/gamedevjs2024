@@ -1,10 +1,8 @@
-import { SceneKey } from '~/enums/SceneKey';
-
+import { SceneKey } from "~/enums/SceneKey";
 
 export class Boot extends Phaser.Scene {
-
   preload(): void {
-    this.load.setPath('assets/gamedevjs2024');
+    this.load.setPath("assets/gamedevjs2024");
     this.loadSvgs();
     this.loadSounds();
     this.preloadSpineAnimations();

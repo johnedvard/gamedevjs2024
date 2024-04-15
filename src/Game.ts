@@ -26,7 +26,7 @@ const addScenes = (game: Game) => {
   game.scene.add(SceneKey.Boot, Boot, true);
 };
 
-export class WhoopHoop {
+export class MyGame {
   game: Game;
   constructor() {
     this.initGame();

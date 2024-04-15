@@ -1,0 +1,13 @@
+player.png
+size:54,63
+filter:Linear,Linear
+pma:true
+player/head
+bounds:2,10,51,50
+rotate:90
+player/left-eye-idle
+bounds:2,2,6,17
+rotate:90
+player/right-eye-idle
+bounds:21,2,6,17
+rotate:90

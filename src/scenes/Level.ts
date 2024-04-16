@@ -8,9 +8,12 @@ import { handleDebugInput } from '~/debugInput';
 
 export class Level extends Phaser.Scene {
   levelState: LevelState;
+  player: Player;
+
   constructor() {
     super(SceneKey.Level);
   }
+
   preload(): void {
     loadLevel(this, 'level')
       .pipe(take(1))
@@ -21,8 +24,10 @@ export class Level extends Phaser.Scene {
   }
 
   create(): void {
-    new Player(this, { startPos: this.levelState.startPos });
+    this.player = new Player(this, { startPos: this.levelState.startPos });
     handleDebugInput(this);
   }
-  update(): void {}
+  update(): void {
+    this.player?.update();
+  }
 }

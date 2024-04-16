@@ -9,6 +9,13 @@ export class Intro extends Phaser.Scene {
     super(SceneKey.Intro);
   }
 
+  preload(): void {}
+
+  create(): void {
+    this.startIntro();
+    this.addEventListeners();
+  }
+
   async startIntro(): Promise<void> {
     this.isIntroComplete = true;
   }
@@ -16,29 +23,22 @@ export class Intro extends Phaser.Scene {
   async startMainMenu() {
     this.isStartMainMenu = true;
     setTimeout(() => {
+      this.removeEventListeners();
       this.scene.start(SceneKey.MainMenu);
     }, 300);
   }
 
-  listenForInput() {
-    this.input.gamepad.on(
-      "down",
-      (_pad: Input.Gamepad.Gamepad, button: Input.Gamepad.Button) => {
-        if (this.isStartMainMenu) return;
-        this.startMainMenu();
-      },
-    );
-    this.input.keyboard.on("keydown", (evt: KeyboardEvent) => {
-      if (this.isStartMainMenu) return;
-      this.startMainMenu();
-    });
+  onPlayButtonClick = () => {
+    this.scene.start(SceneKey.Level, { freeplay: false });
+    this.input.off('pointerdown', this.onPlayButtonClick);
+    
+  };
+
+  addEventListeners() {
+    this.input.on('pointerdown', this.onPlayButtonClick);
   }
-
-  preload(): void {}
-
-  create(): void {
-    this.startIntro();
-    this.listenForInput();
+  removeEventListeners(){
+    this.input.off('pointerdown', this.onPlayButtonClick);
   }
 
   update(time: number, delta: number): void {
@@ -46,4 +46,5 @@ export class Intro extends Phaser.Scene {
     } else if (this.isIntroComplete) {
     }
   }
+
 }

@@ -42,12 +42,12 @@ export function getFullHeight(scene: Scene) {
 }
 
 export function centerScene(scene: Scene) {
-  scene.cameras.main.setBounds(
-    -getFullWidth(scene) / 2 + GAME_WIDTH / 2,
-    -getFullHeight(scene) / 2 + GAME_HEIGHT / 2,
-    getFullWidth(scene),
-    getFullHeight(scene),
-  ); // Covers the entire game world
+  // scene.cameras.main.setBounds(
+  //   -getFullWidth(scene) / 2 + GAME_WIDTH / 2,
+  //   -getFullHeight(scene) / 2 + GAME_HEIGHT / 2,
+  //   getFullWidth(scene),
+  //   getFullHeight(scene),
+  // ); // Covers the entire game world
 }
 
 export function isPointOutsideCircle(
@@ -68,7 +68,7 @@ export const createBackground = (scene: Scene) => {
   if (scene && scene.scene.key === SceneKey.GameOver) return;
   if (backgroundGrapics) backgroundGrapics.clear();
   backgroundGrapics = scene.add.graphics().setDepth(DepthGroup.gameBackground);
-  backgroundGrapics.fillGradientStyle(0x020202, 0x202020, 0x303030, 0x030303);
+  backgroundGrapics.fillGradientStyle(0xaa0202, 0x20aa20, 0x303030, 0x0303aa);
   backgroundGrapics.fillRect(
     -window.innerWidth,
     -window.innerHeight,

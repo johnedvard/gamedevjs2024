@@ -33,13 +33,14 @@ export const getHeightFromSvgRect = (svgEl: SVGElement): number => {
 export const createPathsFromSvg = (svgDoc: Document): SvgPath[] => {
   const svgPaths: SvgPath[] = [];
   const pathEls = svgDoc.querySelectorAll("path");
-
   pathEls.forEach((el) => {
     if (el.getAttribute("id") === "tree-area") return;
     const jsonPath = svgToPhaserPath(el.getAttribute("d"));
     const path = new Phaser.Curves.Path(jsonPath);
     const color: number = rgbTohex(el.style.stroke);
     const fill: number = rgbTohex(el.style.fill);
+    console.log('color, fill,', color, fill)
+    console.log('jsonPath', jsonPath)
     svgPaths.push({
       path,
       svgPathEl: el,

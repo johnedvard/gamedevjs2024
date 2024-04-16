@@ -1,5 +1,4 @@
 import { SceneKey } from "~/enums/SceneKey";
-import { Player } from "./Player";
 
 export class MainMenu extends Phaser.Scene {
   constructor() {
@@ -7,7 +6,6 @@ export class MainMenu extends Phaser.Scene {
   }
   preload(): void {}
   create(): void {
-    new Player(this);
   }
   update(): void {}
 }

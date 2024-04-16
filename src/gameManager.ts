@@ -46,7 +46,7 @@ function onFullscreenchange() {
   });
 }
 
-const debounceResize = debounce(onResize, 300);
+const debounceResize = debounce(onResize, 150);
 const debounceFullscreen = debounce(onFullscreenchange, 500);
 
 function onRemoveListeners() {

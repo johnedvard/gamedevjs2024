@@ -14,9 +14,9 @@ export class Boot extends Phaser.Scene {
 
   preloadSpineAnimations() {
     // Need to set path to "" to be able to load the packed images correctly
-    this.load.setPath("");    
-    this.load.spineBinary('player-skel', 'assets/gamedevjs2024/spine/player.skel');
-    this.load.spineAtlas('player-atlas', 'assets/gamedevjs2024/spine/player.atlas');
+    this.load.setPath("");
+    this.load.spineBinary("player-skel", "assets/gamedevjs2024/spine/player.skel");
+    this.load.spineAtlas("player-atlas", "assets/gamedevjs2024/spine/player.atlas");
   }
 
   loadUi(): void {

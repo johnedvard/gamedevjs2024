@@ -4,12 +4,7 @@ import { debounce } from "lodash";
 import { GameEvent } from "~/enums/GameEvent";
 import { GameState } from "~/types/GameState";
 import { emit, off, on } from "~/utils/eventEmitterUtils";
-import {
-  GAME_HEIGHT,
-  GAME_WIDTH,
-  centerScene,
-  createBackground,
-} from "~/utils/gameUtils";
+import { GAME_HEIGHT, GAME_WIDTH, centerScene, createBackground } from "~/utils/gameUtils";
 
 let state: GameState = "main-menu";
 let game: Game = null;
@@ -73,14 +68,11 @@ export function scaleGame() {
   // Scale the game as wide as it can be, and let the scenes center themslves properly.
   const gameRatio = GAME_WIDTH / GAME_HEIGHT;
   const windowRatio = window.innerWidth / window.innerHeight;
-  const scaleRatio = Math.min(
-    window.innerWidth / window.innerHeight,
-    window.innerHeight / window.innerWidth,
-  );
+  const scaleRatio = Math.min(window.innerWidth / window.innerHeight, window.innerHeight / window.innerWidth);
   if (windowRatio > gameRatio) {
     game.scale.setGameSize(
       Math.max(window.innerWidth * 2, GAME_HEIGHT * scaleRatio),
-      Math.max(window.innerHeight, GAME_HEIGHT),
+      Math.max(window.innerHeight, GAME_HEIGHT)
     );
   } else {
     game.scale.setGameSize(GAME_WIDTH, GAME_WIDTH / scaleRatio);

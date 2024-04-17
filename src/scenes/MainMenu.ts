@@ -5,7 +5,6 @@ export class MainMenu extends Phaser.Scene {
     super(SceneKey.MainMenu);
   }
   preload(): void {}
-  create(): void {
-  }
+  create(): void {}
   update(): void {}
 }

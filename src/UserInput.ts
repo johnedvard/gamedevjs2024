@@ -1,8 +1,8 @@
-import { Scene } from 'phaser';
+import { Scene } from "phaser";
 
-import { GameEvent } from '~/enums/GameEvent';
-import { emit } from '~/utils/eventEmitterUtils';
-import { Player } from '~/Player';
+import { GameEvent } from "~/enums/GameEvent";
+import { emit } from "~/utils/eventEmitterUtils";
+import { Player } from "~/Player";
 
 type Line = { from: Phaser.Math.Vector2; to: Phaser.Math.Vector2 };
 export class UserInput {
@@ -11,22 +11,25 @@ export class UserInput {
   pointerStartPos: { x: number; y: number };
   pointerEndPos: { x: number; y: number };
   graphics: Phaser.GameObjects.Graphics;
-  constructor(private scene: Scene, private player: Player) {
+  constructor(
+    private scene: Scene,
+    private player: Player
+  ) {
     this.listenForPointer();
     this.graphics = this.scene.add.graphics();
   }
 
   listenForPointer() {
-    this.scene.input.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
+    this.scene.input.on("pointerdown", (pointer: Phaser.Input.Pointer) => {
       this.pointerStartPos = { x: pointer.position.x, y: pointer.position.y };
       this.isHoldingDown = true;
       emit(GameEvent.startBallThrow, { pos: new Phaser.Math.Vector2(pointer.x, pointer.y) });
     });
-    this.scene.input.on('pointermove', (pointer: Phaser.Input.Pointer) => {
+    this.scene.input.on("pointermove", (pointer: Phaser.Input.Pointer) => {
       this.pointerEndPos = { x: pointer.position.x, y: pointer.position.y };
     });
 
-    this.scene.input.on('pointerup', () => {
+    this.scene.input.on("pointerup", () => {
       let diffX = 0;
       let diffY = 0;
       if (this.pointerEndPos && this.pointerStartPos) {

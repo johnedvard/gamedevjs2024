@@ -22,5 +22,5 @@ export default tseslint.config(
       ...prettierPlugin.configs.recommended.rules,
       ...eslintConfigPrettier.rules,
     },
-  },
+  }
 );

@@ -5,9 +5,7 @@ import svgToPhaserPath from "svg-to-phaser-path";
 import { BodyTypeLabel } from "~/enums/BodyTypeLabel";
 import { SvgPath } from "~/types/SvgPath";
 
-export const getPosFromSvgCircle = (
-  circleElement: SVGElement,
-): Phaser.Math.Vector2 => {
+export const getPosFromSvgCircle = (circleElement: SVGElement): Phaser.Math.Vector2 => {
   if (!circleElement) return new Phaser.Math.Vector2(0, 0);
   const cx = circleElement.getAttribute("cx");
   const cy = circleElement.getAttribute("cy");
@@ -39,8 +37,8 @@ export const createPathsFromSvg = (svgDoc: Document): SvgPath[] => {
     const path = new Phaser.Curves.Path(jsonPath);
     const color: number = rgbTohex(el.style.stroke);
     const fill: number = rgbTohex(el.style.fill);
-    console.log('color, fill,', color, fill)
-    console.log('jsonPath', jsonPath)
+    console.log("color, fill,", color, fill);
+    console.log("jsonPath", jsonPath);
     svgPaths.push({
       path,
       svgPathEl: el,
@@ -52,11 +50,8 @@ export const createPathsFromSvg = (svgDoc: Document): SvgPath[] => {
   return svgPaths;
 };
 
-export const createCollisionBoxesFromPaths = (
-  scene: Scene,
-  svgPaths: SvgPath[],
-) => {
-  const boxes:MatterJS.BodyType[] = [];
+export const createCollisionBoxesFromPaths = (scene: Scene, svgPaths: SvgPath[]) => {
+  const boxes: MatterJS.BodyType[] = [];
   svgPaths.forEach(({ path, svgPathEl }) => {
     if (!svgPathEl.getAttribute("serif:id")?.match("{collision}")) return;
     const allPoints = path.getPoints(20);
@@ -66,18 +61,13 @@ export const createCollisionBoxesFromPaths = (
       const p1 = allPoints[i + 1];
       const { l0, l1 } = getParallellLine(p0, p1, offset);
       boxes.push(
-        scene.matter.add.fromVertices(
-          (p1.x + p0.x) / 2,
-          (p1.y + p0.y) / 2,
-          [p0, l0, l1, p1],
-          {
-            isStatic: true,
-            label: BodyTypeLabel.collisionWall,
-            ignoreGravity: true,
-            friction: 0,
-            frictionStatic: 0,
-          },
-        ),
+        scene.matter.add.fromVertices((p1.x + p0.x) / 2, (p1.y + p0.y) / 2, [p0, l0, l1, p1], {
+          isStatic: true,
+          label: BodyTypeLabel.collisionWall,
+          ignoreGravity: true,
+          friction: 0,
+          frictionStatic: 0,
+        })
       );
     }
   });
@@ -93,10 +83,7 @@ export const createTextFromSvg = (scene: Scene, svgDoc: Document) => {
     const x = ~~el.getAttribute("x").split("px")[0];
     const y = ~~el.getAttribute("y").split("px")[0];
     const fontSize = ~~el.style.fontSize.split("px")[0];
-    const bitmapText = scene.add
-      .bitmapText(x, y, "atari", el.innerHTML, fontSize)
-      .setAlpha(1)
-      .setOrigin(0.2, 0.6);
+    const bitmapText = scene.add.bitmapText(x, y, "atari", el.innerHTML, fontSize).setAlpha(1).setOrigin(0.2, 0.6);
     bitmapText.setTint(0x000000);
   }
 };
@@ -109,7 +96,7 @@ export const rgbTohex = (rgb: string) => {
       .match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/)
       .slice(1)
       .map((n) => parseInt(n, 10).toString(16).padStart(2, "0"))
-      .join("")}`,
+      .join("")}`
   );
 };
 
@@ -126,7 +113,7 @@ export const getStrokeWidth = (svgPathEl: SVGElement) => {
 const getParallellLine = (
   p0: Phaser.Math.Vector2,
   p1: Phaser.Math.Vector2,
-  offset: number,
+  offset: number
 ): { l0: Phaser.Math.Vector2; l1: Phaser.Math.Vector2 } => {
   const [dx, dy] = [p0.x - p1.x, p0.y - p1.y];
   const scale = offset / (dx * dx + dy * dy) ** 0.5;

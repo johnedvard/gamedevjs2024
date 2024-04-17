@@ -1,15 +1,17 @@
-import { Bone, SpineGameObject } from '@esotericsoftware/spine-phaser';
 import { Scene } from 'phaser';
+import { Bone, SpineGameObject } from '@esotericsoftware/spine-phaser';
+
 import { Player } from '~/Player';
-import { DepthGroup } from './enums/DepthGroup';
-import { BodyTypeLabel } from './enums/BodyTypeLabel';
-import { CollideCallback } from './types/CollideCallback';
-import { emit } from 'process';
-import { GameEvent } from './enums/GameEvent';
+import { DepthGroup } from '~/enums/DepthGroup';
+import { BodyTypeLabel } from '~/enums/BodyTypeLabel';
+import { CollideCallback } from '~/types/CollideCallback';
+import { GameEvent } from '~/enums/GameEvent';
+import { emit } from '~/utils/eventEmitterUtils';
+
 type HoleOptions = {
   startPos: Phaser.Math.Vector2;
 };
-const CIRCLE_RADIUS = 5;
+const CIRCLE_RADIUS = 7;
 export class Hole {
   startPoint: Phaser.Math.Vector2;
   spineObject: SpineGameObject;
@@ -33,9 +35,8 @@ export class Hole {
 
   handleCollisions() {
     this.hole.onCollideCallback = ({ bodyA, bodyB }: CollideCallback) => {
-      if (bodyA.label === BodyTypeLabel.enemy) {
+      if (bodyA.label === BodyTypeLabel.enemy || bodyA.label === BodyTypeLabel.player) {
         // this.spineObject.skeleton.setSkinByName('dead');
-        console.log(' enemy inside holw');
         emit(GameEvent.inHole, { other: bodyA });
       }
     };

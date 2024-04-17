@@ -102,9 +102,9 @@ export class UserInput {
     if (distance > 10) {
       yScale = distance / maxDistance;
       if (yScale < 1) yScale = 1;
+      // this.player.spineObject.setScale(1,yScale)
       this.player.spineObject.setRotation(line2.from.clone().subtract(line2.to).angle() + Math.PI / 2);
     }
-    // this.player.spineObject.setScale(1,yScale)
 
     this.graphics.stroke();
   }

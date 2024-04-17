@@ -16,7 +16,6 @@ export class Enemy {
     private scene: Scene,
     enemyOptions: EnemyOptions
   ) {
-    console.log("init enemy", enemyOptions);
     this.startPoint = enemyOptions.startPos;
     this.init();
   }
@@ -29,6 +28,7 @@ export class Enemy {
   handleCollisions() {
     this.ball.onCollideCallback = ({ bodyA, bodyB }: CollideCallback) => {
       if (bodyA.label === BodyTypeLabel.player) {
+        // this.spineObject.skeleton.setSkinByName('dead');
         const trackEntry: TrackEntry = this.spineObject.animationState.setAnimation(0, "hit", false);
         trackEntry.animationEnd;
       }
@@ -38,6 +38,7 @@ export class Enemy {
     this.spineObject = this.scene.add
       .spine(this.startPoint.x, this.startPoint.y, "enemy-skel", "enemy-atlas")
       .setDepth(DepthGroup.player);
+    this.spineObject.skeleton.setSkinByName("regular");
     this.ball = this.scene.matter.add.circle(this.startPoint.x, this.startPoint.y, BALL_RADIUS, {
       label: BodyTypeLabel.enemy,
       frictionAir: 0.03,

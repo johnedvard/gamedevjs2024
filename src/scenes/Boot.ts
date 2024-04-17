@@ -19,6 +19,8 @@ export class Boot extends Phaser.Scene {
     this.load.spineAtlas("player-atlas", "assets/gamedevjs2024/spine/player.atlas");
     this.load.spineBinary("enemy-skel", "assets/gamedevjs2024/spine/enemy.skel");
     this.load.spineAtlas("enemy-atlas", "assets/gamedevjs2024/spine/enemy.atlas");
+    this.load.spineBinary("hole-skel", "assets/gamedevjs2024/spine/hole.skel");
+    this.load.spineAtlas("hole-atlas", "assets/gamedevjs2024/spine/hole.atlas");
   }
 
   loadUi(): void {

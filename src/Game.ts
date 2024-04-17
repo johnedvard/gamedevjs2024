@@ -34,7 +34,7 @@ export class MyGame {
 
   async initGame() {
     this.game = new Game({
-      type: Phaser.CANVAS,
+      type: Phaser.WEBGL,
       canvas: getCanvas(),
       width: GAME_WIDTH, // smart phone vertical
       height: GAME_HEIGHT,

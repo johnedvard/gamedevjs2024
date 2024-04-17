@@ -37,8 +37,6 @@ export const createPathsFromSvg = (svgDoc: Document): SvgPath[] => {
     const path = new Phaser.Curves.Path(jsonPath);
     const color: number = rgbTohex(el.style.stroke);
     const fill: number = rgbTohex(el.style.fill);
-    console.log("color, fill,", color, fill);
-    console.log("jsonPath", jsonPath);
     svgPaths.push({
       path,
       svgPathEl: el,
@@ -134,10 +132,19 @@ const getParallellLine = (
 export const getEnemiesFromSvg = (svgDoc: Document) => {
   const enemies = [];
   const enemiesEls = svgDoc.querySelectorAll("g[id^='Enemy']");
-  console.log(enemiesEls);
   enemiesEls.forEach((el) => {
     const enemyPos = getPosFromSvgCircle(el.querySelector(`circle[id^='enemyPos']`));
     enemies.push({ startPos: enemyPos });
   });
   return enemies;
+};
+
+export const getHolesFromSvg = (svgDoc: Document) => {
+  const holes = [];
+  const holesEl = svgDoc.querySelectorAll("g[id^='Hole']");
+  holesEl.forEach((el) => {
+    const holePos = getPosFromSvgCircle(el.querySelector(`circle[id^='holePos']`));
+    holes.push({ startPos: holePos });
+  });
+  return holes;
 };

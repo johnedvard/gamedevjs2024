@@ -2,6 +2,7 @@
 export enum DepthGroup {
   gameBackground,
   background,
+  hole,
   wall,
   particleFront,
   player,

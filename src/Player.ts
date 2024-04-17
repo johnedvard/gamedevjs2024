@@ -1,5 +1,5 @@
 import { Scene } from "phaser";
-import { SpineGameObject } from "@esotericsoftware/spine-phaser";
+import { Bone, SpineGameObject } from "@esotericsoftware/spine-phaser";
 
 import { BodyTypeLabel } from "~/enums/BodyTypeLabel";
 import { DepthGroup } from "~/enums/DepthGroup";
@@ -11,9 +11,11 @@ type PlayerOptions = { startPos: Phaser.Math.Vector2 };
 const BALL_RADIUS = 23;
 export class Player {
   spineObject: SpineGameObject;
+  hole: SpineGameObject;
   ball: MatterJS.BodyType;
   userInput: UserInput;
   startPoint: Phaser.Math.Vector2 = new Phaser.Math.Vector2(200, 200);
+  controlBone: Bone;
   constructor(
     private scene: Scene,
     playerOptions: PlayerOptions
@@ -41,7 +43,7 @@ export class Player {
     this.scene.cameras.main.startFollow(this.spineObject, true, 0, 0.3);
   }
   onReleaseBallThrow = ({ holdDuration, diffX, diffY }: { holdDuration: number; diffX: number; diffY: number }) => {
-    const force = new Phaser.Math.Vector2(Math.min(1, diffX / -300), Math.max(-1, diffY / -300)).scale(0.08);
+    const force = new Phaser.Math.Vector2(Math.min(1, diffX / -300), Math.max(-1, diffY / -300)).scale(0.12);
     this.scene.matter.applyForce(this.ball, force);
     // this.spineObject.setScale(1,1);
   };

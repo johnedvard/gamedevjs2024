@@ -1,0 +1,9 @@
+hole.png
+size:238,155
+filter:Linear,Linear
+pma:true
+Hole
+bounds:155,70,83,81
+rotate:90
+HoleDonut
+bounds:2,2,151,151

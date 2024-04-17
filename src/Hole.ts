@@ -37,7 +37,7 @@ export class Hole {
     this.hole.onCollideCallback = ({ bodyA, bodyB }: CollideCallback) => {
       if (bodyA.label === BodyTypeLabel.enemy || bodyA.label === BodyTypeLabel.player) {
         // this.spineObject.skeleton.setSkinByName('dead');
-        emit(GameEvent.inHole, { other: bodyA });
+        emit(GameEvent.fallInHole, { other: bodyA });
       }
     };
   }

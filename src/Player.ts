@@ -55,7 +55,7 @@ export class Player {
     // this.spineObject.setScale(1,1);
   };
 
-  inHole = (data: { other: MatterJS.BodyType }) => {
+  fallInHole = (data: { other: MatterJS.BodyType }) => {
     if (data.other === this.ball) {
       this.spineObject.animationState.setAnimation(0, 'dead', false);
       this.state = 'dead';
@@ -77,12 +77,12 @@ export class Player {
 
   listenForEvents() {
     on(GameEvent.releaseBallThrow, this.onReleaseBallThrow);
-    on(GameEvent.inHole, this.inHole);
+    on(GameEvent.fallInHole, this.fallInHole);
   }
 
   removeEventListeners() {
     off(GameEvent.releaseBallThrow, this.onReleaseBallThrow);
-    off(GameEvent.inHole, this.inHole);
+    off(GameEvent.fallInHole, this.fallInHole);
   }
 
   update(time: number, delta: number) {

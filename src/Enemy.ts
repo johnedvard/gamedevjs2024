@@ -53,7 +53,7 @@ export class Enemy {
     });
   }
 
-  inHole = (data: { other: MatterJS.BodyType }) => {
+  fallInHole = (data: { other: MatterJS.BodyType }) => {
     if (data.other === this.ball) {
       this.spineObject.skeleton.setSkinByName('dead');
       this.spineObject.animationState.setAnimation(0, 'dead', false);
@@ -74,10 +74,10 @@ export class Enemy {
     }
   };
   listenForEvents() {
-    on(GameEvent.inHole, this.inHole);
+    on(GameEvent.fallInHole, this.fallInHole);
   }
   removeEventListeners() {
-    off(GameEvent.inHole, this.inHole);
+    off(GameEvent.fallInHole, this.fallInHole);
   }
 
   update(time: number, delta: number) {

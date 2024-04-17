@@ -1,5 +1,4 @@
 import { SpineGameObject } from "@esotericsoftware/spine-phaser";
-import { debounce } from "lodash";
 import { Scene } from "phaser";
 import { DepthGroup } from "~/enums/DepthGroup";
 
@@ -19,6 +18,5 @@ export class Player {
         this.spineObject = this.scene.add
         .spine(this.startPoint.x, this.startPoint.y, 'player-skel', 'player-atlas')
         .setDepth(DepthGroup.player)
-        // this.spineObject.animationState.setAnimation(0, "blink", false);
     }
 }

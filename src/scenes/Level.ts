@@ -2,7 +2,7 @@ import { take } from 'rxjs/internal/operators/take';
 
 import { SceneKey } from '~/enums/SceneKey';
 import { loadLevel } from '~/utils/levelUtils';
-import { Player } from '~/scenes/Player';
+import { Player } from '~/Player';
 import { LevelState } from '~/types/LevelState';
 import { handleDebugInput } from '~/debugInput';
 

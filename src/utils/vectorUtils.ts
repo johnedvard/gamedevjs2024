@@ -56,7 +56,7 @@ export const createCollisionBoxesFromPaths = (
   scene: Scene,
   svgPaths: SvgPath[],
 ) => {
-  const boxes = [];
+  const boxes:MatterJS.BodyType[] = [];
   svgPaths.forEach(({ path, svgPathEl }) => {
     if (!svgPathEl.getAttribute("serif:id")?.match("{collision}")) return;
     const allPoints = path.getPoints(20);
@@ -82,6 +82,7 @@ export const createCollisionBoxesFromPaths = (
     }
   });
   scene.matter.bounds.create(boxes);
+  return boxes;
 };
 
 export const createTextFromSvg = (scene: Scene, svgDoc: Document) => {

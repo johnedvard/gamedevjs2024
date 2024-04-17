@@ -28,23 +28,18 @@ export function loadLevel(scene: Scene, levelId: string): Observable<LevelState>
 export function createLevelFromSvg(scene: Scene, svgText: string): LevelState {
   const svgDoc: Document = parser.parseFromString(svgText, "image/svg+xml");
   const svgPaths = createPathsFromSvg(svgDoc);
-  createCollisionBoxesFromPaths(scene, svgPaths);
-  createWallGraphics(scene, svgPaths);
+  const walls=createCollisionBoxesFromPaths(scene, svgPaths);
+  createWallGraphics(scene, walls, {strokeWidth:16, color: 0xFF0066}); // pink
   // createTextFromSvg(scene, svgDoc);
 
   const startPos = getPosFromSvgCircle(svgDoc.querySelector(`#start`));
   return { startPos };
 }
 
-function createWallGraphics(scene: Scene, svgPaths: SvgPath[]){
+function createWallGraphics(scene: Scene, walls: MatterJS.BodyType[], {strokeWidth, color}){
   const graphics = scene.add.graphics().setDepth(DepthGroup.wall);
-  svgPaths.forEach(({ path, svgPathEl, strokeWidth, color }) => {
-    if (!svgPathEl.getAttribute('serif:id')?.match('{collision}')) return;
-    if (color != null) {
-      graphics.lineStyle(strokeWidth, color, 1);
-    } else {
-      graphics.lineStyle(0, 0, 0);
-    }
-    path.draw(graphics);
-  });
+
+  const curve = new Phaser.Curves.Spline(walls.flatMap(w => [w.position.x,w.position.y]))
+  graphics.lineStyle(strokeWidth, color, 1);
+  curve.draw(graphics, 264);
 }

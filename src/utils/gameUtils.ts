@@ -1,7 +1,7 @@
-import { Scene } from "phaser";
-import { Bone } from "@esotericsoftware/spine-phaser";
-import { DepthGroup } from "~/enums/DepthGroup";
-import { SceneKey } from "~/enums/SceneKey";
+import { Scene } from 'phaser';
+import { Bone } from '@esotericsoftware/spine-phaser';
+import { DepthGroup } from '~/enums/DepthGroup';
+import { SceneKey } from '~/enums/SceneKey';
 
 export const GAME_WIDTH = 750;
 export const GAME_HEIGHT = 1334;
@@ -9,7 +9,7 @@ export const GAME_HEIGHT = 1334;
 let backgroundGrapics;
 
 export const getCanvas = (): HTMLCanvasElement => {
-  return document.querySelector("#my-game");
+  return document.querySelector('#my-game');
 };
 
 export const getCenter = (scene: Scene): Phaser.Math.Vector2 => {
@@ -22,7 +22,7 @@ export const updateAim = (aimBone: Bone, pos: Phaser.Math.Vector2) => {
 };
 
 export function getSquashedAddress(address: string) {
-  return address.substring(0, 5) + "..." + address.substring(address.length - 4);
+  return address.substring(0, 5) + '...' + address.substring(address.length - 4);
 }
 
 export function getFullWidth(scene: Scene) {
@@ -81,7 +81,7 @@ export function getSeconds(time) {
   const seconds = totalSeconds - 60 * minutes;
   const sec10 = Math.floor(seconds / 10);
   const sec = seconds % 10;
-  return `${sec10 > 0 ? sec10 : ""}${sec}`;
+  return `${sec10 > 0 ? sec10 : ''}${sec}`;
 }
 
 export function isWideScreen() {

@@ -1,8 +1,8 @@
-import { SceneKey } from "~/enums/SceneKey";
+import { SceneKey } from '~/enums/SceneKey';
 
 export class Boot extends Phaser.Scene {
   preload(): void {
-    this.load.setPath("assets/gamedevjs2024");
+    this.load.setPath('assets/gamedevjs2024');
     this.loadSvgs();
     this.loadSounds();
     this.preloadSpineAnimations();
@@ -14,13 +14,13 @@ export class Boot extends Phaser.Scene {
 
   preloadSpineAnimations() {
     // Need to set path to "" to be able to load the packed images correctly
-    this.load.setPath("");
-    this.load.spineBinary("player-skel", "assets/gamedevjs2024/spine/player.skel");
-    this.load.spineAtlas("player-atlas", "assets/gamedevjs2024/spine/player.atlas");
-    this.load.spineBinary("enemy-skel", "assets/gamedevjs2024/spine/enemy.skel");
-    this.load.spineAtlas("enemy-atlas", "assets/gamedevjs2024/spine/enemy.atlas");
-    this.load.spineBinary("hole-skel", "assets/gamedevjs2024/spine/hole.skel");
-    this.load.spineAtlas("hole-atlas", "assets/gamedevjs2024/spine/hole.atlas");
+    this.load.setPath('');
+    this.load.spineBinary('player-skel', 'assets/gamedevjs2024/spine/player.skel');
+    this.load.spineAtlas('player-atlas', 'assets/gamedevjs2024/spine/player.atlas');
+    this.load.spineBinary('enemy-skel', 'assets/gamedevjs2024/spine/enemy.skel');
+    this.load.spineAtlas('enemy-atlas', 'assets/gamedevjs2024/spine/enemy.atlas');
+    this.load.spineBinary('hole-skel', 'assets/gamedevjs2024/spine/hole.skel');
+    this.load.spineAtlas('hole-atlas', 'assets/gamedevjs2024/spine/hole.atlas');
   }
 
   loadUi(): void {

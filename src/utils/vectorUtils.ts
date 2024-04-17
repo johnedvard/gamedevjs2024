@@ -1,39 +1,39 @@
-import { Scene } from "phaser";
+import { Scene } from 'phaser';
 
-import svgToPhaserPath from "svg-to-phaser-path";
+import svgToPhaserPath from 'svg-to-phaser-path';
 
-import { BodyTypeLabel } from "~/enums/BodyTypeLabel";
-import { SvgPath } from "~/types/SvgPath";
+import { BodyTypeLabel } from '~/enums/BodyTypeLabel';
+import { SvgPath } from '~/types/SvgPath';
 
 export const getPosFromSvgCircle = (circleElement: SVGElement): Phaser.Math.Vector2 => {
   if (!circleElement) return new Phaser.Math.Vector2(0, 0);
-  const cx = circleElement.getAttribute("cx");
-  const cy = circleElement.getAttribute("cy");
+  const cx = circleElement.getAttribute('cx');
+  const cy = circleElement.getAttribute('cy');
   if (!cx || !cy) return null;
   return new Phaser.Math.Vector2(~~cx, ~~cy);
 };
 
 export const getPosFromSvgRect = (svgEl: SVGElement): Phaser.Math.Vector2 => {
-  let x = svgEl.getAttribute("x");
-  let y = svgEl.getAttribute("y");
-  if (x.match("px")) x = x.split("px")[0];
-  if (y.match("px")) y = y.split("px")[0];
+  let x = svgEl.getAttribute('x');
+  let y = svgEl.getAttribute('y');
+  if (x.match('px')) x = x.split('px')[0];
+  if (y.match('px')) y = y.split('px')[0];
   if (!x || !y) return null;
   return new Phaser.Math.Vector2(~~x, ~~y);
 };
 export const getHeightFromSvgRect = (svgEl: SVGElement): number => {
-  let height = svgEl.getAttribute("height");
+  let height = svgEl.getAttribute('height');
 
-  if (height.match("px")) height = height.split("px")[0];
+  if (height.match('px')) height = height.split('px')[0];
   if (!height) return 0;
   return ~~height;
 };
 export const createPathsFromSvg = (svgDoc: Document): SvgPath[] => {
   const svgPaths: SvgPath[] = [];
-  const pathEls = svgDoc.querySelectorAll("path");
+  const pathEls = svgDoc.querySelectorAll('path');
   pathEls.forEach((el) => {
-    if (el.getAttribute("id") === "tree-area") return;
-    const jsonPath = svgToPhaserPath(el.getAttribute("d"));
+    if (el.getAttribute('id') === 'tree-area') return;
+    const jsonPath = svgToPhaserPath(el.getAttribute('d'));
     const path = new Phaser.Curves.Path(jsonPath);
     const color: number = rgbTohex(el.style.stroke);
     const fill: number = rgbTohex(el.style.fill);
@@ -52,7 +52,7 @@ export const createCollisionBoxesFromPaths = (scene: Scene, svgPaths: SvgPath[])
   const boxes: MatterJS.BodyType[] = [];
   for (let x = 0; x < 2; x++) {
     svgPaths.forEach(({ path, svgPathEl }) => {
-      if (!svgPathEl.getAttribute("serif:id")?.match("{collision}")) return;
+      if (!svgPathEl.getAttribute('serif:id')?.match('{collision}')) return;
       const allPoints = path.getPoints(13 + x * 4);
       const offset = 30; // thichness of boxes
       for (let i = 0; i < allPoints.length - 1; i++) {
@@ -80,27 +80,27 @@ export const createCollisionBoxesFromPaths = (scene: Scene, svgPaths: SvgPath[])
 };
 
 export const createTextFromSvg = (scene: Scene, svgDoc: Document) => {
-  const textelements = svgDoc.querySelectorAll("text");
+  const textelements = svgDoc.querySelectorAll('text');
 
   for (const el of textelements) {
     // TODO (johnedvard) deal with attributes not containing 'px'
-    const x = ~~el.getAttribute("x").split("px")[0];
-    const y = ~~el.getAttribute("y").split("px")[0];
-    const fontSize = ~~el.style.fontSize.split("px")[0];
-    const bitmapText = scene.add.bitmapText(x, y, "atari", el.innerHTML, fontSize).setAlpha(1).setOrigin(0.2, 0.6);
+    const x = ~~el.getAttribute('x').split('px')[0];
+    const y = ~~el.getAttribute('y').split('px')[0];
+    const fontSize = ~~el.style.fontSize.split('px')[0];
+    const bitmapText = scene.add.bitmapText(x, y, 'atari', el.innerHTML, fontSize).setAlpha(1).setOrigin(0.2, 0.6);
     bitmapText.setTint(0x000000);
   }
 };
 
 // See https://stackoverflow.com/a/3627747/1471485
 export const rgbTohex = (rgb: string) => {
-  if (!rgb || rgb === "none") return null;
+  if (!rgb || rgb === 'none') return null;
   return parseInt(
     `0x${rgb
       .match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/)
       .slice(1)
-      .map((n) => parseInt(n, 10).toString(16).padStart(2, "0"))
-      .join("")}`
+      .map((n) => parseInt(n, 10).toString(16).padStart(2, '0'))
+      .join('')}`
   );
 };
 

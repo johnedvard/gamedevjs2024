@@ -1,9 +1,9 @@
-import { Scene } from "phaser";
+import { Scene } from 'phaser';
 
-import { Observable } from "rxjs/internal/Observable";
+import { Observable } from 'rxjs/internal/Observable';
 
-import { DepthGroup } from "~/enums/DepthGroup";
-import { LevelState } from "~/types/LevelState";
+import { DepthGroup } from '~/enums/DepthGroup';
+import { LevelState } from '~/types/LevelState';
 
 import {
   createPathsFromSvg,
@@ -11,14 +11,14 @@ import {
   getPosFromSvgCircle,
   getEnemiesFromSvg,
   getHolesFromSvg,
-} from "~/utils/vectorUtils";
+} from '~/utils/vectorUtils';
 
 const parser = new DOMParser();
 
 export function loadLevel(scene: Scene, levelId: string): Observable<LevelState> {
   return new Observable((subscriber) => {
     scene.load.text(levelId, `assets/gamedevjs2024/svg/${levelId}.svg`);
-    scene.load.on("filecomplete", (key: string, _type, svgText: string) => {
+    scene.load.on('filecomplete', (key: string, _type, svgText: string) => {
       if (key === levelId) {
         subscriber.next(createLevelFromSvg(scene, svgText));
       }
@@ -27,7 +27,7 @@ export function loadLevel(scene: Scene, levelId: string): Observable<LevelState>
 }
 
 export function createLevelFromSvg(scene: Scene, svgText: string): LevelState {
-  const svgDoc: Document = parser.parseFromString(svgText, "image/svg+xml");
+  const svgDoc: Document = parser.parseFromString(svgText, 'image/svg+xml');
   const svgPaths = createPathsFromSvg(svgDoc);
   const walls = createCollisionBoxesFromPaths(scene, svgPaths);
   const enemies = getEnemiesFromSvg(svgDoc);

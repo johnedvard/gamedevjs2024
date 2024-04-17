@@ -1,14 +1,20 @@
-import { Bone, SpineGameObject } from "@esotericsoftware/spine-phaser";
-import { Scene } from "phaser";
-import { Player } from "~/Player";
-import { DepthGroup } from "./enums/DepthGroup";
+import { Bone, SpineGameObject } from '@esotericsoftware/spine-phaser';
+import { Scene } from 'phaser';
+import { Player } from '~/Player';
+import { DepthGroup } from './enums/DepthGroup';
+import { BodyTypeLabel } from './enums/BodyTypeLabel';
+import { CollideCallback } from './types/CollideCallback';
+import { emit } from 'process';
+import { GameEvent } from './enums/GameEvent';
 type HoleOptions = {
   startPos: Phaser.Math.Vector2;
 };
+const CIRCLE_RADIUS = 5;
 export class Hole {
   startPoint: Phaser.Math.Vector2;
   spineObject: SpineGameObject;
   controlBone: Bone;
+  hole: MatterJS.BodyType;
   constructor(
     private scene: Scene,
     private player: Player,
@@ -16,14 +22,38 @@ export class Hole {
   ) {
     this.startPoint = holeOptions.startPos;
     this.init();
-    console.log("init hole");
+    console.log('init hole');
   }
 
   init() {
+    this.initSpineObject();
+    this.initPhysics();
+    this.handleCollisions();
+  }
+
+  handleCollisions() {
+    this.hole.onCollideCallback = ({ bodyA, bodyB }: CollideCallback) => {
+      if (bodyA.label === BodyTypeLabel.enemy) {
+        // this.spineObject.skeleton.setSkinByName('dead');
+        console.log(' enemy inside holw');
+        emit(GameEvent.inHole, { other: bodyA });
+      }
+    };
+  }
+
+  initSpineObject() {
     this.spineObject = this.scene.add
-      .spine(this.startPoint.x, this.startPoint.y, "hole-skel", "hole-atlas")
+      .spine(this.startPoint.x, this.startPoint.y, 'hole-skel', 'hole-atlas')
       .setDepth(DepthGroup.hole);
-    this.controlBone = this.spineObject.skeleton.findBone("outerControlBone");
+    this.controlBone = this.spineObject.skeleton.findBone('outerControlBone');
+  }
+
+  initPhysics() {
+    this.hole = this.scene.matter.add.circle(this.startPoint.x, this.startPoint.y, CIRCLE_RADIUS, {
+      label: BodyTypeLabel.hole,
+      isStatic: true,
+      isSensor: true,
+    });
   }
   update(time: number, delta: number) {
     this.handleHoleShadowOffset();

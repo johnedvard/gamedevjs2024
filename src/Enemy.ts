@@ -1,9 +1,9 @@
-import { Scene } from "phaser";
-import { SpineGameObject, TrackEntry } from "@esotericsoftware/spine-phaser";
+import { Scene } from 'phaser';
+import { SpineGameObject, TrackEntry } from '@esotericsoftware/spine-phaser';
 
-import { BodyTypeLabel } from "~/enums/BodyTypeLabel";
-import { DepthGroup } from "~/enums/DepthGroup";
-import { CollideCallback } from "~/types/CollideCallback";
+import { BodyTypeLabel } from '~/enums/BodyTypeLabel';
+import { DepthGroup } from '~/enums/DepthGroup';
+import { CollideCallback } from '~/types/CollideCallback';
 
 type EnemyOptions = { startPos: Phaser.Math.Vector2; skin?: string };
 const BALL_RADIUS = 23;
@@ -21,6 +21,7 @@ export class Enemy {
   }
   init() {
     this.initSpineObject();
+    this.initPhysics();
     this.listenForEvents();
     this.handleCollisions();
   }
@@ -29,16 +30,19 @@ export class Enemy {
     this.ball.onCollideCallback = ({ bodyA, bodyB }: CollideCallback) => {
       if (bodyA.label === BodyTypeLabel.player) {
         // this.spineObject.skeleton.setSkinByName('dead');
-        const trackEntry: TrackEntry = this.spineObject.animationState.setAnimation(0, "hit", false);
-        trackEntry.animationEnd;
+        this.spineObject.animationState.setAnimation(0, 'hit', false);
       }
     };
   }
+
   initSpineObject() {
     this.spineObject = this.scene.add
-      .spine(this.startPoint.x, this.startPoint.y, "enemy-skel", "enemy-atlas")
+      .spine(this.startPoint.x, this.startPoint.y, 'enemy-skel', 'enemy-atlas')
       .setDepth(DepthGroup.player);
-    this.spineObject.skeleton.setSkinByName("regular");
+    this.spineObject.skeleton.setSkinByName('regular');
+  }
+
+  initPhysics() {
     this.ball = this.scene.matter.add.circle(this.startPoint.x, this.startPoint.y, BALL_RADIUS, {
       label: BodyTypeLabel.enemy,
       frictionAir: 0.03,

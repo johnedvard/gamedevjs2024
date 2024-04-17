@@ -1,12 +1,12 @@
-import { take } from "rxjs/internal/operators/take";
+import { take } from 'rxjs/internal/operators/take';
 
-import { SceneKey } from "~/enums/SceneKey";
-import { loadLevel } from "~/utils/levelUtils";
-import { LevelState } from "~/types/LevelState";
-import { handleDebugInput } from "~/debugInput";
-import { Player } from "~/Player";
-import { Enemy } from "~/Enemy";
-import { Hole } from "~/Hole";
+import { SceneKey } from '~/enums/SceneKey';
+import { loadLevel } from '~/utils/levelUtils';
+import { LevelState } from '~/types/LevelState';
+import { handleDebugInput } from '~/debugInput';
+import { Player } from '~/Player';
+import { Enemy } from '~/Enemy';
+import { Hole } from '~/Hole';
 
 export class Level extends Phaser.Scene {
   levelState!: LevelState;
@@ -19,10 +19,10 @@ export class Level extends Phaser.Scene {
   }
 
   preload(): void {
-    loadLevel(this, "level")
+    loadLevel(this, 'level')
       .pipe(take(1))
       .subscribe((levelState) => {
-        console.log("levelState", levelState);
+        console.log('levelState', levelState);
         this.levelState = levelState;
       });
   }

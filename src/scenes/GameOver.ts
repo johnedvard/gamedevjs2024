@@ -1,4 +1,4 @@
-import { SceneKey } from "~/enums/SceneKey";
+import { SceneKey } from '~/enums/SceneKey';
 
 export class GameOver extends Phaser.Scene {
   constructor() {

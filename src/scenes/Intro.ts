@@ -1,5 +1,5 @@
-import { Input } from "phaser";
-import { SceneKey } from "~/enums/SceneKey";
+import { Input } from 'phaser';
+import { SceneKey } from '~/enums/SceneKey';
 
 export class Intro extends Phaser.Scene {
   isIntroComplete = false;
@@ -30,14 +30,14 @@ export class Intro extends Phaser.Scene {
 
   onPlayButtonClick = () => {
     this.scene.start(SceneKey.Level, { freeplay: false });
-    this.input.off("pointerdown", this.onPlayButtonClick);
+    this.input.off('pointerdown', this.onPlayButtonClick);
   };
 
   addEventListeners() {
-    this.input.on("pointerdown", this.onPlayButtonClick);
+    this.input.on('pointerdown', this.onPlayButtonClick);
   }
   removeEventListeners() {
-    this.input.off("pointerdown", this.onPlayButtonClick);
+    this.input.off('pointerdown', this.onPlayButtonClick);
   }
 
   update(time: number, delta: number): void {

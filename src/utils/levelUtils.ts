@@ -3,6 +3,7 @@ import { Scene } from 'phaser';
 import { Observable } from 'rxjs/internal/Observable';
 
 import { DepthGroup } from '~/enums/DepthGroup';
+import { MyColor } from '~/enums/MyColor';
 import { LevelState } from '~/types/LevelState';
 
 import {
@@ -32,8 +33,7 @@ export function createLevelFromSvg(scene: Scene, svgText: string): LevelState {
   const walls = createCollisionBoxesFromPaths(scene, svgPaths);
   const enemies = getEnemiesFromSvg(svgDoc);
   const holes = getHolesFromSvg(svgDoc);
-  createWallGraphics(scene, walls, { strokeWidth: 25, color: 0xff0066 }); // pink
-  // createTextFromSvg(scene, svgDoc);
+  createWallGraphics(scene, walls, { strokeWidth: 25, color: MyColor.pink }); // pink
 
   const startPos = getPosFromSvgCircle(svgDoc.querySelector(`#start`));
   return { startPos, enemies, holes };

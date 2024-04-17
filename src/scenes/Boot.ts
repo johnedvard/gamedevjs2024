@@ -6,6 +6,7 @@ export class Boot extends Phaser.Scene {
     this.loadSvgs();
     this.loadSounds();
     this.preloadSpineAnimations();
+    this.loadFonts();
   }
 
   loadSounds() {
@@ -29,6 +30,22 @@ export class Boot extends Phaser.Scene {
     // this.load.text('svg-star', 'svg/something.svg');
   }
 
+  loadFont(name: string, url: string) {
+    var newFont = new FontFace(name, `url(${url})`);
+    newFont
+      .load()
+      .then((loaded) => {
+        document.fonts.add(loaded);
+      })
+      .catch((error) => {
+        console.log('err', error);
+        return error;
+      });
+  }
+  
+  loadFonts(){
+    this.loadFont('TiltNeon', 'assets/neon-hoop/fonts/TiltNeon-Regular.ttf');
+  }
   create(): void {
     this.scene.start(SceneKey.Intro);
   }

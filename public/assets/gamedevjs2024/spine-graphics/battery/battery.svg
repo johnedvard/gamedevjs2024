@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="79px" height="43px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;">
+    <path id="battery" d="M73.563,25.955l0,13.362c0,1.207 -0.979,2.186 -2.186,2.186l-67.682,0c-1.207,0 -2.186,-0.979 -2.186,-2.186l-0,-35.627c-0,-1.207 0.979,-2.187 2.186,-2.187l67.682,0c1.207,0 2.186,0.98 2.186,2.187l0,13.361c0,-0.491 0.399,-0.89 0.891,-0.89l1.781,-0c0.491,-0 0.89,0.399 0.89,0.89l0,8.904c0,0.492 -0.399,0.891 -0.89,0.891l-1.781,-0c-0.492,-0 -0.891,-0.399 -0.891,-0.891Z" style="stroke:#000;stroke-width:2.99px;"/>
+</svg>

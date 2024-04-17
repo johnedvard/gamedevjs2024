@@ -130,3 +130,14 @@ const getParallellLine = (
   const l1 = new Phaser.Math.Vector2(ox + p1.x, oy + p1.y);
   return { l0, l1 };
 };
+
+export const getEnemiesFromSvg = (svgDoc: Document) => {
+  const enemies = [];
+  const enemiesEls = svgDoc.querySelectorAll("g[id^='Enemy']");
+  console.log(enemiesEls);
+  enemiesEls.forEach((el) => {
+    const enemyPos = getPosFromSvgCircle(el.querySelector(`circle[id^='enemyPos']`));
+    enemies.push({ startPos: enemyPos });
+  });
+  return enemies;
+};

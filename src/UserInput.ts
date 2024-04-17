@@ -89,8 +89,8 @@ export class UserInput {
     const maxDistance = 250;
     const distance = line2.from.distance(line2.to);
 
+    const diffNormalized: Phaser.Math.Vector2 = line2.to.clone().subtract(line2.from).normalize();
     if (distance > maxDistance) {
-      const diffNormalized = line2.to.clone().subtract(line2.from).normalize();
       diffNormalized.scale(maxDistance);
       this.graphics.moveTo(line2.from.x, line2.from.y);
       this.graphics.lineTo(line2.from.x + diffNormalized.x, line2.from.y + diffNormalized.y);
@@ -98,6 +98,13 @@ export class UserInput {
       this.graphics.moveTo(line2.from.x, line2.from.y);
       this.graphics.lineTo(line2.to.x, line2.to.y);
     }
+    let yScale = 1;
+    if (distance > 10) {
+      yScale = distance / maxDistance;
+      if (yScale < 1) yScale = 1;
+      this.player.spineObject.setRotation(line2.from.clone().subtract(line2.to).angle() + Math.PI / 2);
+    }
+    // this.player.spineObject.setScale(1,yScale)
 
     this.graphics.stroke();
   }

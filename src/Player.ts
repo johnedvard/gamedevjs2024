@@ -36,19 +36,21 @@ export class Player {
       friction: 0.2,
       restitution: 0.5,
     });
+
     // this.spineObject.animationState.setAnimation(0, "blink", false);
     this.scene.cameras.main.startFollow(this.spineObject, true, 0, 0.3);
   }
   onReleaseBallThrow = ({ holdDuration, diffX, diffY }: { holdDuration: number; diffX: number; diffY: number }) => {
     const force = new Phaser.Math.Vector2(Math.min(1, diffX / -300), Math.max(-1, diffY / -300)).scale(0.08);
     this.scene.matter.applyForce(this.ball, force);
+    // this.spineObject.setScale(1,1);
   };
   listenForEvents() {
     on(GameEvent.releaseBallThrow, this.onReleaseBallThrow);
   }
   update(time: number, delta: number) {
     this.spineObject.setPosition(this.ball.position.x, this.ball.position.y);
-    this.spineObject.setRotation(this.ball.angle);
+    // this.spineObject.setRotation(this.ball.angle);
     this.userInput.update(time, delta);
   }
   get x() {

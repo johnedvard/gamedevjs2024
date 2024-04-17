@@ -3,5 +3,6 @@
  */
 export enum BodyTypeLabel {
   player = "player",
+  enemy = "enemy",
   collisionWall = "collisionWall",
 }

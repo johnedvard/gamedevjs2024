@@ -5,7 +5,12 @@ import { Observable } from "rxjs/internal/Observable";
 import { DepthGroup } from "~/enums/DepthGroup";
 import { LevelState } from "~/types/LevelState";
 
-import { createPathsFromSvg, createCollisionBoxesFromPaths, getPosFromSvgCircle } from "~/utils/vectorUtils";
+import {
+  createPathsFromSvg,
+  createCollisionBoxesFromPaths,
+  getPosFromSvgCircle,
+  getEnemiesFromSvg,
+} from "~/utils/vectorUtils";
 
 const parser = new DOMParser();
 
@@ -24,11 +29,12 @@ export function createLevelFromSvg(scene: Scene, svgText: string): LevelState {
   const svgDoc: Document = parser.parseFromString(svgText, "image/svg+xml");
   const svgPaths = createPathsFromSvg(svgDoc);
   const walls = createCollisionBoxesFromPaths(scene, svgPaths);
+  const enemies = getEnemiesFromSvg(svgDoc);
   createWallGraphics(scene, walls, { strokeWidth: 25, color: 0xff0066 }); // pink
   // createTextFromSvg(scene, svgDoc);
 
   const startPos = getPosFromSvgCircle(svgDoc.querySelector(`#start`));
-  return { startPos };
+  return { startPos, enemies };
 }
 
 function createWallGraphics(scene: Scene, walls: MatterJS.BodyType[], { strokeWidth, color }) {

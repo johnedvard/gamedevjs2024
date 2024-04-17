@@ -52,26 +52,32 @@ export const createPathsFromSvg = (svgDoc: Document): SvgPath[] => {
 
 export const createCollisionBoxesFromPaths = (scene: Scene, svgPaths: SvgPath[]) => {
   const boxes: MatterJS.BodyType[] = [];
-  svgPaths.forEach(({ path, svgPathEl }) => {
-    if (!svgPathEl.getAttribute("serif:id")?.match("{collision}")) return;
-    const allPoints = path.getPoints(20);
-    const offset = 25;
-    for (let i = 0; i < allPoints.length - 1; i++) {
-      const p0 = allPoints[i];
-      const p1 = allPoints[i + 1];
-      const { l0, l1 } = getParallellLine(p0, p1, offset);
-      boxes.push(
-        scene.matter.add.fromVertices((p1.x + p0.x) / 2, (p1.y + p0.y) / 2, [p0, l0, l1, p1], {
+  for (let x = 0; x < 2; x++) {
+    svgPaths.forEach(({ path, svgPathEl }) => {
+      if (!svgPathEl.getAttribute("serif:id")?.match("{collision}")) return;
+      const allPoints = path.getPoints(13 + x * 4);
+      const offset = 30; // thichness of boxes
+      for (let i = 0; i < allPoints.length - 1; i++) {
+        const p0 = allPoints[i];
+        const p1 = allPoints[i + 1];
+        const { l0, l1 } = getParallellLine(p0, p1, offset);
+
+        const box = scene.matter.add.fromVertices((p1.x + p0.x) / 2, (p1.y + p0.y) / 2, [p0, l0, l1, p1], {
           isStatic: true,
           label: BodyTypeLabel.collisionWall,
           ignoreGravity: true,
+          restitution: 0.5,
           friction: 0,
           frictionStatic: 0,
-        })
-      );
-    }
-  });
-  scene.matter.bounds.create(boxes);
+        });
+        //
+        if (x === 1) {
+          boxes.push(box);
+        }
+      }
+    });
+  }
+  // scene.matter.bounds.create(boxes);
   return boxes;
 };
 

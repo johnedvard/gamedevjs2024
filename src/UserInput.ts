@@ -86,8 +86,18 @@ export class UserInput {
       to: ballPos.clone().add(new Phaser.Math.Vector2(line.to.x - line.from.x, line.to.y - line.from.y)),
     };
 
-    this.graphics.moveTo(line2.from.x, line2.from.y);
-    this.graphics.lineTo(line2.to.x, line2.to.y);
+    const maxDistance = 250;
+    const distance = line2.from.distance(line2.to);
+
+    if (distance > maxDistance) {
+      const diffNormalized = line2.to.clone().subtract(line2.from).normalize();
+      diffNormalized.scale(maxDistance);
+      this.graphics.moveTo(line2.from.x, line2.from.y);
+      this.graphics.lineTo(line2.from.x + diffNormalized.x, line2.from.y + diffNormalized.y);
+    } else {
+      this.graphics.moveTo(line2.from.x, line2.from.y);
+      this.graphics.lineTo(line2.to.x, line2.to.y);
+    }
 
     this.graphics.stroke();
   }

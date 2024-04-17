@@ -4,7 +4,6 @@ import { Observable } from "rxjs/internal/Observable";
 
 import { DepthGroup } from "~/enums/DepthGroup";
 import { LevelState } from "~/types/LevelState";
-import { SvgPath } from "~/types/SvgPath";
 
 import { createPathsFromSvg, createCollisionBoxesFromPaths, getPosFromSvgCircle } from "~/utils/vectorUtils";
 
@@ -25,7 +24,7 @@ export function createLevelFromSvg(scene: Scene, svgText: string): LevelState {
   const svgDoc: Document = parser.parseFromString(svgText, "image/svg+xml");
   const svgPaths = createPathsFromSvg(svgDoc);
   const walls = createCollisionBoxesFromPaths(scene, svgPaths);
-  createWallGraphics(scene, walls, { strokeWidth: 16, color: 0xff0066 }); // pink
+  createWallGraphics(scene, walls, { strokeWidth: 25, color: 0xff0066 }); // pink
   // createTextFromSvg(scene, svgDoc);
 
   const startPos = getPosFromSvgCircle(svgDoc.querySelector(`#start`));

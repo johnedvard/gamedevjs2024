@@ -38,7 +38,7 @@ export class MyGame {
       canvas: getCanvas(),
       width: GAME_WIDTH, // smart phone vertical
       height: GAME_HEIGHT,
-      backgroundColor: '#131313',
+      backgroundColor: '#191919',
       physics: {
         default: 'matter',
         matter: {

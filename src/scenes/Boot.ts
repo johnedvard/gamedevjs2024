@@ -44,7 +44,8 @@ export class Boot extends Phaser.Scene {
   }
   
   loadFonts(){
-    this.loadFont('TiltNeon', 'assets/neon-hoop/fonts/TiltNeon-Regular.ttf');
+    this.loadFont('TiltNeon', 'assets/gamedevjs2024/fonts/TiltNeon-Regular.ttf');
+    this.loadFont('ConcertOne', 'assets/gamedevjs2024/fonts/ConcertOne-Regular.ttf');
   }
   create(): void {
     this.scene.start(SceneKey.Intro);

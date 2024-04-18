@@ -1,5 +1,8 @@
 import { Scene } from 'phaser';
 import { Bone } from '@esotericsoftware/spine-phaser';
+
+import { Observable } from 'rxjs';
+
 import { DepthGroup } from '~/enums/DepthGroup';
 import { SceneKey } from '~/enums/SceneKey';
 
@@ -60,14 +63,14 @@ export const createBackground = (scene: Scene) => {
 };
 
 // TODO (john) convert to a subscription that can be cancelled instead
-export function startWaitRoutine(scene: Scene, waitTime: number) {
-  return new Promise<void>((resolve) => {
+export function startWaitRoutine(scene: Scene, waitTime: number): Observable<void> {
+  return new Observable<void>((subscriber) => {
     let ellapsedTime = 0;
     const gameUpdateListener = (_time: number, delta: number) => {
       ellapsedTime += delta;
       if (ellapsedTime >= waitTime) {
         scene.events.off(Phaser.Scenes.Events.UPDATE, gameUpdateListener);
-        resolve();
+        subscriber.next();
       }
     };
     scene.events.on(Phaser.Scenes.Events.UPDATE, gameUpdateListener);

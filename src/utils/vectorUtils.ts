@@ -3,7 +3,20 @@ import { Scene } from 'phaser';
 import svgToPhaserPath from 'svg-to-phaser-path';
 
 import { BodyTypeLabel } from '~/enums/BodyTypeLabel';
+import { MyColor } from '~/enums/MyColor';
 import { SvgPath } from '~/types/SvgPath';
+
+type ButtonConfig = {
+  x: number;
+  y: number;
+  width?: number;
+  height?: number;
+  borderRadius?: number;
+  scale?: number;
+  onButtonDown?: Function;
+  fill?: any
+};
+
 
 export const getPosFromSvgCircle = (circleElement: SVGElement): Phaser.Math.Vector2 => {
   if (!circleElement) return new Phaser.Math.Vector2(0, 0);
@@ -147,4 +160,28 @@ export const getHolesFromSvg = (svgDoc: Document) => {
     holes.push({ startPos: holePos });
   });
   return holes;
+};
+
+
+export const createButtonGraphics = (scene: Scene, config?: ButtonConfig): Phaser.GameObjects.Graphics => {
+  const graphics = scene.add.graphics();
+  const btnWidth = config.width || 100;
+  const btnHeight = config.height || 100;
+  const radius = config.borderRadius || 15;
+  const fill = config.fill || MyColor.pink;
+
+  const rect = new Phaser.Geom.Rectangle(0, 0, btnWidth, btnHeight);
+  graphics.fillStyle(0xff7423, 0);
+  graphics.lineStyle(5, fill, 1);
+  graphics.translateCanvas(-rect.width / 2, -rect.height / 2);
+  graphics.setPosition(config.x, config.y); // set origin to center
+  rect.x -= rect.width / 2; // make up for the canvas translation
+  rect.y -= rect.height / 2;
+  if(config.onButtonDown){
+    graphics.setInteractive(rect, Phaser.Geom.Rectangle.Contains);
+    graphics.on('pointerdown', config.onButtonDown, this);
+  }
+  graphics.fillRoundedRect(0, 0, rect.width, rect.height, radius);
+  graphics.stroke();
+  return graphics;
 };

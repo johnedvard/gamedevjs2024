@@ -11,9 +11,10 @@ export class UserInput {
   pointerStartPos: { x: number; y: number };
   pointerEndPos: { x: number; y: number };
   graphics: Phaser.GameObjects.Graphics;
+  player: Player;
+
   constructor(
-    private scene: Scene,
-    private player: Player
+    private scene: Scene
   ) {
     this.listenForPointer();
     this.graphics = this.scene.add.graphics();
@@ -103,9 +104,13 @@ export class UserInput {
       yScale = distance / maxDistance;
       if (yScale < 1) yScale = 1;
       // this.player.spineObject.setScale(1,yScale)
-      this.player.spineObject.setRotation(line2.from.clone().subtract(line2.to).angle() - Math.PI / 2);
+      this.player.spineObject?.setRotation(line2.from.clone().subtract(line2.to).angle() - Math.PI / 2);
     }
 
     this.graphics.stroke();
+  }
+
+  setPlayer(player: Player){
+    this.player = player;
   }
 }

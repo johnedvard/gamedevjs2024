@@ -4,8 +4,7 @@ import { Bone, SpineGameObject } from '@esotericsoftware/spine-phaser';
 import { BodyTypeLabel } from '~/enums/BodyTypeLabel';
 import { DepthGroup } from '~/enums/DepthGroup';
 import { GameEvent } from '~/enums/GameEvent';
-import { off, on } from '~/utils/eventEmitterUtils';
-import { UserInput } from '~/UserInput';
+import { emit, off, on } from '~/utils/eventEmitterUtils'
 import { createText } from '~/utils/textUtils';
 import { startWaitRoutine } from './utils/gameUtils';
 import { Subscription, take } from 'rxjs';
@@ -20,7 +19,6 @@ export class Player {
   spineObject: SpineGameObject;
   hole: SpineGameObject;
   ball: MatterJS.BodyType;
-  userInput: UserInput;
   startPoint: Phaser.Math.Vector2 = new Phaser.Math.Vector2(200, 200);
   deadPos: Phaser.Math.Vector2; // store the position we died
   controlBone: Bone;
@@ -40,7 +38,6 @@ export class Player {
     this.init();
   }
   init() {
-    this.userInput = new UserInput(this.scene, this);
     this.initSpineObject();
     this.initPhysics();
     this.listenForEvents();
@@ -78,7 +75,7 @@ export class Player {
   }
 
   onReleaseBallThrow = ({ holdDuration, diffX, diffY }: { holdDuration: number; diffX: number; diffY: number }) => {
-    
+    console.log('on release ball')
     this.handleShotsTxtTween?.stop();
     this.handleShotsTxtTween = this.scene.tweens.add({targets: this.shotsTxt, duration:2000, alpha: 0, delay: 2000,ease: Phaser.Math.Easing.Quadratic.InOut })
     
@@ -88,8 +85,6 @@ export class Player {
     this.scene.matter.applyForce(this.ball, force);
     this.addShots(-1);
     // this.spineObject.setScale(1,1);
-    
-    
   };
 
   fallInHole = (data: { other: MatterJS.BodyType }) => {
@@ -107,6 +102,7 @@ export class Player {
   }
 
   removeEventListeners() {
+    console.log('remove event listeners');
     off(GameEvent.startBallThrow, this.onStartBallThrow);
     off(GameEvent.releaseBallThrow, this.onReleaseBallThrow);
     off(GameEvent.fallInHole, this.fallInHole);
@@ -120,7 +116,6 @@ export class Player {
       this.shotsTxtContainer.y = this.ball.position.y + TEXT_OFFSET.y
     }
     // this.spineObject.setRotation(this.ball.angle);
-    this.userInput.update(time, delta);
     this.handleOutOfShots();
   }
 
@@ -134,17 +129,22 @@ export class Player {
   }
 
 
-  destroyPhysicsObjects() {
+  private destroyPhysicsObjects() {
     this.deadPos = new Phaser.Math.Vector2(this.ball.position.x, this.ball.position.y);
     this.scene.matter.world.remove(this.ball);
     this.ball = null;
   }
 
-  destroy() {
+  private destroy() {
     this.state = 'dead';
     this.removeEventListeners();
     this.spineObject.destroy();
     this.spineObject = null;
+    this.shotsTxt.destroy();
+    this.shotsTxt = null;
+    this.shotsTxtContainer.destroy();
+    this.shotsTxtContainer = null;
+    emit(GameEvent.gameOver);
   }
 
   getShotsText(){
@@ -162,8 +162,8 @@ export class Player {
   }
   startDieRoutine(){
     this.spineObject.animationState.setAnimation(0, 'dead', false);
-    this.state = 'dead';
     this.destroyPhysicsObjects();
+    this.state = 'dead';
     const animationStateListeners = {
       complete: (trackEntry) => {
         // Animation has completed

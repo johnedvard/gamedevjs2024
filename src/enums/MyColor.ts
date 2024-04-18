@@ -1,4 +1,5 @@
 export enum MyColor {
-    pink = 0xff0066,
-   pinkStr = "#ff0066"
+pink = 0xff0066,
+pinkStr = "#ff0066",
+pinkShadow = 0x840035,
 }

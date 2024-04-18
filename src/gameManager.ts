@@ -1,29 +1,9 @@
 import { Game } from 'phaser';
 import { debounce } from 'lodash';
 
-import { GameEvent } from '~/enums/GameEvent';
-import { GameState } from '~/types/GameState';
-import { emit, off, on } from '~/utils/eventEmitterUtils';
 import { GAME_HEIGHT, GAME_WIDTH, centerScene, createBackground } from '~/utils/gameUtils';
 
-let state: GameState = 'main-menu';
 let game: Game = null;
-
-function onPlay() {
-  setGameState('active');
-}
-
-function onGameOver() {
-  setGameState('game-over');
-}
-
-function onReplay() {
-  setGameState('main-menu');
-}
-
-function onHome() {
-  setGameState('main-menu');
-}
 
 function onResize() {
   scaleGame();
@@ -44,22 +24,13 @@ function onFullscreenchange() {
 const debounceResize = debounce(onResize, 150);
 const debounceFullscreen = debounce(onFullscreenchange, 500);
 
-function onRemoveListeners() {
-  off(GameEvent.gameOver, onGameOver);
-  off(GameEvent.destroyAll, onRemoveListeners);
-  off(GameEvent.replay, onReplay);
-  off(GameEvent.home, onHome);
-  off(GameEvent.play, onPlay);
+// Call when game is destroyed
+function removeEventListener() {
   document.removeEventListener('fullscreenchange', debounceFullscreen);
   window.removeEventListener('resize', debounceResize);
 }
 
 function listenForGameEvents() {
-  on(GameEvent.gameOver, onGameOver);
-  on(GameEvent.destroyAll, onRemoveListeners);
-  on(GameEvent.replay, onReplay);
-  on(GameEvent.home, onHome);
-  on(GameEvent.play, onPlay);
   document.addEventListener('fullscreenchange', debounceFullscreen);
   window.addEventListener('resize', debounceResize);
 }
@@ -77,15 +48,6 @@ export function scaleGame() {
   } else {
     game.scale.setGameSize(GAME_WIDTH, GAME_WIDTH / scaleRatio);
   }
-}
-
-export function getGameState(): GameState {
-  return state;
-}
-
-export function setGameState(gameState: GameState): void {
-  state = gameState;
-  emit(GameEvent.gameStateChange, { gameState });
 }
 
 export function setGame(g: Game) {

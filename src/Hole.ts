@@ -59,17 +59,32 @@ export class Hole {
   update(time: number, delta: number) {
     this.handleHoleShadowOffset();
   }
+  private destroyPhysicsObjects() {
+    this.scene.matter.world.remove(this.hole);
+    this.hole = null;
+  }
+
+  private destroy() {
+    this.spineObject.destroy();
+    this.spineObject = null;
+  }
+  
+  destroyEverything(){
+    this.destroyPhysicsObjects();
+    this.destroy();
+  }
+
   handleHoleShadowOffset() {
-    const holePos = new Phaser.Math.Vector2(this.spineObject.x, this.spineObject.y);
-    const maxOffset = 15;
+    const maxOffsetY = 15;
+    const maxOffsetX = 10;
     const diffX = this.player.x - this.spineObject.x;
     const diffY = this.spineObject.y - this.player.y;
 
     this.controlBone.x = diffX / 20;
-    this.controlBone.y = diffY / 20 - 10;
-    if (this.controlBone.x < -maxOffset) this.controlBone.x = -maxOffset;
-    if (this.controlBone.x > maxOffset) this.controlBone.x = maxOffset;
-    if (this.controlBone.y < -maxOffset) this.controlBone.y = -maxOffset;
-    if (this.controlBone.y > maxOffset) this.controlBone.y = maxOffset;
+    this.controlBone.y = diffY / 20 - 25;
+    if (this.controlBone.x < -maxOffsetX) this.controlBone.x = -maxOffsetX;
+    if (this.controlBone.x > maxOffsetX) this.controlBone.x = maxOffsetX;
+    if (this.controlBone.y < -maxOffsetY) this.controlBone.y = -maxOffsetY;
+    if (this.controlBone.y > maxOffsetY) this.controlBone.y = maxOffsetY;
   }
 }

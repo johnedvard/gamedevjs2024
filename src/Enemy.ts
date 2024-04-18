@@ -14,6 +14,7 @@ export class Enemy {
   ball: MatterJS.BodyType;
   startPoint: Phaser.Math.Vector2 = new Phaser.Math.Vector2(200, 200);
   state: '' | 'dead' = '';
+  isDestroyed = false;
 
   constructor(
     private scene: Scene,
@@ -86,17 +87,24 @@ export class Enemy {
     this.spineObject.setRotation(this.ball.angle);
   }
 
-  destroyPhysicsObjects() {
+  private destroyPhysicsObjects() {
     this.scene.matter.world.remove(this.ball);
     this.ball = null;
   }
-  destroy() {
+
+  private destroy() {
     this.state = 'dead';
     this.removeEventListeners();
     this.spineObject.destroy();
     this.spineObject = null;
+    this.isDestroyed = true;
   }
 
+  destroyEverything (){
+    this.destroyPhysicsObjects();
+    this.destroy();
+  }
+  
   get x() {
     return this.ball.position.x;
   }

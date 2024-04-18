@@ -73,16 +73,20 @@ export class HUD extends Phaser.Scene {
       });
   }
   handleTapTutorial() {
-    if (this.battery.isCharged()) {
-      startWaitRoutine(this, 3000)
-        .pipe(take(1))
-        .subscribe(() => {
-          console.log('start tap tutorial');
-          this.spineHand.x = GAME_WIDTH - 10;
-          this.spineHand.y = 140;
-          this.spineHand.visible = true;
-          this.spineHand.animationState.setAnimation(0, 'tap', true);
-        });
+    if (!this.battery.isCharged()) {
+      this.spineHand.visible = false;
+      this.spineHand.animationState?.setAnimation(0, 'idle', false);
+      return;
     }
+    startWaitRoutine(this, 3000)
+      .pipe(take(1))
+      .subscribe(() => {
+        if (!this.battery.isCharged()) return;
+        console.log('start tap tutorial');
+        this.spineHand.x = GAME_WIDTH - 10;
+        this.spineHand.y = 140;
+        this.spineHand.visible = true;
+        this.spineHand.animationState.setAnimation(0, 'tap', true);
+      });
   }
 }

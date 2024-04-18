@@ -16,7 +16,20 @@ export class Battery {
   }
   init() {
     this.initSpineObject();
+    this.initClickArea();
     this.listenForEvents();
+  }
+  onBatteryClick = () => {
+    this.discharge();
+  };
+  initClickArea() {
+    const clickableGraphics = this.scene.add.graphics();
+    const clickableRect = new Phaser.Geom.Rectangle(GAME_WIDTH - 121, 75, 83, 50);
+    clickableGraphics.setInteractive(clickableRect, Phaser.Geom.Rectangle.Contains);
+    clickableGraphics.on('pointerdown', this.onBatteryClick, this);
+    // enable to debug position
+    // clickableGraphics.fillStyle(0xffffff);
+    // clickableGraphics.fillRectShape(clickableRect);
   }
   initSpineObject() {
     this.spineBattery = this.scene.add
@@ -25,16 +38,17 @@ export class Battery {
     this.spineBattery.skeleton.setSkinByName('yellow');
     const animationStateListeners = {
       complete: (trackEntry) => {
-        if (trackEntry.animation.name === 'add-charge') {
+        if (trackEntry.animation.name === 'add-charge' || trackEntry.animation.name === 'spend-all') {
           this.spineBattery.animationState.setAnimation(0, 'idle');
           if (this.charges === 3) {
             this.spineBattery.skeleton.setSkinByName('green');
-
             this.spineBattery.animationState.setAnimation(0, 'charged', true);
           } else if (this.charges === 2) {
             this.spineBattery.skeleton.setSkinByName('yellow');
           } else if (this.charges === 1) {
             this.spineBattery.skeleton.setSkinByName('red');
+          } else if (this.charges === 0) {
+            this.spineBattery.skeleton.setSkinByName('empty');
           }
         }
         if (trackEntry.animation.name === 'charged') {
@@ -52,6 +66,12 @@ export class Battery {
       this.addCharge();
     }
   };
+  discharge() {
+    if (this.charges !== MAX_CHARGES) return;
+    this.charges = 0;
+    this.spineBattery.animationState.setAnimation(0, 'spend-all');
+    emit(GameEvent.batteryChange, { oldValue: MAX_CHARGES, newValue: this.charges });
+  }
   addCharge() {
     this.charges++;
     if (this.charges >= MAX_CHARGES) this.charges = MAX_CHARGES;

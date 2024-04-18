@@ -1,7 +1,6 @@
 import { Scene } from 'phaser';
 import { DepthGroup } from '~/enums/DepthGroup';
 import { MyColor } from '~/enums/MyColor';
-import { isWideScreen } from '~/utils/gameUtils';
 import { createButtonGraphics } from '~/utils/vectorUtils';
 
 export function createText(
@@ -12,7 +11,7 @@ export function createText(
   startText = '',
   textOptions?
 ): Phaser.GameObjects.Text {
-  if (isWideScreen()) size = size * 1.3;
+  size = size * 1.3;
   return scene.add
     .text(x, y, startText, {
       fontFamily: 'ConcertOne',

@@ -1,0 +1,10 @@
+hand.png
+size:255,148
+filter:Linear,Linear
+pma:true
+Hand
+bounds:2,2,193,144
+offsets:1,0,194,146
+Wrist-shade
+bounds:197,80,56,66
+offsets:4,1,62,72

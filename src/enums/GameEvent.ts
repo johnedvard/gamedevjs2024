@@ -8,4 +8,5 @@ export enum GameEvent {
   replay = 'replay',
   fallInHole = 'fallInHole',
   gameStateChange = 'gameStateChange',
+  batteryChange = 'batteryChange',
 }

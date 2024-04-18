@@ -43,6 +43,7 @@ export class Enemy {
       .spine(this.startPoint.x, this.startPoint.y, 'enemy-skel', 'enemy-atlas')
       .setDepth(DepthGroup.player);
     this.spineObject.skeleton.setSkinByName('regular');
+    this.spineObject.animationState.timeScale = 0.5;
   }
 
   initPhysics() {
@@ -54,8 +55,14 @@ export class Enemy {
     });
   }
 
-  fallInHole = (data: { other: MatterJS.BodyType }) => {
+  fallInHole = (data: { other: MatterJS.BodyType; hole: MatterJS.BodyType }) => {
     if (data.other === this.ball) {
+      this.scene.add.tween({
+        targets: this.spineObject,
+        x: data.hole.position.x,
+        y: data.hole.position.y,
+        duration: 1000,
+      });
       this.spineObject.skeleton.setSkinByName('dead');
       this.spineObject.animationState.setAnimation(0, 'dead', false);
       this.state = 'dead';

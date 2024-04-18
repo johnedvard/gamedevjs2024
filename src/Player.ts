@@ -1,13 +1,15 @@
 import { Scene } from 'phaser';
 import { Bone, SpineGameObject } from '@esotericsoftware/spine-phaser';
 
+import { Subscription } from 'rxjs/internal/Subscription';
+import { take } from 'rxjs/internal/operators/take';
+
 import { BodyTypeLabel } from '~/enums/BodyTypeLabel';
 import { DepthGroup } from '~/enums/DepthGroup';
 import { GameEvent } from '~/enums/GameEvent';
 import { emit, off, on } from '~/utils/eventEmitterUtils';
 import { createText } from '~/utils/textUtils';
-import { startWaitRoutine } from './utils/gameUtils';
-import { Subscription, take } from 'rxjs';
+import { startWaitRoutine } from '~/utils/gameUtils';
 
 type PlayerOptions = { startPos: Phaser.Math.Vector2 };
 const BALL_RADIUS = 23;
@@ -57,7 +59,8 @@ export class Player {
       .spine(this.startPoint.x, this.startPoint.y, 'enemy-skel', 'enemy-atlas')
       .setDepth(DepthGroup.player);
     this.spineObject.skeleton.setSkinByName('player');
-    this.scene.cameras.main.startFollow(this.spineObject, true, 0, 0.3);
+    this.spineObject.animationState.timeScale = 0.5;
+    this.scene.cameras.main.startFollow(this.spineObject, true, 0, 0.2);
   }
 
   initPhysics() {
@@ -93,8 +96,14 @@ export class Player {
     // this.spineObject.setScale(1,1);
   };
 
-  fallInHole = (data: { other: MatterJS.BodyType }) => {
+  fallInHole = (data: { other: MatterJS.BodyType; hole: MatterJS.BodyType }) => {
     if (data.other === this.ball) {
+      this.scene.add.tween({
+        targets: this.spineObject,
+        x: data.hole.position.x,
+        y: data.hole.position.y,
+        duration: 1000,
+      });
       this.startDieRoutine();
     } else if (data.other.label === BodyTypeLabel.enemy) {
       this.addShots(1);

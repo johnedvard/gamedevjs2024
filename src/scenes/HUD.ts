@@ -1,22 +1,88 @@
+import { SpineGameObject } from '@esotericsoftware/spine-phaser';
+
+import { Subscription } from 'rxjs/internal/Subscription';
+import { take } from 'rxjs/internal/operators/take';
+
 import { Battery } from '~/Battery';
 import { DepthGroup } from '~/enums/DepthGroup';
+import { GameEvent } from '~/enums/GameEvent';
 import { SceneKey } from '~/enums/SceneKey';
-import { GAME_WIDTH, centerScene } from '~/utils/gameUtils';
+import { off, on } from '~/utils/eventEmitterUtils';
+import { GAME_HEIGHT, GAME_WIDTH, centerScene, startWaitRoutine } from '~/utils/gameUtils';
+
+const RELASE_DEADZONE = 20;
 
 export class HUD extends Phaser.Scene {
   battery: Battery;
+  spineHand: SpineGameObject;
+  startDragTutorialSubscription: Subscription;
   constructor() {
     super(SceneKey.HUD);
   }
+  preload() {}
   create() {
     centerScene(this);
     this.battery = new Battery(this);
-
-    const hand = this.add.spine(GAME_WIDTH - 10, 145, 'hand-skel', 'hand-atlas').setDepth(DepthGroup.ui);
-    hand.animationState.setAnimation(0, 'tap', true);
+    this.listenForEvents();
+    this.initSpineHand();
+    this.handleDragTutorial();
   }
-  preload() {}
+  onBatteryChange = (data: { oldValue: number; newValue: number }) => {
+    this.handleTapTutorial();
+  };
+  onReleaseBallThrow = ({ holdDuration, diffX, diffY }: { holdDuration: number; diffX: number; diffY: number }) => {
+    if (Math.abs(diffX) < RELASE_DEADZONE && Math.abs(diffY) < RELASE_DEADZONE) return;
+    this.stopDragTutorial();
+  };
+
+  initSpineHand() {
+    this.spineHand = this.add.spine(0, 0, 'hand-skel', 'hand-atlas').setDepth(DepthGroup.ui);
+    this.spineHand.animationState.timeScale = 0.5;
+    this.spineHand.visible = false;
+  }
+
+  listenForEvents() {
+    on(GameEvent.batteryChange, this.onBatteryChange);
+    on(GameEvent.releaseBallThrow, this.onReleaseBallThrow);
+  }
+  removeEventListeners() {
+    off(GameEvent.batteryChange, this.onBatteryChange);
+    off(GameEvent.releaseBallThrow, this.onReleaseBallThrow);
+  }
+
   update(time: number, delta: number) {
     this.battery?.update(time, delta);
+  }
+
+  stopDragTutorial() {
+    if (!this.startDragTutorialSubscription) return;
+    this.startDragTutorialSubscription.unsubscribe();
+    this.spineHand.visible = false;
+    this.startDragTutorialSubscription = null;
+  }
+
+  handleDragTutorial() {
+    this.startDragTutorialSubscription = startWaitRoutine(this, 2000)
+      .pipe(take(1))
+      .subscribe(() => {
+        console.log('start drag tutorial');
+        this.spineHand.x = GAME_WIDTH / 2 + 110;
+        this.spineHand.y = GAME_HEIGHT / 2 + 30;
+        this.spineHand.visible = true;
+        this.spineHand.animationState.setAnimation(0, 'drag', true);
+      });
+  }
+  handleTapTutorial() {
+    if (this.battery.isCharged()) {
+      startWaitRoutine(this, 3000)
+        .pipe(take(1))
+        .subscribe(() => {
+          console.log('start tap tutorial');
+          this.spineHand.x = GAME_WIDTH - 10;
+          this.spineHand.y = 140;
+          this.spineHand.visible = true;
+          this.spineHand.animationState.setAnimation(0, 'tap', true);
+        });
+    }
   }
 }

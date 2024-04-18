@@ -1,7 +1,7 @@
 import { Scene } from 'phaser';
 import { Bone } from '@esotericsoftware/spine-phaser';
 
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/internal/Observable';
 
 import { DepthGroup } from '~/enums/DepthGroup';
 import { SceneKey } from '~/enums/SceneKey';

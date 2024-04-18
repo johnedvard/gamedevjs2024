@@ -2,7 +2,7 @@ import { Scene } from 'phaser';
 import { SpineGameObject } from '@esotericsoftware/spine-phaser';
 
 import { GAME_WIDTH } from '~/utils/gameUtils';
-import { off, on } from '~/utils/eventEmitterUtils';
+import { emit, off, on } from '~/utils/eventEmitterUtils';
 import { DepthGroup } from '~/enums/DepthGroup';
 import { GameEvent } from '~/enums/GameEvent';
 import { BodyTypeLabel } from './enums/BodyTypeLabel';
@@ -56,6 +56,10 @@ export class Battery {
     this.charges++;
     if (this.charges >= MAX_CHARGES) this.charges = MAX_CHARGES;
     this.spineBattery.animationState.setAnimation(0, 'add-charge');
+    emit(GameEvent.batteryChange, { oldValue: this.charges - 1, newValue: this.charges });
+  }
+  isCharged() {
+    return this.charges === MAX_CHARGES;
   }
   listenForEvents() {
     on(GameEvent.fallInHole, this.fallInHole);

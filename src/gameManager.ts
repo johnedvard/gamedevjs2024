@@ -1,7 +1,7 @@
 import { Game } from 'phaser';
 import { debounce } from 'lodash';
 
-import { GAME_HEIGHT, GAME_WIDTH, centerScene, createBackground } from '~/utils/gameUtils';
+import { GAME_HEIGHT, GAME_WIDTH, centerScene } from '~/utils/gameUtils';
 
 let game: Game = null;
 
@@ -9,7 +9,6 @@ function onResize() {
   scaleGame();
   game.scene.getScenes().forEach((s) => {
     centerScene(s);
-    createBackground(s);
   });
 }
 
@@ -17,7 +16,6 @@ function onFullscreenchange() {
   scaleGame();
   game.scene.getScenes().forEach((s) => {
     centerScene(s);
-    createBackground(s);
   });
 }
 

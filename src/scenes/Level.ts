@@ -1,7 +1,7 @@
 import { take } from 'rxjs/internal/operators/take';
 
 import { SceneKey } from '~/enums/SceneKey';
-import { loadLevel } from '~/utils/levelUtils';
+import { createFlooring, loadLevel } from '~/utils/levelUtils';
 import { LevelState } from '~/types/LevelState';
 import { handleDebugInput } from '~/debugInput';
 import { Player } from '~/Player';
@@ -28,6 +28,7 @@ export class Level extends Phaser.Scene {
       .subscribe((levelState) => {
         console.log('levelState', levelState);
         this.levelState = levelState;
+        createFlooring(this, this.levelState.startPos.y, this.levelState.startPos.y - 90000);
       });
   }
 

@@ -17,6 +17,7 @@ import { Boot } from '~/scenes/Boot';
 import { Level } from '~/scenes/Level';
 import { GameOver } from '~/scenes/GameOver';
 import { HUD } from '~/scenes/HUD';
+import { MyColor } from './enums/MyColor';
 
 const addScenes = (game: Game) => {
   game.scene.add(SceneKey.Intro, Intro);
@@ -40,7 +41,7 @@ export class MyGame {
       canvas: getCanvas(),
       width: GAME_WIDTH, // smart phone vertical
       height: GAME_HEIGHT,
-      backgroundColor: '#191919',
+      backgroundColor: MyColor.blackStr,
       physics: {
         default: 'matter',
         matter: {

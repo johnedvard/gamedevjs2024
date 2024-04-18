@@ -1,9 +1,10 @@
 // order is important, because first item in enum is 0
 export enum DepthGroup {
   gameBackground,
+  flooring,
   background,
-  hole,
   wall,
+  hole,
   particleFront,
   player,
   ui,

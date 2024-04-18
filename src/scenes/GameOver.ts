@@ -26,7 +26,7 @@ export class GameOver extends Phaser.Scene {
 
   createOverlay() {
     const backdropGraphics = this.add.graphics().setDepth(DepthGroup.background);
-    backdropGraphics.fillStyle(0x000000, 0.9);
+    backdropGraphics.fillStyle(0x000000, 0.5);
     backdropGraphics.fillRect(-window.innerWidth, -window.innerHeight, window.innerWidth * 4, window.innerHeight * 4);
   }
 

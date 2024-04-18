@@ -13,6 +13,7 @@ export class HUD extends Phaser.Scene {
         this.spineBattery = this.add
         .spine(GAME_WIDTH - 30, 100, 'battery-skel', 'battery-atlas')
         .setDepth(DepthGroup.ui);
+        this.spineBattery.skeleton.setSkinByName('empty');
       
     }
     create(){

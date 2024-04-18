@@ -4,7 +4,7 @@ import { Bone, SpineGameObject } from '@esotericsoftware/spine-phaser';
 import { BodyTypeLabel } from '~/enums/BodyTypeLabel';
 import { DepthGroup } from '~/enums/DepthGroup';
 import { GameEvent } from '~/enums/GameEvent';
-import { emit, off, on } from '~/utils/eventEmitterUtils'
+import { emit, off, on } from '~/utils/eventEmitterUtils';
 import { createText } from '~/utils/textUtils';
 import { startWaitRoutine } from './utils/gameUtils';
 import { Subscription, take } from 'rxjs';
@@ -12,7 +12,7 @@ import { Subscription, take } from 'rxjs';
 type PlayerOptions = { startPos: Phaser.Math.Vector2 };
 const BALL_RADIUS = 23;
 const MAX_SHOTS = 5;
-const TEXT_OFFSET = new Phaser.Math.Vector2(2,70);
+const TEXT_OFFSET = new Phaser.Math.Vector2(2, 70);
 const RELASE_DEADZONE = 20;
 const VELOCITY_DEADZONE = 2;
 export class Player {
@@ -25,7 +25,7 @@ export class Player {
   waitBeforeDieSubscription: Subscription;
   state: '' | 'dead' = '';
   shots = 5;
-  
+
   handleShotsTxtTween: Phaser.Tweens.Tween;
   shotsTxt: Phaser.GameObjects.Text;
   shotsTxtContainer: Phaser.GameObjects.Container;
@@ -42,14 +42,14 @@ export class Player {
     this.initPhysics();
     this.listenForEvents();
     this.initShotsTxt();
-    
   }
 
-  initShotsTxt(){
+  initShotsTxt() {
     // TODO (johnedvard) move to a new class
-    this.shotsTxt = createText(this.scene,0,0, 50, this.getShotsText(),{align:'center'});
-    this.shotsTxtContainer = this.scene.add.container(this.x + TEXT_OFFSET.x, this.y + TEXT_OFFSET.y, this.shotsTxt).setDepth(DepthGroup.ui);
-    
+    this.shotsTxt = createText(this.scene, 0, 0, 50, this.getShotsText(), { align: 'center' });
+    this.shotsTxtContainer = this.scene.add
+      .container(this.x + TEXT_OFFSET.x, this.y + TEXT_OFFSET.y, this.shotsTxt)
+      .setDepth(DepthGroup.ui);
   }
 
   initSpineObject() {
@@ -72,15 +72,21 @@ export class Player {
   onStartBallThrow = () => {
     this.handleShotsTxtTween?.stop();
     this.shotsTxt.alpha = 1;
-  }
+  };
 
   onReleaseBallThrow = ({ holdDuration, diffX, diffY }: { holdDuration: number; diffX: number; diffY: number }) => {
-    console.log('on release ball')
+    console.log('on release ball');
     this.handleShotsTxtTween?.stop();
-    this.handleShotsTxtTween = this.scene.tweens.add({targets: this.shotsTxt, duration:2000, alpha: 0, delay: 2000,ease: Phaser.Math.Easing.Quadratic.InOut })
-    
-    if(Math.abs(diffX) < RELASE_DEADZONE && Math.abs(diffY) < RELASE_DEADZONE) return;
-    if(this.shots <= 0) return;
+    this.handleShotsTxtTween = this.scene.tweens.add({
+      targets: this.shotsTxt,
+      duration: 2000,
+      alpha: 0,
+      delay: 2000,
+      ease: Phaser.Math.Easing.Quadratic.InOut,
+    });
+
+    if (Math.abs(diffX) < RELASE_DEADZONE && Math.abs(diffY) < RELASE_DEADZONE) return;
+    if (this.shots <= 0) return;
     const force = new Phaser.Math.Vector2(Math.min(1, diffX / -300), Math.max(-1, diffY / -300)).scale(0.12);
     this.scene.matter.applyForce(this.ball, force);
     this.addShots(-1);
@@ -89,8 +95,8 @@ export class Player {
 
   fallInHole = (data: { other: MatterJS.BodyType }) => {
     if (data.other === this.ball) {
-     this.startDieRoutine();
-    } else if(data.other.label === BodyTypeLabel.enemy){
+      this.startDieRoutine();
+    } else if (data.other.label === BodyTypeLabel.enemy) {
       this.addShots(1);
     }
   };
@@ -111,23 +117,28 @@ export class Player {
   update(time: number, delta: number) {
     if (this.state === 'dead') return;
     this.spineObject.setPosition(this.ball.position.x, this.ball.position.y);
-    if(this.shotsTxtContainer){
+    if (this.shotsTxtContainer) {
       this.shotsTxtContainer.x = this.ball.position.x + TEXT_OFFSET.x;
-      this.shotsTxtContainer.y = this.ball.position.y + TEXT_OFFSET.y
+      this.shotsTxtContainer.y = this.ball.position.y + TEXT_OFFSET.y;
     }
     // this.spineObject.setRotation(this.ball.angle);
     this.handleOutOfShots();
   }
 
-  handleOutOfShots(){
-    if(this.state === 'dead' || this.waitBeforeDieSubscription) return;
-    if(this.shots <= 0 && Math.abs(this.ball.velocity.y) < VELOCITY_DEADZONE && Math.abs(this.ball.velocity.x) < VELOCITY_DEADZONE){
-      this.waitBeforeDieSubscription = startWaitRoutine(this.scene,3000).pipe(take(1)).subscribe(() => {
-        this.startDieRoutine();
-      }) 
+  handleOutOfShots() {
+    if (this.state === 'dead' || this.waitBeforeDieSubscription) return;
+    if (
+      this.shots <= 0 &&
+      Math.abs(this.ball.velocity.y) < VELOCITY_DEADZONE &&
+      Math.abs(this.ball.velocity.x) < VELOCITY_DEADZONE
+    ) {
+      this.waitBeforeDieSubscription = startWaitRoutine(this.scene, 3000)
+        .pipe(take(1))
+        .subscribe(() => {
+          this.startDieRoutine();
+        });
     }
   }
-
 
   private destroyPhysicsObjects() {
     this.deadPos = new Phaser.Math.Vector2(this.ball.position.x, this.ball.position.y);
@@ -147,20 +158,20 @@ export class Player {
     emit(GameEvent.gameOver);
   }
 
-  getShotsText(){
+  getShotsText() {
     return `SHOTS\n${this.shots} / ${MAX_SHOTS}`;
   }
-  addShots(num: number){
+  addShots(num: number) {
     this.shots += num;
     this.shotsTxt.text = this.getShotsText();
-    if(this.shots >= MAX_SHOTS) this.shots = MAX_SHOTS;
-    if(this.state === 'dead' && this.shots>0){
+    if (this.shots >= MAX_SHOTS) this.shots = MAX_SHOTS;
+    if (this.state === 'dead' && this.shots > 0) {
       this.waitBeforeDieSubscription?.unsubscribe();
       this.waitBeforeDieSubscription = null;
       this.state = '';
     }
   }
-  startDieRoutine(){
+  startDieRoutine() {
     this.spineObject.animationState.setAnimation(0, 'dead', false);
     this.destroyPhysicsObjects();
     this.state = 'dead';

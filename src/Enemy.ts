@@ -100,11 +100,11 @@ export class Enemy {
     this.isDestroyed = true;
   }
 
-  destroyEverything (){
+  destroyEverything() {
     this.destroyPhysicsObjects();
     this.destroy();
   }
-  
+
   get x() {
     return this.ball.position.x;
   }

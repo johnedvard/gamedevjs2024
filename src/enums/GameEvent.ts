@@ -7,5 +7,5 @@ export enum GameEvent {
   play = 'play',
   replay = 'replay',
   fallInHole = 'fallInHole',
-  gameStateChange = 'gameStateChange'
+  gameStateChange = 'gameStateChange',
 }

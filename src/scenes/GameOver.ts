@@ -12,7 +12,7 @@ export class GameOver extends Phaser.Scene {
   }
   preload(): void {}
   create(): void {
-    console.log('Game Over.\nRetry?')
+    console.log('Game Over.\nRetry?');
     this.displayRetryScreen();
     centerScene(this);
     this.createOverlay();
@@ -24,7 +24,6 @@ export class GameOver extends Phaser.Scene {
     this.scene.stop();
   };
 
-
   createOverlay() {
     const backdropGraphics = this.add.graphics().setDepth(DepthGroup.background);
     backdropGraphics.fillStyle(0x000000, 0.9);
@@ -32,9 +31,8 @@ export class GameOver extends Phaser.Scene {
   }
 
   displayRetryScreen() {
-    
     this.retryScreenObjects = [];
-    const tryAgainText = createText(this, GAME_WIDTH / 2, 185, 60, 'Game Over\nTry Again?', {align: 'center'});
+    const tryAgainText = createText(this, GAME_WIDTH / 2, 185, 60, 'Game Over\nTry Again?', { align: 'center' });
     const yesBtn = createButton(this, GAME_WIDTH / 2 - 190, 220, 200, 60, this.onReplay, 'YES');
 
     [tryAgainText].forEach((text) => {

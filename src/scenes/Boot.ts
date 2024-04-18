@@ -33,7 +33,7 @@ export class Boot extends Phaser.Scene {
   }
 
   loadFont(name: string, url: string) {
-    var newFont = new FontFace(name, `url(${url})`);
+    const newFont = new FontFace(name, `url(${url})`);
     newFont
       .load()
       .then((loaded) => {
@@ -44,8 +44,8 @@ export class Boot extends Phaser.Scene {
         return error;
       });
   }
-  
-  loadFonts(){
+
+  loadFonts() {
     this.loadFont('ConcertOne', 'assets/gamedevjs2024/fonts/ConcertOne-Regular.ttf');
   }
   create(): void {

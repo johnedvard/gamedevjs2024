@@ -13,9 +13,7 @@ export class UserInput {
   graphics: Phaser.GameObjects.Graphics;
   player: Player;
 
-  constructor(
-    private scene: Scene
-  ) {
+  constructor(private scene: Scene) {
     this.listenForPointer();
     this.graphics = this.scene.add.graphics();
   }
@@ -110,7 +108,7 @@ export class UserInput {
     this.graphics.stroke();
   }
 
-  setPlayer(player: Player){
+  setPlayer(player: Player) {
     this.player = player;
   }
 }

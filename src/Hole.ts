@@ -68,8 +68,8 @@ export class Hole {
     this.spineObject.destroy();
     this.spineObject = null;
   }
-  
-  destroyEverything(){
+
+  destroyEverything() {
     this.destroyPhysicsObjects();
     this.destroy();
   }

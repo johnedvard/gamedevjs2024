@@ -13,10 +13,9 @@ type ButtonConfig = {
   height?: number;
   borderRadius?: number;
   scale?: number;
-  onButtonDown?: Function;
-  fill?: any
+  onButtonDown?: () => void;
+  fill?: any;
 };
-
 
 export const getPosFromSvgCircle = (circleElement: SVGElement): Phaser.Math.Vector2 => {
   if (!circleElement) return new Phaser.Math.Vector2(0, 0);
@@ -162,7 +161,6 @@ export const getHolesFromSvg = (svgDoc: Document) => {
   return holes;
 };
 
-
 export const createButtonGraphics = (scene: Scene, config?: ButtonConfig): Phaser.GameObjects.Graphics => {
   const graphics = scene.add.graphics();
   const btnWidth = config.width || 100;
@@ -177,7 +175,7 @@ export const createButtonGraphics = (scene: Scene, config?: ButtonConfig): Phase
   graphics.setPosition(config.x, config.y); // set origin to center
   rect.x -= rect.width / 2; // make up for the canvas translation
   rect.y -= rect.height / 2;
-  if(config.onButtonDown){
+  if (config.onButtonDown) {
     graphics.setInteractive(rect, Phaser.Geom.Rectangle.Contains);
     graphics.on('pointerdown', config.onButtonDown, this);
   }

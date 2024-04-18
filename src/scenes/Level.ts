@@ -31,7 +31,7 @@ export class Level extends Phaser.Scene {
       });
   }
 
-  initLevel(){
+  initLevel() {
     this.player = new Player(this, { startPos: this.levelState.startPos });
     this.userInput.setPlayer(this.player);
     this.createEnemies();
@@ -46,24 +46,24 @@ export class Level extends Phaser.Scene {
     handleDebugInput(this);
   }
 
-  removeEventListeners(){
+  removeEventListeners() {
     off(GameEvent.gameOver, this.onGameOver);
     off(GameEvent.replay, this.onReplay);
   }
 
-  listenForEvents(){
+  listenForEvents() {
     on(GameEvent.gameOver, this.onGameOver);
     on(GameEvent.replay, this.onReplay);
   }
 
   onGameOver = () => {
     this.scene.launch(SceneKey.GameOver);
-  }
+  };
 
   onReplay = () => {
     this.destroyGameObjects();
     this.initLevel();
-  }
+  };
 
   createEnemies() {
     this.levelState.enemies.forEach((e) => {
@@ -78,23 +78,23 @@ export class Level extends Phaser.Scene {
   }
 
   update(time: number, delta: number): void {
-    this.userInput?.update(time,delta);
+    this.userInput?.update(time, delta);
     this.player?.update(time, delta);
-    for(let i = this.enemies.length-1; i>=0; i--){
+    for (let i = this.enemies.length - 1; i >= 0; i--) {
       const e = this.enemies[i];
-      e.update(time, delta)
-      if(e.isDestroyed){ 
+      e.update(time, delta);
+      if (e.isDestroyed) {
         this.enemies[i] = null;
-        this.enemies.splice(i,1);
+        this.enemies.splice(i, 1);
       }
     }
     this.holes.forEach((e) => e.update(time, delta));
   }
 
-  destroyGameObjects(){
+  destroyGameObjects() {
     // No need to destroy player, because it destroys itself
     this.player = null;
-    this.enemies.forEach((e) => e.destroyEverything())
+    this.enemies.forEach((e) => e.destroyEverything());
     this.holes.forEach((e) => e.destroyEverything());
     this.holes = [];
     this.enemies = [];

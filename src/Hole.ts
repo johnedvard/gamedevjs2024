@@ -75,13 +75,13 @@ export class Hole {
   }
 
   handleHoleShadowOffset() {
-    const maxOffsetY = 15;
-    const maxOffsetX = 10;
+    const maxOffsetY = 18;
+    const maxOffsetX = 15;
     const diffX = this.player.x - this.spineObject.x;
     const diffY = this.spineObject.y - this.player.y;
 
     this.controlBone.x = diffX / 20;
-    this.controlBone.y = diffY / 20 - 25;
+    this.controlBone.y = diffY / 20 - 10;
     if (this.controlBone.x < -maxOffsetX) this.controlBone.x = -maxOffsetX;
     if (this.controlBone.x > maxOffsetX) this.controlBone.x = maxOffsetX;
     if (this.controlBone.y < -maxOffsetY) this.controlBone.y = -maxOffsetY;

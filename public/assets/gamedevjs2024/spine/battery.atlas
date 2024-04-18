@@ -1,0 +1,15 @@
+battery.png
+size:83,86
+filter:Linear,Linear
+pma:true
+battery/battery
+bounds:2,41,79,43
+battery/charge1-white
+bounds:31,2,22,37
+offsets:1,0,23,37
+battery/charge2-white
+bounds:2,2,27,37
+offsets:2,0,31,37
+battery/charge3-white
+bounds:55,2,21,37
+offsets:0,0,23,37

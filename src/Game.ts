@@ -16,6 +16,7 @@ import { UserInterface } from '~/scenes/UserInterface';
 import { Boot } from '~/scenes/Boot';
 import { Level } from '~/scenes/Level';
 import { GameOver } from '~/scenes/GameOver';
+import { HUD } from '~/scenes/HUD';
 
 const addScenes = (game: Game) => {
   game.scene.add(SceneKey.Intro, Intro);
@@ -23,6 +24,7 @@ const addScenes = (game: Game) => {
   game.scene.add(SceneKey.UserInterface, UserInterface);
   game.scene.add(SceneKey.Level, Level);
   game.scene.add(SceneKey.GameOver, GameOver);
+  game.scene.add(SceneKey.HUD, HUD);
   game.scene.add(SceneKey.Boot, Boot, true);
 };
 

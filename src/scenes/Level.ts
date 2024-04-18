@@ -36,6 +36,7 @@ export class Level extends Phaser.Scene {
     this.userInput.setPlayer(this.player);
     this.createEnemies();
     this.createHoles();
+    this.scene.launch(SceneKey.HUD);
   }
 
   create(): void {

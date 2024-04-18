@@ -6,4 +6,5 @@ export enum SceneKey {
   Boot = 'Boot',
   Settings = 'Settings',
   GameOver = 'GameOver',
+  HUD = 'HUD',
 }

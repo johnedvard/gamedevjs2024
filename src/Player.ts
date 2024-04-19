@@ -205,4 +205,7 @@ export class Player {
     if (this.state === 'dead') return this.deadPos.y;
     return this.ball.position.y;
   }
+  get eyeGroup(): Bone {
+    return this.spineObject.skeleton.findBone('eye-group');
+  }
 }

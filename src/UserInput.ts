@@ -55,6 +55,7 @@ export class UserInput {
 
   updateTrajectory() {
     this.graphics.clear();
+    if(this.player.shots === 0) return;
     if (!this.pointerEndPos || !this.pointerStartPos) return;
     const line = this.getMirroredPointerLine();
     // this.drawMirroredPointerLine(line);
@@ -104,7 +105,7 @@ export class UserInput {
       yScale = distance / maxDistance;
       if (yScale < 1) yScale = 1;
       // this.player.spineObject.setScale(1,yScale)
-      this.player.spineObject?.setRotation(line2.from.clone().subtract(line2.to).angle() - Math.PI / 2);
+      this.player.eyeGroup.rotation = Phaser.Math.RadToDeg(line2.from.clone().subtract(line2.to).angle() - Math.PI / 2) * -1;
     }
 
     this.graphics.stroke();

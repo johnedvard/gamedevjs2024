@@ -67,7 +67,7 @@ export class Battery {
     }
   };
   discharge() {
-    if (this.charges !== MAX_CHARGES) return;
+    // if (this.charges !== MAX_CHARGES) return;
     this.charges = 0;
     this.spineBattery.animationState.setAnimation(0, 'spend-all');
     emit(GameEvent.batteryChange, { oldValue: MAX_CHARGES, newValue: this.charges });

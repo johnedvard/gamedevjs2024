@@ -26,6 +26,9 @@ export class HUD extends Phaser.Scene {
     this.listenForEvents();
     this.initSpineHand();
     this.handleDragTutorial();
+    const g = this.add.graphics();
+    g.fillStyle(0x222222,0.2);
+    g.fillRect(0,0,GAME_WIDTH,GAME_HEIGHT)
   }
   onBatteryChange = (data: { oldValue: number; newValue: number }) => {
     this.handleTapTutorial();

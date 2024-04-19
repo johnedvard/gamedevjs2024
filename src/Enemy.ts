@@ -1,5 +1,5 @@
 import { Scene } from 'phaser';
-import { SpineGameObject } from '@esotericsoftware/spine-phaser';
+import { Attachment, SpineGameObject } from '@esotericsoftware/spine-phaser';
 
 import { BodyTypeLabel } from '~/enums/BodyTypeLabel';
 import { DepthGroup } from '~/enums/DepthGroup';
@@ -15,6 +15,9 @@ export class Enemy {
   startPoint: Phaser.Math.Vector2 = new Phaser.Math.Vector2(200, 200);
   state: '' | 'dead' = '';
   isDestroyed = false;
+  highlightAttachment: Attachment;
+  displayHighlight = false;
+  isInisideDischargeArea = false;
 
   constructor(
     private scene: Scene,
@@ -35,6 +38,14 @@ export class Enemy {
       if (bodyA.label === BodyTypeLabel.player) {
         this.spineObject.animationState.setAnimation(0, 'hit', false);
       }
+      if (bodyB.label === BodyTypeLabel.dischargeCircle) {
+        this.isInisideDischargeArea = true;
+      }
+    };
+    this.ball.onCollideEndCallback = ({ bodyA, bodyB }: CollideCallback) => {
+      if (bodyB.label === BodyTypeLabel.dischargeCircle) {
+        this.isInisideDischargeArea = false;
+      }
     };
   }
 
@@ -44,12 +55,13 @@ export class Enemy {
       .setDepth(DepthGroup.player);
     this.spineObject.skeleton.setSkinByName('regular');
     this.spineObject.animationState.timeScale = 0.5;
+    this.highlightAttachment = this.spineObject.skeleton.getAttachmentByName('player/highlight', 'player/highlight');
   }
 
   initPhysics() {
     this.ball = this.scene.matter.add.circle(this.startPoint.x, this.startPoint.y, BALL_RADIUS, {
       label: BodyTypeLabel.enemy,
-      frictionAir: 0.03,
+      frictionAir: 0.028,
       friction: 0.1,
       restitution: 0.9,
     });
@@ -81,17 +93,29 @@ export class Enemy {
       this.spineObject.animationState.addListener(animationStateListeners);
     }
   };
+
+  onDischargePreview = () => {
+    if (this.isInisideDischargeArea) this.showHighlight();
+  };
+  onDischargeDismissPreview = () => {
+    this.hideHighlight();
+  };
+
   listenForEvents() {
     on(GameEvent.fallInHole, this.fallInHole);
+    on(GameEvent.batteryDischargePreview, this.onDischargePreview);
+    on(GameEvent.batteryDischargeDismissPreview, this.onDischargeDismissPreview);
   }
   removeEventListeners() {
     off(GameEvent.fallInHole, this.fallInHole);
+    off(GameEvent.batteryDischargePreview, this.onDischargePreview);
+    off(GameEvent.batteryDischargeDismissPreview, this.onDischargeDismissPreview);
   }
 
   update(time: number, delta: number) {
     if (this.state === 'dead') return;
     this.spineObject.setPosition(this.ball.position.x, this.ball.position.y);
-    this.spineObject.setDepth(DepthGroup.player + this.ball.position.y);
+    this.spineObject.setDepth(DepthGroup.player + this.ball.position.y / 1000);
     this.eyeGroup.rotation = Phaser.Math.RadToDeg(this.ball.angle) * -1;
   }
 
@@ -113,6 +137,13 @@ export class Enemy {
     this.destroy();
   }
 
+  showHighlight() {
+    this.spineObject.skeleton.findSlot('player/highlight').setAttachment(this.highlightAttachment);
+  }
+  hideHighlight() {
+    this.spineObject.skeleton.findSlot('player/highlight').setAttachment(null);
+  }
+
   get x() {
     return this.ball.position.x;
   }
@@ -120,6 +151,7 @@ export class Enemy {
   get y() {
     return this.ball.position.y;
   }
+
   get eyeGroup() {
     return this.spineObject.skeleton.findBone('eye-group');
   }

@@ -66,9 +66,9 @@ export class Player {
   initPhysics() {
     this.ball = this.scene.matter.add.circle(this.startPoint.x, this.startPoint.y, BALL_RADIUS, {
       label: BodyTypeLabel.player,
-      frictionAir: 0.03,
-      friction: 0.2,
-      restitution: 0.5,
+      frictionAir: 0.028,
+      friction: 0.1,
+      restitution: 0.7,
     });
   }
 
@@ -125,7 +125,7 @@ export class Player {
   update(time: number, delta: number) {
     if (this.state === 'dead') return;
     this.spineObject.setPosition(this.ball.position.x, this.ball.position.y);
-    this.spineObject.setDepth(DepthGroup.player + this.ball.position.y);
+    this.spineObject.setDepth(DepthGroup.player + this.ball.position.y / 1000);
     if (this.shotsTxtContainer) {
       this.shotsTxtContainer.x = this.ball.position.x + TEXT_OFFSET.x;
       this.shotsTxtContainer.y = this.ball.position.y + TEXT_OFFSET.y;

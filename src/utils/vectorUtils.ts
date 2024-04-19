@@ -76,7 +76,7 @@ export const createCollisionBoxesFromPaths = (scene: Scene, svgPaths: SvgPath[])
           isStatic: true,
           label: BodyTypeLabel.collisionWall,
           ignoreGravity: true,
-          restitution: 0.5,
+          restitution: 0.7,
           friction: 0,
           frictionStatic: 0,
         });

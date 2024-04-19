@@ -5,7 +5,7 @@ export enum DepthGroup {
   background = 20000,
   wall = 30000,
   hole = 40000,
-  particleFront = 50000,
-  player = 60000,
+  player = 50000,
+  particleFront = 60000,
   ui = 70000,
 }

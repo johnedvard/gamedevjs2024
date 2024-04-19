@@ -22,11 +22,22 @@ export class Battery {
   onBatteryClick = () => {
     this.discharge();
   };
+  onDischargePreview = () => {
+    console.log('discharge preview');
+    emit(GameEvent.batteryDischargePreview);
+  };
+  onDischargeDismissPreview = () => {
+    console.log('dismiss discharge preview');
+    emit(GameEvent.batteryDischargeDismissPreview);
+  };
   initClickArea() {
     const clickableGraphics = this.scene.add.graphics();
     const clickableRect = new Phaser.Geom.Rectangle(GAME_WIDTH - 121, 75, 83, 50);
     clickableGraphics.setInteractive(clickableRect, Phaser.Geom.Rectangle.Contains);
-    clickableGraphics.on('pointerdown', this.onBatteryClick, this);
+    clickableGraphics.on('pointerup', this.onBatteryClick, this);
+    // clickableGraphics.on('pointerdown', this.onDischargePreview, this);
+    clickableGraphics.on('pointerover', this.onDischargePreview, this);
+    clickableGraphics.on('pointerout', this.onDischargeDismissPreview, this);
     // enable to debug position
     // clickableGraphics.fillStyle(0xffffff);
     // clickableGraphics.fillRectShape(clickableRect);
@@ -67,10 +78,11 @@ export class Battery {
     }
   };
   discharge() {
-    // if (this.charges !== MAX_CHARGES) return;
+    if (this.charges !== MAX_CHARGES) return;
     this.charges = 0;
     this.spineBattery.animationState.setAnimation(0, 'spend-all');
     emit(GameEvent.batteryChange, { oldValue: MAX_CHARGES, newValue: this.charges });
+    emit(GameEvent.batteryDischarge);
   }
   addCharge() {
     this.charges++;

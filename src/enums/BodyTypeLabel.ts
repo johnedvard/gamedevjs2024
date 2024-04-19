@@ -6,4 +6,5 @@ export enum BodyTypeLabel {
   enemy = 'enemy',
   hole = 'hole',
   collisionWall = 'collisionWall',
+  dischargeCircle = 'dischargeCircle',
 }

@@ -24,11 +24,11 @@ export class Battery {
   };
   onDischargePreview = () => {
     console.log('discharge preview');
-    emit(GameEvent.batteryDischargePreview);
+    emit(GameEvent.dischargePreview);
   };
   onDischargeDismissPreview = () => {
     console.log('dismiss discharge preview');
-    emit(GameEvent.batteryDischargeDismissPreview);
+    emit(GameEvent.dischargeDismissPreview);
   };
   initClickArea() {
     const clickableGraphics = this.scene.add.graphics();
@@ -81,8 +81,8 @@ export class Battery {
     if (this.charges !== MAX_CHARGES) return;
     this.charges = 0;
     this.spineBattery.animationState.setAnimation(0, 'spend-all');
+    emit(GameEvent.discharge);
     emit(GameEvent.batteryChange, { oldValue: MAX_CHARGES, newValue: this.charges });
-    emit(GameEvent.batteryDischarge);
   }
   addCharge() {
     this.charges++;

@@ -75,25 +75,32 @@ export class Enemy {
         y: data.hole.position.y,
         duration: 1000,
       });
-      this.spineObject.skeleton.setSkinByName('dead');
-      this.spineObject.animationState.setAnimation(0, 'dead', false);
-      this.state = 'dead';
-      this.destroyPhysicsObjects();
-      const animationStateListeners = {
-        complete: (trackEntry) => {
-          // Animation has completed
-          console.log(`Animation ${trackEntry.animation.name} has completed`);
-          this.spineObject.animationState.removeListener(animationStateListeners);
-          this.destroy();
-          // Perform any actions you need after the animation ends here
-          // For example, switching back to an idle animation or triggering game logic
-        },
-      };
-
-      this.spineObject.animationState.addListener(animationStateListeners);
+      this.startDieRoutine('regular');
     }
   };
 
+  startDieRoutine(skin: 'regular' | 'dead') {
+    this.spineObject.skeleton.setSkinByName(skin);
+    this.spineObject.animationState.setAnimation(0, 'dead', false);
+    this.state = 'dead';
+    this.destroyPhysicsObjects();
+    const animationStateListeners = {
+      complete: (trackEntry) => {
+        // Animation has completed
+        console.log(`Animation ${trackEntry.animation.name} has completed`);
+        this.spineObject.animationState.removeListener(animationStateListeners);
+        this.destroy();
+        // Perform any actions you need after the animation ends here
+        // For example, switching back to an idle animation or triggering game logic
+      },
+    };
+
+    this.spineObject.animationState.addListener(animationStateListeners);
+  }
+
+  onDischargeComplete = () => {
+    if (this.isInisideDischargeArea) this.startDieRoutine('dead');
+  };
   onDischargePreview = () => {
     if (this.isInisideDischargeArea) this.showHighlight();
   };
@@ -103,13 +110,15 @@ export class Enemy {
 
   listenForEvents() {
     on(GameEvent.fallInHole, this.fallInHole);
-    on(GameEvent.batteryDischargePreview, this.onDischargePreview);
-    on(GameEvent.batteryDischargeDismissPreview, this.onDischargeDismissPreview);
+    on(GameEvent.dischargePreview, this.onDischargePreview);
+    on(GameEvent.dischargeDismissPreview, this.onDischargeDismissPreview);
+    on(GameEvent.dischargeComplete, this.onDischargeComplete);
   }
   removeEventListeners() {
     off(GameEvent.fallInHole, this.fallInHole);
-    off(GameEvent.batteryDischargePreview, this.onDischargePreview);
-    off(GameEvent.batteryDischargeDismissPreview, this.onDischargeDismissPreview);
+    off(GameEvent.dischargePreview, this.onDischargePreview);
+    off(GameEvent.dischargeDismissPreview, this.onDischargeDismissPreview);
+    off(GameEvent.dischargeComplete, this.onDischargeComplete);
   }
 
   update(time: number, delta: number) {

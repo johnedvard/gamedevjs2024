@@ -9,7 +9,8 @@ export enum GameEvent {
   fallInHole = 'fallInHole',
   gameStateChange = 'gameStateChange',
   batteryChange = 'batteryChange',
-  batteryDischarge = 'batteryDischarge',
-  batteryDischargePreview = 'batteryDischargePreview',
-  batteryDischargeDismissPreview = 'batteryDischargeDismissPreview',
+  dischargeComplete = 'dischargeComplete',
+  discharge = 'discharge',
+  dischargePreview = 'dischargePreview',
+  dischargeDismissPreview = 'dischargeDismissPreview',
 }

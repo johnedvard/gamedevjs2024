@@ -10,10 +10,7 @@ import { Hole } from '~/Hole';
 import { off, on } from '~/utils/eventEmitterUtils';
 import { GameEvent } from '~/enums/GameEvent';
 import { UserInput } from '~/UserInput';
-import { DepthGroup } from '~/enums/DepthGroup';
-import { BodyTypeLabel } from '~/enums/BodyTypeLabel';
-
-const DISCARGE_CIRCLE_RADIUS = 270;
+import { Discharge } from '~/Discharge';
 
 export class Level extends Phaser.Scene {
   levelState!: LevelState;
@@ -21,10 +18,7 @@ export class Level extends Phaser.Scene {
   userInput!: UserInput;
   enemies: Enemy[] = [];
   holes: Hole[] = [];
-  dischargeCircle: MatterJS.BodyType; // follows player (maybe move it into own class or inside player)
-  dischargeBoundryGeom: Phaser.Geom.Circle; // follows player (maybe move it into own class or inside player)
-  dischargeBoundryGraphics: Phaser.GameObjects.Graphics; // follows player (maybe move it into own class or inside player)
-  displayDischargePreview = false;
+  discharge: Discharge;
 
   constructor() {
     super(SceneKey.Level);
@@ -40,20 +34,13 @@ export class Level extends Phaser.Scene {
       });
   }
 
-  createDischargeCircle() {
-    this.dischargeCircle = this.matter.add.circle(0, 0, DISCARGE_CIRCLE_RADIUS, {
-      isSensor: true,
-      label: BodyTypeLabel.dischargeCircle,
-    });
-    this.dischargeBoundryGeom = new Phaser.Geom.Circle(0, 0, DISCARGE_CIRCLE_RADIUS);
-    this.dischargeBoundryGraphics = this.add.graphics().setDepth(DepthGroup.particleFront);
-  }
   initLevel() {
     this.player = new Player(this, { startPos: this.levelState.startPos });
     this.userInput.setPlayer(this.player);
     this.createEnemies();
     this.createHoles();
-    this.createDischargeCircle();
+    this.discharge = new Discharge(this);
+    this.discharge.setPlayer(this.player);
     this.scene.launch(SceneKey.HUD);
   }
 
@@ -64,36 +51,14 @@ export class Level extends Phaser.Scene {
     handleDebugInput(this);
   }
 
-  onBatteryDischarged = () => {
-    // create power field around player in a radius r,
-    // wipe out enemies inside the area
-    this.displayDischargePreview = false;
-  };
-
-  onDischargePreview = () => {
-    console.log('preview plz');
-    this.displayDischargePreview = true;
-  };
-
-  onDischargeDismissPreview = () => {
-    console.log('dismiss preview plz');
-    this.displayDischargePreview = false;
-  };
-
   listenForEvents() {
     on(GameEvent.gameOver, this.onGameOver);
     on(GameEvent.replay, this.onReplay);
-    on(GameEvent.batteryDischarge, this.onBatteryDischarged);
-    on(GameEvent.batteryDischargePreview, this.onDischargePreview);
-    on(GameEvent.batteryDischargeDismissPreview, this.onDischargeDismissPreview);
   }
 
   removeEventListeners() {
     off(GameEvent.gameOver, this.onGameOver);
     off(GameEvent.replay, this.onReplay);
-    off(GameEvent.batteryDischarge, this.onBatteryDischarged);
-    off(GameEvent.batteryDischargePreview, this.onDischargePreview);
-    off(GameEvent.batteryDischargeDismissPreview, this.onDischargeDismissPreview);
   }
 
   onGameOver = () => {
@@ -130,23 +95,7 @@ export class Level extends Phaser.Scene {
       }
     }
     this.holes.forEach((e) => e.update(time, delta));
-    this.handleDischargeUpdates();
-  }
-
-  handleDischargeUpdates() {
-    if (this.dischargeCircle) {
-      this.dischargeCircle.position.x = this.player.x;
-      this.dischargeCircle.position.y = this.player.y;
-    }
-    this.dischargeBoundryGraphics.clear();
-    if (this.dischargeBoundryGraphics && this.displayDischargePreview) {
-      this.dischargeBoundryGraphics.lineStyle(3, 0xfefefe, 0.5);
-      this.dischargeBoundryGraphics.fillStyle(0xfefefe, 0.05);
-      this.dischargeBoundryGraphics.x = this.player.x;
-      this.dischargeBoundryGraphics.y = this.player.y;
-      this.dischargeBoundryGraphics.fillCircleShape(this.dischargeBoundryGeom);
-      this.dischargeBoundryGraphics.strokeCircleShape(this.dischargeBoundryGeom);
-    }
+    this.discharge?.update(time, delta);
   }
 
   destroyGameObjects() {
@@ -154,6 +103,7 @@ export class Level extends Phaser.Scene {
     this.player = null;
     this.enemies.forEach((e) => e.destroyEverything());
     this.holes.forEach((e) => e.destroyEverything());
+    this.discharge.destroy();
     this.holes = [];
     this.enemies = [];
   }

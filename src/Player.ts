@@ -78,7 +78,6 @@ export class Player {
   };
 
   onReleaseBallThrow = ({ holdDuration, diffX, diffY }: { holdDuration: number; diffX: number; diffY: number }) => {
-    console.log('on release ball');
     this.handleShotsTxtTween?.stop();
     this.handleShotsTxtTween = this.scene.tweens.add({
       targets: this.shotsTxt,
@@ -144,6 +143,7 @@ export class Player {
       this.waitBeforeDieSubscription = startWaitRoutine(this.scene, 3000)
         .pipe(take(1))
         .subscribe(() => {
+          if (this.shots > 0) return; // we got a few more shots before
           this.startDieRoutine();
         });
     }
@@ -174,24 +174,23 @@ export class Player {
     this.shots += num;
     this.shotsTxt.text = this.getShotsText();
     if (this.shots >= MAX_SHOTS) this.shots = MAX_SHOTS;
-    if (this.state === 'dead' && this.shots > 0) {
+    // make sure we don't die if we still have shots left
+    if (this.shots > 0) {
       this.waitBeforeDieSubscription?.unsubscribe();
       this.waitBeforeDieSubscription = null;
       this.state = '';
     }
   }
+
   startDieRoutine() {
     this.spineObject.animationState.setAnimation(0, 'dead', false);
     this.destroyPhysicsObjects();
     this.state = 'dead';
     const animationStateListeners = {
       complete: (trackEntry) => {
-        // Animation has completed
         console.log(`Animation ${trackEntry.animation.name} has completed`);
         this.spineObject.animationState.removeListener(animationStateListeners);
         this.destroy();
-        // Perform any actions you need after the animation ends here
-        // For example, switching back to an idle animation or triggering game logic
       },
     };
 

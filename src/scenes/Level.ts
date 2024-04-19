@@ -10,6 +10,8 @@ import { Hole } from '~/Hole';
 import { off, on } from '~/utils/eventEmitterUtils';
 import { GameEvent } from '~/enums/GameEvent';
 import { UserInput } from '~/UserInput';
+import { DepthGroup } from '~/enums/DepthGroup';
+import { SpineGameObject } from '@esotericsoftware/spine-phaser';
 
 export class Level extends Phaser.Scene {
   levelState!: LevelState;

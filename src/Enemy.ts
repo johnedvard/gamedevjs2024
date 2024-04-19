@@ -91,7 +91,7 @@ export class Enemy {
   update(time: number, delta: number) {
     if (this.state === 'dead') return;
     this.spineObject.setPosition(this.ball.position.x, this.ball.position.y);
-    
+    this.spineObject.setDepth(DepthGroup.player + this.ball.position.y);
     this.eyeGroup.rotation = Phaser.Math.RadToDeg(this.ball.angle) * -1;
   }
 
@@ -120,7 +120,7 @@ export class Enemy {
   get y() {
     return this.ball.position.y;
   }
-  get eyeGroup(){
+  get eyeGroup() {
     return this.spineObject.skeleton.findBone('eye-group');
   }
 }

@@ -125,6 +125,7 @@ export class Player {
   update(time: number, delta: number) {
     if (this.state === 'dead') return;
     this.spineObject.setPosition(this.ball.position.x, this.ball.position.y);
+    this.spineObject.setDepth(DepthGroup.player + this.ball.position.y);
     if (this.shotsTxtContainer) {
       this.shotsTxtContainer.x = this.ball.position.x + TEXT_OFFSET.x;
       this.shotsTxtContainer.y = this.ball.position.y + TEXT_OFFSET.y;

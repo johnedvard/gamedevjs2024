@@ -64,7 +64,7 @@ export function createFlooring(scene: Scene, startY: number, endY: number) {
 }
 
 function createBackgroundFromSvg(scene: Scene, svgPaths: SvgPath[]) {
-  const graphics = scene.add.graphics().setDepth(DepthGroup.background);
+  const graphics = scene.add.graphics().setDepth(DepthGroup.ui);
   graphics.fillStyle(MyColor.black);
   svgPaths.forEach(({ path, svgPathEl }) => {
     if (!svgPathEl.getAttribute('serif:id')?.match('{background}')) return;

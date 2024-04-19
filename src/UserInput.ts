@@ -11,13 +11,16 @@ export class UserInput {
   holdDuration = 0;
   pointerStartPos: { x: number; y: number };
   pointerEndPos: { x: number; y: number };
-  graphics: Phaser.GameObjects.Graphics;
+  trajectoryGraphics: Phaser.GameObjects.Graphics;
+  trajectorypotentialGraphics: Phaser.GameObjects.Graphics;
   player: Player;
 
   constructor(private scene: Scene) {
     this.listenForPointer();
-    this.graphics = this.scene.add.graphics();
-    this.graphics.setDepth(DepthGroup.player);
+    this.trajectoryGraphics = this.scene.add.graphics();
+    this.trajectoryGraphics.setDepth(DepthGroup.player);
+    this.trajectorypotentialGraphics = this.scene.add.graphics();
+    this.trajectorypotentialGraphics.setDepth(DepthGroup.player);
   }
 
   listenForPointer() {
@@ -54,11 +57,11 @@ export class UserInput {
   }
 
   updateTrajectory() {
-    this.graphics.clear();
-    if(this.player.shots === 0) return;
+    this.trajectoryGraphics.clear();
+    this.trajectorypotentialGraphics.clear();
+    if (this.player.shots === 0) return;
     if (!this.pointerEndPos || !this.pointerStartPos) return;
     const line = this.getMirroredPointerLine();
-    // this.drawMirroredPointerLine(line);
     if (!this.player) return;
     this.drawPointerPathFromBall(line);
   }
@@ -73,42 +76,49 @@ export class UserInput {
     return line;
   }
 
-  drawMirroredPointerLine(line: Line) {
-    this.graphics.lineStyle(4, 0xffffff, 1);
-    this.graphics.moveTo(line.from.x, line.from.y);
-    this.graphics.lineTo(line.to.x, line.to.y);
-    this.graphics.stroke();
-  }
-
   drawPointerPathFromBall(line: Line) {
-    this.graphics.lineStyle(4, 0xffffff, 1);
     const ballPos = new Phaser.Math.Vector2(this.player.x, this.player.y);
     const line2 = {
       from: ballPos,
       to: ballPos.clone().add(new Phaser.Math.Vector2(line.to.x - line.from.x, line.to.y - line.from.y)),
     };
 
+    const minDistance = 50;
     const maxDistance = 250;
+    const maxLineWidth = 8;
+    const minLineWidth = 3;
     const distance = line2.from.distance(line2.to);
 
     const diffNormalized: Phaser.Math.Vector2 = line2.to.clone().subtract(line2.from).normalize();
+    diffNormalized.scale(maxDistance);
+    const unitLength = 1 / maxDistance;
+    const lineWidth = Math.min(distance, maxDistance) * unitLength * maxLineWidth;
+    this.trajectoryGraphics.lineStyle(Math.max(minLineWidth, lineWidth), 0xffffff, 1);
+    this.trajectorypotentialGraphics.lineStyle(Math.max(minLineWidth, lineWidth), 0xffffff, 0.4);
+    // draw the potential to max length
+    if (distance > minDistance) {
+      this.trajectorypotentialGraphics.moveTo(line2.from.x, line2.from.y);
+      this.trajectorypotentialGraphics.lineTo(line2.from.x + diffNormalized.x, line2.from.y + diffNormalized.y);
+    }
+
     if (distance > maxDistance) {
-      diffNormalized.scale(maxDistance);
-      this.graphics.moveTo(line2.from.x, line2.from.y);
-      this.graphics.lineTo(line2.from.x + diffNormalized.x, line2.from.y + diffNormalized.y);
+      this.trajectoryGraphics.moveTo(line2.from.x, line2.from.y);
+      this.trajectoryGraphics.lineTo(line2.from.x + diffNormalized.x, line2.from.y + diffNormalized.y);
     } else {
-      this.graphics.moveTo(line2.from.x, line2.from.y);
-      this.graphics.lineTo(line2.to.x, line2.to.y);
+      this.trajectoryGraphics.moveTo(line2.from.x, line2.from.y);
+      this.trajectoryGraphics.lineTo(line2.to.x, line2.to.y);
     }
     let yScale = 1;
     if (distance > 10) {
       yScale = distance / maxDistance;
       if (yScale < 1) yScale = 1;
       // this.player.spineObject.setScale(1,yScale)
-      this.player.eyeGroup.rotation = Phaser.Math.RadToDeg(line2.from.clone().subtract(line2.to).angle() - Math.PI / 2) * -1;
+      this.player.eyeGroup.rotation =
+        Phaser.Math.RadToDeg(line2.from.clone().subtract(line2.to).angle() - Math.PI / 2) * -1;
     }
 
-    this.graphics.stroke();
+    this.trajectoryGraphics.stroke();
+    this.trajectorypotentialGraphics.stroke();
   }
 
   setPlayer(player: Player) {

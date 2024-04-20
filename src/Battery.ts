@@ -47,6 +47,7 @@ export class Battery {
       .spine(GAME_WIDTH - 80, 100, 'battery-skel', 'battery-atlas')
       .setDepth(DepthGroup.ui);
     this.spineBattery.skeleton.setSkinByName('yellow');
+    this.spineBattery.animationState.timeScale = 0.9;
     const animationStateListeners = {
       complete: (trackEntry) => {
         if (trackEntry.animation.name === 'add-charge' || trackEntry.animation.name === 'spend-all') {

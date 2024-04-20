@@ -13,4 +13,5 @@ export enum GameEvent {
   discharge = 'discharge',
   dischargePreview = 'dischargePreview',
   dischargeDismissPreview = 'dischargeDismissPreview',
+  enemyKilled = 'enemyKilled',
 }

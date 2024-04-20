@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs/internal/Subscription';
 import { take } from 'rxjs/internal/operators/take';
 
 import { Battery } from '~/Battery';
+import { Score } from '~/Score';
 import { DepthGroup } from '~/enums/DepthGroup';
 import { GameEvent } from '~/enums/GameEvent';
 import { SceneKey } from '~/enums/SceneKey';
@@ -16,13 +17,17 @@ export class HUD extends Phaser.Scene {
   battery: Battery;
   spineHand: SpineGameObject;
   startDragTutorialSubscription: Subscription;
+  score: Score;
+
   constructor() {
     super(SceneKey.HUD);
   }
   preload() {}
   create() {
     centerScene(this);
+    console.log('new HUD');
     this.battery = new Battery(this);
+    this.score = new Score(this);
     this.listenForEvents();
     this.initSpineHand();
     this.handleDragTutorial();
@@ -44,17 +49,20 @@ export class HUD extends Phaser.Scene {
     this.spineHand.visible = false;
   }
 
+  onReplay = () => {
+    this.battery.reset();
+    this.score.reset();
+  };
+
   listenForEvents() {
     on(GameEvent.batteryChange, this.onBatteryChange);
     on(GameEvent.releaseBallThrow, this.onReleaseBallThrow);
+    on(GameEvent.replay, this.onReplay);
   }
   removeEventListeners() {
     off(GameEvent.batteryChange, this.onBatteryChange);
     off(GameEvent.releaseBallThrow, this.onReleaseBallThrow);
-  }
-
-  update(time: number, delta: number) {
-    this.battery?.update(time, delta);
+    off(GameEvent.replay, this.onReplay);
   }
 
   stopDragTutorial() {

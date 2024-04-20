@@ -8,9 +8,10 @@ import { GameEvent } from '~/enums/GameEvent';
 import { BodyTypeLabel } from './enums/BodyTypeLabel';
 
 const MAX_CHARGES = 3;
+const START_CHARGES = 1;
 export class Battery {
   spineBattery: SpineGameObject;
-  charges = 2;
+  charges = START_CHARGES;
   constructor(private scene: Scene) {
     this.init();
   }
@@ -46,22 +47,13 @@ export class Battery {
     this.spineBattery = this.scene.add
       .spine(GAME_WIDTH - 80, 100, 'battery-skel', 'battery-atlas')
       .setDepth(DepthGroup.ui);
-    this.spineBattery.skeleton.setSkinByName('yellow');
+    this.setSkinByChargeCount();
     this.spineBattery.animationState.timeScale = 0.9;
     const animationStateListeners = {
       complete: (trackEntry) => {
         if (trackEntry.animation.name === 'add-charge' || trackEntry.animation.name === 'spend-all') {
           this.spineBattery.animationState.setAnimation(0, 'idle');
-          if (this.charges === 3) {
-            this.spineBattery.skeleton.setSkinByName('green');
-            this.spineBattery.animationState.setAnimation(0, 'charged', true);
-          } else if (this.charges === 2) {
-            this.spineBattery.skeleton.setSkinByName('yellow');
-          } else if (this.charges === 1) {
-            this.spineBattery.skeleton.setSkinByName('red');
-          } else if (this.charges === 0) {
-            this.spineBattery.skeleton.setSkinByName('empty');
-          }
+          this.setSkinByChargeCount();
         }
         if (trackEntry.animation.name === 'charged') {
           if (this.charges < 3) {
@@ -73,6 +65,19 @@ export class Battery {
 
     this.spineBattery.animationState.addListener(animationStateListeners);
   }
+  setSkinByChargeCount() {
+    if (this.charges === 3) {
+      this.spineBattery.skeleton.setSkinByName('green');
+      this.spineBattery.animationState.setAnimation(0, 'charged', true);
+    } else if (this.charges === 2) {
+      this.spineBattery.skeleton.setSkinByName('yellow');
+    } else if (this.charges === 1) {
+      this.spineBattery.skeleton.setSkinByName('red');
+    } else if (this.charges === 0) {
+      this.spineBattery.skeleton.setSkinByName('empty');
+    }
+  }
+
   fallInHole = (data: { other: MatterJS.BodyType }) => {
     if (data.other.label === BodyTypeLabel.enemy) {
       this.addCharge();
@@ -91,6 +96,10 @@ export class Battery {
     this.spineBattery.animationState.setAnimation(0, 'add-charge');
     emit(GameEvent.batteryChange, { oldValue: this.charges - 1, newValue: this.charges });
   }
+  resetCharges() {
+    this.charges = START_CHARGES;
+    this.spineBattery.animationState.setAnimation(0, 'add-charge');
+  }
   isCharged() {
     return this.charges === MAX_CHARGES;
   }
@@ -100,5 +109,7 @@ export class Battery {
   removeEventListeners() {
     off(GameEvent.fallInHole, this.fallInHole);
   }
-  update(time: number, delta: number) {}
+  reset() {
+    this.resetCharges();
+  }
 }

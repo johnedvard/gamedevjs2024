@@ -4,7 +4,7 @@ import { Attachment, SpineGameObject } from '@esotericsoftware/spine-phaser';
 import { BodyTypeLabel } from '~/enums/BodyTypeLabel';
 import { DepthGroup } from '~/enums/DepthGroup';
 import { CollideCallback } from '~/types/CollideCallback';
-import { off, on } from '~/utils/eventEmitterUtils';
+import { emit, off, on } from '~/utils/eventEmitterUtils';
 import { GameEvent } from '~/enums/GameEvent';
 
 type EnemyOptions = { startPos: Phaser.Math.Vector2; skin?: string };
@@ -84,6 +84,7 @@ export class Enemy {
     this.spineObject.animationState.setAnimation(0, 'dead', false);
     this.state = 'dead';
     this.destroyPhysicsObjects();
+    emit(GameEvent.enemyKilled, { enemy: this });
     const animationStateListeners = {
       complete: (trackEntry) => {
         // Animation has completed

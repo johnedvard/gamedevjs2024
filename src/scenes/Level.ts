@@ -41,7 +41,6 @@ export class Level extends Phaser.Scene {
     this.createHoles();
     this.discharge = new Discharge(this);
     this.discharge.setPlayer(this.player);
-    this.scene.launch(SceneKey.HUD);
   }
 
   create(): void {
@@ -49,6 +48,7 @@ export class Level extends Phaser.Scene {
     this.listenForEvents();
     this.initLevel();
     handleDebugInput(this);
+    this.scene.launch(SceneKey.HUD);
   }
 
   listenForEvents() {

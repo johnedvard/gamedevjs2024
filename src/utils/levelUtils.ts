@@ -64,19 +64,20 @@ export function createFlooring(scene: Scene, startY: number, endY: number) {
 }
 
 function createBackgroundFromSvg(scene: Scene, svgPaths: SvgPath[]) {
-  const graphics = scene.add.graphics().setDepth(DepthGroup.ui);
-  graphics.fillStyle(MyColor.black);
   svgPaths.forEach(({ path, svgPathEl }) => {
     if (!svgPathEl.getAttribute('serif:id')?.match('{background}')) return;
+    const graphics = scene.add.graphics().setDepth(DepthGroup.ui);
+    graphics.fillStyle(MyColor.black);
     graphics.fillPoints(path.getPoints(200));
   });
 }
-function createWallGraphics(scene: Scene, walls: MatterJS.BodyType[], { strokeWidth, color }) {
-  const graphics = scene.add.graphics().setDepth(DepthGroup.wall);
-
-  const curve = new Phaser.Curves.Spline(walls.flatMap((w) => [w.position.x, w.position.y]));
-  graphics.lineStyle(strokeWidth, color, 1);
+function createWallGraphics(scene: Scene, walls: MatterJS.BodyType[][], { strokeWidth, color }) {
+  walls.forEach((group) => {
+    const graphics = scene.add.graphics().setDepth(DepthGroup.wall);
+    const curve = new Phaser.Curves.Spline(group.flatMap((w) => [w.position.x, w.position.y]));
+    graphics.lineStyle(strokeWidth, color, 1);
+    curve.draw(graphics, 200);
+  });
   // graphics.fillStyle(MyColor.black);
   // graphics.fillPoints(curve.getPoints(200))
-  curve.draw(graphics, 200);
 }

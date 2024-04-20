@@ -59,7 +59,7 @@ export class UserInput {
   updateTrajectory() {
     this.trajectoryGraphics.clear();
     this.trajectorypotentialGraphics.clear();
-    if (this.player.shots === 0) return;
+    if (this.player.shots === 0 || this.player.state === 'dead') return;
     if (!this.pointerEndPos || !this.pointerStartPos) return;
     const line = this.getMirroredPointerLine();
     if (!this.player) return;

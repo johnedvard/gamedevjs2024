@@ -61,11 +61,12 @@ export const createPathsFromSvg = (svgDoc: Document): SvgPath[] => {
 };
 
 export const createCollisionBoxesFromPaths = (scene: Scene, svgPaths: SvgPath[]) => {
-  const boxes: MatterJS.BodyType[] = [];
+  const boxes: MatterJS.BodyType[][] = [];
   for (let x = 0; x < 2; x++) {
     svgPaths.forEach(({ path, svgPathEl }) => {
       if (!svgPathEl.getAttribute('serif:id')?.match('{collision}')) return;
-      const allPoints = path.getPoints(13 + x * 4);
+      const collisionGroup = [];
+      const allPoints = path.getPoints(10 + x * 4);
       const offset = 30; // thichness of boxes
       for (let i = 0; i < allPoints.length - 1; i++) {
         const p0 = allPoints[i];
@@ -76,18 +77,22 @@ export const createCollisionBoxesFromPaths = (scene: Scene, svgPaths: SvgPath[])
           isStatic: true,
           label: BodyTypeLabel.collisionWall,
           ignoreGravity: true,
-          restitution: 0.7,
+          restitution: 0.2,
           friction: 0,
           frictionStatic: 0,
         });
         //
         if (x === 1) {
-          boxes.push(box);
+          collisionGroup.push(box);
         }
+      }
+      if (x === 1) {
+        boxes.push(collisionGroup);
       }
     });
   }
   // scene.matter.bounds.create(boxes);
+  console.log('boxes', boxes);
   return boxes;
 };
 

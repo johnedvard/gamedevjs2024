@@ -73,11 +73,13 @@ export class Player {
   }
 
   onStartBallThrow = () => {
+    if (this.state === 'dead') return;
     this.handleShotsTxtTween?.stop();
     this.shotsTxt.alpha = 1;
   };
 
   onReleaseBallThrow = ({ holdDuration, diffX, diffY }: { holdDuration: number; diffX: number; diffY: number }) => {
+    if (this.state === 'dead') return;
     this.handleShotsTxtTween?.stop();
     this.handleShotsTxtTween = this.scene.tweens.add({
       targets: this.shotsTxt,
@@ -89,7 +91,7 @@ export class Player {
 
     if (Math.abs(diffX) < RELASE_DEADZONE && Math.abs(diffY) < RELASE_DEADZONE) return;
     if (this.shots <= 0) return;
-    const force = new Phaser.Math.Vector2(Math.min(1, diffX / -300), Math.max(-1, diffY / -300)).scale(0.12);
+    const force = new Phaser.Math.Vector2(Math.min(1, diffX / -300), Math.max(-1, diffY / -300)).scale(0.18);
     this.scene.matter.applyForce(this.ball, force);
     this.addShots(-1);
     // this.spineObject.setScale(1,1);

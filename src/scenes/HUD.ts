@@ -51,6 +51,8 @@ export class HUD extends Phaser.Scene {
   onReplay = () => {
     this.battery.reset();
     this.score.reset();
+    this.spineHand.animationState.setAnimation(0, 'idle');
+    this.spineHand.visible = false;
   };
 
   listenForEvents() {

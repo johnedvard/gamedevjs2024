@@ -180,8 +180,8 @@ export class Player {
   }
   addShots(num: number) {
     this.shots += num;
-    this.shotsTxt.text = this.getShotsText();
     if (this.shots >= MAX_SHOTS) this.shots = MAX_SHOTS;
+    this.shotsTxt.text = this.getShotsText();
     // make sure we don't die if we still have shots left
     if (this.shots > 0) {
       this.waitBeforeDieSubscription?.unsubscribe();

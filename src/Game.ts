@@ -93,7 +93,6 @@ export class MyGame {
   destroyGame() {
     if (this.game) {
       destroyMusicAndSfx();
-      emit(GameEvent.destroyAll);
       this.game.destroy(true);
     }
     this.game = null;

@@ -68,7 +68,7 @@ function createBackgroundFromSvg(scene: Scene, svgPaths: SvgPath[]) {
     if (!svgPathEl.getAttribute('serif:id')?.match('{background}')) return;
     const graphics = scene.add.graphics().setDepth(DepthGroup.ui);
     graphics.fillStyle(MyColor.black);
-    graphics.fillPoints(path.getPoints(200));
+    graphics.fillPoints(path.getPoints(10));
   });
 }
 function createWallGraphics(scene: Scene, walls: MatterJS.BodyType[][], { strokeWidth, color }) {
@@ -76,7 +76,7 @@ function createWallGraphics(scene: Scene, walls: MatterJS.BodyType[][], { stroke
     const graphics = scene.add.graphics().setDepth(DepthGroup.wall);
     const curve = new Phaser.Curves.Spline(group.flatMap((w) => [w.position.x, w.position.y]));
     graphics.lineStyle(strokeWidth, color, 1);
-    curve.draw(graphics, 200);
+    curve.draw(graphics, 175);
   });
   // graphics.fillStyle(MyColor.black);
   // graphics.fillPoints(curve.getPoints(200))

@@ -5,6 +5,7 @@ import svgToPhaserPath from 'svg-to-phaser-path';
 import { BodyTypeLabel } from '~/enums/BodyTypeLabel';
 import { MyColor } from '~/enums/MyColor';
 import { SvgPath } from '~/types/SvgPath';
+import { GAME_WIDTH } from './gameUtils';
 
 type ButtonConfig = {
   x: number;
@@ -63,10 +64,11 @@ export const createPathsFromSvg = (svgDoc: Document): SvgPath[] => {
 export const createCollisionBoxesFromPaths = (scene: Scene, svgPaths: SvgPath[]) => {
   const boxes: MatterJS.BodyType[][] = [];
   for (let x = 0; x < 2; x++) {
+    // hack to overlap boxes, preventing puck from tunneling through cracks (most of the time)
     svgPaths.forEach(({ path, svgPathEl }) => {
       if (!svgPathEl.getAttribute('serif:id')?.match('{collision}')) return;
       const collisionGroup = [];
-      const allPoints = path.getPoints(10 + x * 4);
+      const allPoints = path.getPoints(9 + x * 3);
       const offset = 30; // thichness of boxes
       for (let i = 0; i < allPoints.length - 1; i++) {
         const p0 = allPoints[i];

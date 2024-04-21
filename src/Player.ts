@@ -17,6 +17,7 @@ const MAX_SHOTS = 5;
 const TEXT_OFFSET = new Phaser.Math.Vector2(2, 70);
 const RELASE_DEADZONE = 20;
 const VELOCITY_DEADZONE = 2;
+const MAX_FORCE_DIFF = 300;
 export class Player {
   spineObject: SpineGameObject;
   hole: SpineGameObject;
@@ -91,7 +92,12 @@ export class Player {
 
     if (Math.abs(diffX) < RELASE_DEADZONE && Math.abs(diffY) < RELASE_DEADZONE) return;
     if (this.shots <= 0) return;
-    const force = new Phaser.Math.Vector2(Math.min(1, diffX / -300), Math.max(-1, diffY / -300)).scale(0.18);
+    if (Math.abs(diffX) > MAX_FORCE_DIFF) diffX = MAX_FORCE_DIFF * Math.sign(diffX);
+    if (Math.abs(diffY) > MAX_FORCE_DIFF) diffY = MAX_FORCE_DIFF * Math.sign(diffY);
+    const force = new Phaser.Math.Vector2(
+      Math.min(1, diffX / -MAX_FORCE_DIFF),
+      Math.max(-1, diffY / -MAX_FORCE_DIFF)
+    ).scale(0.18);
     this.scene.matter.applyForce(this.ball, force);
     this.addShots(-1);
     // this.spineObject.setScale(1,1);

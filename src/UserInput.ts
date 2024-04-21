@@ -27,7 +27,7 @@ export class UserInput {
     this.scene.input.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
       this.pointerStartPos = { x: pointer.position.x, y: pointer.position.y };
       this.isHoldingDown = true;
-      emit(GameEvent.startBallThrow, { pos: new Phaser.Math.Vector2(pointer.x, pointer.y) });
+      emit(GameEvent.startBallThrow, { pos: new Phaser.Math.Vector2(pointer.position.x, pointer.position.y) });
     });
     this.scene.input.on('pointermove', (pointer: Phaser.Input.Pointer) => {
       this.pointerEndPos = { x: pointer.position.x, y: pointer.position.y };

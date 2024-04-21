@@ -25,7 +25,6 @@ export class HUD extends Phaser.Scene {
   preload() {}
   create() {
     centerScene(this);
-    console.log('new HUD');
     this.battery = new Battery(this);
     this.score = new Score(this);
     this.listenForEvents();
@@ -76,7 +75,6 @@ export class HUD extends Phaser.Scene {
     this.startDragTutorialSubscription = startWaitRoutine(this, 2000)
       .pipe(take(1))
       .subscribe(() => {
-        console.log('start drag tutorial');
         this.spineHand.x = GAME_WIDTH / 2 + 110;
         this.spineHand.y = GAME_HEIGHT / 2 + 30;
         this.spineHand.visible = true;
@@ -93,7 +91,6 @@ export class HUD extends Phaser.Scene {
       .pipe(take(1))
       .subscribe(() => {
         if (!this.battery.isCharged()) return;
-        console.log('start tap tutorial');
         this.spineHand.x = GAME_WIDTH - 10;
         this.spineHand.y = 140;
         this.spineHand.visible = true;

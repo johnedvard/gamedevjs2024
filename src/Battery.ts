@@ -24,11 +24,9 @@ export class Battery {
     this.discharge();
   };
   onDischargePreview = () => {
-    console.log('discharge preview');
     emit(GameEvent.dischargePreview);
   };
   onDischargeDismissPreview = () => {
-    console.log('dismiss discharge preview');
     emit(GameEvent.dischargeDismissPreview);
   };
   initClickArea() {

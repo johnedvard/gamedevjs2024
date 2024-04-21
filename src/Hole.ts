@@ -7,11 +7,12 @@ import { BodyTypeLabel } from '~/enums/BodyTypeLabel';
 import { CollideCallback } from '~/types/CollideCallback';
 import { GameEvent } from '~/enums/GameEvent';
 import { emit } from '~/utils/eventEmitterUtils';
+import { playRingAnimation } from './utils/animationUtils';
 
 type HoleOptions = {
   startPos: Phaser.Math.Vector2;
 };
-const CIRCLE_RADIUS = 7;
+const CIRCLE_RADIUS = 9;
 export class Hole {
   startPoint: Phaser.Math.Vector2;
   spineObject: SpineGameObject;
@@ -24,7 +25,6 @@ export class Hole {
   ) {
     this.startPoint = holeOptions.startPos;
     this.init();
-    console.log('init hole');
   }
 
   init() {
@@ -37,6 +37,8 @@ export class Hole {
     this.hole.onCollideCallback = ({ bodyA, bodyB }: CollideCallback) => {
       if (bodyA.label === BodyTypeLabel.enemy || bodyA.label === BodyTypeLabel.player) {
         // this.spineObject.skeleton.setSkinByName('dead');
+        if (bodyA.label === BodyTypeLabel.enemy) playRingAnimation(this.scene, this.startPoint);
+
         emit(GameEvent.fallInHole, { other: bodyA, hole: bodyB });
       }
     };

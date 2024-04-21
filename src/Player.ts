@@ -118,7 +118,6 @@ export class Player {
   }
 
   removeEventListeners() {
-    console.log('remove event listeners');
     off(GameEvent.startBallThrow, this.onStartBallThrow);
     off(GameEvent.releaseBallThrow, this.onReleaseBallThrow);
     off(GameEvent.fallInHole, this.fallInHole);
@@ -155,7 +154,6 @@ export class Player {
   private destroyPhysicsObjects() {
     this.deadPos = new Phaser.Math.Vector2(this.ball.position.x, this.ball.position.y);
     this.scene.matter.world.remove(this.ball);
-    this.ball = null;
   }
 
   private destroy() {
@@ -167,6 +165,7 @@ export class Player {
     this.shotsTxt = null;
     this.shotsTxtContainer.destroy();
     this.shotsTxtContainer = null;
+    this.ball = null;
     emit(GameEvent.gameOver);
   }
 
@@ -186,12 +185,11 @@ export class Player {
   }
 
   startDieRoutine() {
+    this.state = 'dead';
     this.spineObject.animationState.setAnimation(0, 'dead', false);
     this.destroyPhysicsObjects();
-    this.state = 'dead';
     const animationStateListeners = {
       complete: (trackEntry) => {
-        console.log(`Animation ${trackEntry.animation.name} has completed`);
         this.spineObject.animationState.removeListener(animationStateListeners);
         this.destroy();
       },

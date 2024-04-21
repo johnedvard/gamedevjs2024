@@ -28,7 +28,6 @@ export class Level extends Phaser.Scene {
     loadLevel(this, 'level')
       .pipe(take(1))
       .subscribe((levelState) => {
-        console.log('levelState', levelState);
         this.levelState = levelState;
         createFlooring(this, this.levelState.startPos.y, this.levelState.startPos.y - 90000);
       });

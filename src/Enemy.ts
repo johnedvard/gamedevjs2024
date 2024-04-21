@@ -87,12 +87,8 @@ export class Enemy {
     emit(GameEvent.enemyKilled, { enemy: this });
     const animationStateListeners = {
       complete: (trackEntry) => {
-        // Animation has completed
-        console.log(`Animation ${trackEntry.animation.name} has completed`);
         this.spineObject.animationState.removeListener(animationStateListeners);
         this.destroy();
-        // Perform any actions you need after the animation ends here
-        // For example, switching back to an idle animation or triggering game logic
       },
     };
 

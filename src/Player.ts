@@ -55,6 +55,7 @@ export class Player {
   initTrail() {
     this.trailRope = this.scene.add.rope(0, 0, 'trailTexture');
     this.trailRope.setPoints(150);
+    this.trailRope.setColors(0x115424);
     this.trailRope.setDepth(DepthGroup.player);
   }
 

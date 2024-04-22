@@ -61,8 +61,11 @@ export class Discharge {
   update(time: number, delta: number) {
     if (!this.player || this.isDestroyed) return;
     if (this.dischargeCircle) {
-      this.dischargeCircle.position.x = this.player.x;
-      this.dischargeCircle.position.y = this.player.y;
+      this.scene.matter.body.setPosition(
+        this.dischargeCircle,
+        new Phaser.Math.Vector2(this.player.x, this.player.y),
+        false
+      );
     }
     this.dischargeBoundryGraphics.clear();
     if (this.dischargeBoundryGraphics && this.displayDischargePreview) {

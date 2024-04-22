@@ -1,5 +1,5 @@
-import { Input } from 'phaser';
 import { SceneKey } from '~/enums/SceneKey';
+import { initMusicAndSfx } from '~/utils/audioUtils';
 
 export class Intro extends Phaser.Scene {
   isIntroComplete = false;
@@ -14,6 +14,7 @@ export class Intro extends Phaser.Scene {
   create(): void {
     this.startIntro();
     this.addEventListeners();
+    initMusicAndSfx(this);
   }
 
   async startIntro(): Promise<void> {

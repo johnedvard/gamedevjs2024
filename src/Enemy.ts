@@ -6,6 +6,7 @@ import { DepthGroup } from '~/enums/DepthGroup';
 import { CollideCallback } from '~/types/CollideCallback';
 import { emit, off, on } from '~/utils/eventEmitterUtils';
 import { GameEvent } from '~/enums/GameEvent';
+import { playPuckHit } from './utils/audioUtils';
 
 type EnemyOptions = { startPos: Phaser.Math.Vector2; skin?: string };
 const BALL_RADIUS = 23;
@@ -37,6 +38,7 @@ export class Enemy {
     this.ball.onCollideCallback = ({ bodyA, bodyB }: CollideCallback) => {
       if (bodyA.label === BodyTypeLabel.player) {
         this.spineObject.animationState.setAnimation(0, 'hit', false);
+        playPuckHit();
       }
       if (bodyB.label === BodyTypeLabel.dischargeCircle) {
         this.isInisideDischargeArea = true;

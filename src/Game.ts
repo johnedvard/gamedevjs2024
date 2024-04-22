@@ -8,7 +8,7 @@ import { setGame } from '~/gameManager';
 import { SceneKey } from '~/enums/SceneKey';
 import { GameEvent } from '~/enums/GameEvent';
 import { GAME_HEIGHT, GAME_WIDTH, getCanvas } from '~/utils/gameUtils';
-import { destroyMusicAndSfx } from '~/utils/audioUtils';
+import { destroyMusicAndSfx, initMusicAndSfx } from '~/utils/audioUtils';
 import { emit } from '~/utils/eventEmitterUtils';
 import { Intro } from '~/scenes/Intro';
 import { MainMenu } from '~/scenes/MainMenu';

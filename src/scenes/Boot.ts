@@ -3,14 +3,18 @@ import { SceneKey } from '~/enums/SceneKey';
 export class Boot extends Phaser.Scene {
   preload(): void {
     this.load.setPath('assets/gamedevjs2024');
-    this.loadSvgs();
+    this.loadImages();
     this.loadSounds();
-    this.preloadSpineAnimations();
     this.loadFonts();
+    this.preloadSpineAnimations();
+  }
+
+  loadImages() {
+    this.load.image('trailTexture', 'trailTexture.png');
   }
 
   loadSounds() {
-    // this.load.audio('bgm', 'sounds/bgm.mp3');
+    this.load.audio('puckhit1', 'sounds/puckhit1.wav');
   }
 
   preloadSpineAnimations() {
@@ -30,10 +34,6 @@ export class Boot extends Phaser.Scene {
 
   loadUi(): void {
     // this.load.image('icon-home', 'ui/icon-home.png');
-  }
-
-  loadSvgs(): void {
-    // this.load.text('svg-star', 'svg/something.svg');
   }
 
   loadFont(name: string, url: string) {

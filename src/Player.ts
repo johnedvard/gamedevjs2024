@@ -12,22 +12,26 @@ import { createText } from '~/utils/textUtils';
 import { startWaitRoutine } from '~/utils/gameUtils';
 
 type PlayerOptions = { startPos: Phaser.Math.Vector2 };
+type TrailParticle = { pos: Phaser.Math.Vector2; timeToLive: number; maxLifeTime: number };
 const BALL_RADIUS = 23;
 const MAX_SHOTS = 5;
 const TEXT_OFFSET = new Phaser.Math.Vector2(2, 70);
 const RELASE_DEADZONE = 20;
 const VELOCITY_DEADZONE = 2;
 const MAX_FORCE_DIFF = 300;
+
 export class Player {
   spineObject: SpineGameObject;
   hole: SpineGameObject;
   ball: MatterJS.BodyType;
+  trailRope: Phaser.GameObjects.Rope;
   startPoint: Phaser.Math.Vector2 = new Phaser.Math.Vector2(200, 200);
   deadPos: Phaser.Math.Vector2; // store the position we died
   controlBone: Bone;
   waitBeforeDieSubscription: Subscription;
   state: '' | 'dead' = '';
   shots = 5;
+  trailParticles: TrailParticle[] = [];
 
   handleShotsTxtTween: Phaser.Tweens.Tween;
   shotsTxt: Phaser.GameObjects.Text;
@@ -45,6 +49,13 @@ export class Player {
     this.initPhysics();
     this.listenForEvents();
     this.initShotsTxt();
+    this.initTrail();
+  }
+
+  initTrail() {
+    this.trailRope = this.scene.add.rope(0, 0, 'trailTexture');
+    this.trailRope.setPoints(150);
+    this.trailRope.setDepth(DepthGroup.player);
   }
 
   initShotsTxt() {
@@ -130,6 +141,7 @@ export class Player {
   }
 
   update(time: number, delta: number) {
+    this.handleTrail(time, delta); // make trail animate even when we're dead
     if (this.state === 'dead') return;
     this.spineObject.setPosition(this.ball.position.x, this.ball.position.y);
     this.spineObject.setDepth(DepthGroup.player + this.ball.position.y / 1000);
@@ -137,8 +149,38 @@ export class Player {
       this.shotsTxtContainer.x = this.ball.position.x + TEXT_OFFSET.x;
       this.shotsTxtContainer.y = this.ball.position.y + TEXT_OFFSET.y;
     }
-    // this.spineObject.setRotation(this.ball.angle);
     this.handleOutOfShots();
+  }
+  handleTrail(time: number, delta: number) {
+    if (!this.trailRope) return;
+    if (Math.abs(this.ball.velocity.x) < 0.1 && Math.abs(this.ball.velocity.y) < 0.1) {
+      this.trailRope.visible = false;
+    } else {
+      this.trailRope.visible = true;
+      const trailParticle: TrailParticle = {
+        timeToLive: 500,
+        maxLifeTime: 500,
+        pos: new Phaser.Math.Vector2(this.ball.position.x, this.ball.position.y),
+      };
+      this.trailParticles.push(trailParticle);
+      const curve = new Phaser.Curves.Spline(this.trailParticles.flatMap((p) => [p.pos.x, p.pos.y]));
+      this.trailRope.setDirty();
+
+      let ropePoints = this.trailRope.points;
+      const curvePoints = curve.getPoints(ropePoints.length - 1);
+      for (let i = 0; i < curvePoints.length; i++) {
+        ropePoints[i].x = curvePoints[i].x;
+        ropePoints[i].y = curvePoints[i].y;
+      }
+
+      for (let i = this.trailParticles.length - 1; i >= 0; i--) {
+        const particle = this.trailParticles[i];
+        particle.timeToLive -= delta;
+        if (particle.timeToLive <= 0) {
+          this.trailParticles.splice(i, 1);
+        }
+      }
+    }
   }
 
   handleOutOfShots() {
@@ -172,6 +214,9 @@ export class Player {
     this.shotsTxtContainer.destroy();
     this.shotsTxtContainer = null;
     this.ball = null;
+    this.trailParticles.length = 0;
+    this.trailRope.destroy();
+    this.trailRope = null;
     emit(GameEvent.gameOver);
   }
 

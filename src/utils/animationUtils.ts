@@ -16,6 +16,7 @@ export function startAccumulateScoreRoutine(scene: Scene, totalScore: number, co
 
 export function playRingAnimation(scene: Scene, pos: Phaser.Math.Vector2) {
   const ellipseGraphics = scene.add.graphics({ lineStyle: { width: 5, color: 0xffffff } }).setDepth(DepthGroup.hole);
+  const circleGraphics = scene.add.graphics({ fillStyle: { color: 0xffffff, alpha: 1 } }).setDepth(DepthGroup.hole);
   scene.tweens.add({
     targets: [ellipseGraphics],
     width: { from: 60, to: 105 },
@@ -32,7 +33,20 @@ export function playRingAnimation(scene: Scene, pos: Phaser.Math.Vector2) {
     onComplete: function () {
       this.targets.forEach((t) => {
         t.clear();
+        t.destroy();
       });
+    },
+  });
+  circleGraphics.fillCircle(pos.x, pos.y, 40);
+  scene.tweens.add({
+    targets: circleGraphics,
+    color: 0x000000,
+    alpha: 0,
+    delay: 30,
+    ease: Phaser.Math.Easing.Expo.Out,
+    duration: 750,
+    onComplete: () => {
+      circleGraphics.destroy();
     },
   });
 }

@@ -17,8 +17,8 @@ export class Score {
     this.init();
   }
   init() {
-    this.scoreTxt = createText(this.scene, GAME_WIDTH / 2, 100, 80, '0');
-    this.personalBestTxt = createText(this.scene, GAME_WIDTH / 2, 135, 30, '');
+    this.scoreTxt = createText(this.scene, GAME_WIDTH / 2, 100, 100, '0');
+    this.personalBestTxt = createText(this.scene, GAME_WIDTH / 2, 155, 50, '');
     this.listenForEvents();
   }
   onEnemyKilled = (data: { emeny: Enemy }) => {

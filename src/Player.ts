@@ -167,7 +167,7 @@ export class Player {
       const curve = new Phaser.Curves.Spline(this.trailParticles.flatMap((p) => [p.pos.x, p.pos.y]));
       this.trailRope.setDirty();
 
-      let ropePoints = this.trailRope.points;
+      const ropePoints = this.trailRope.points;
       const curvePoints = curve.getPoints(ropePoints.length - 1);
       for (let i = 0; i < curvePoints.length; i++) {
         ropePoints[i].x = curvePoints[i].x;

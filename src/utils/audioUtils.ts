@@ -1,7 +1,7 @@
 import { Scene } from 'phaser';
 
 let isInitialized = false;
-let sfxOn = true;
+const sfxOn = true;
 const puckhitSounds = [];
 
 export function destroyMusicAndSfx() {}

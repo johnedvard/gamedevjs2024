@@ -11,6 +11,8 @@ import { off, on } from '~/utils/eventEmitterUtils';
 import { GameEvent } from '~/enums/GameEvent';
 import { UserInput } from '~/UserInput';
 import { Discharge } from '~/Discharge';
+import { MyColor } from '~/enums/MyColor';
+import { DepthGroup } from '~/enums/DepthGroup';
 
 export class Level extends Phaser.Scene {
   levelIntro!: LevelState;
@@ -19,6 +21,7 @@ export class Level extends Phaser.Scene {
   userInput!: UserInput;
   enemies: Enemy[] = [];
   holes: Hole[] = [];
+  collisionCircles: { circle: MatterJS.BodyType; graphics: Phaser.GameObjects.Graphics }[] = [];
   discharge: Discharge;
   playerPosZoneInterval = 3000; //load next zone for each 3000px
   currentZone = 0;
@@ -40,6 +43,7 @@ export class Level extends Phaser.Scene {
       .subscribe((levelSvgText) => {
         this.levelSvgs.push(levelSvgText);
       });
+    handleDebugInput(this);
   }
 
   initLevel(levelState: LevelState) {
@@ -47,11 +51,13 @@ export class Level extends Phaser.Scene {
     this.userInput.setPlayer(this.player);
     this.createEnemies(levelState);
     this.createHoles(levelState);
+    this.createCollisionCircles(levelState);
     this.discharge = new Discharge(this);
     this.discharge.setPlayer(this.player);
   }
 
   addLevel(levelState: LevelState) {
+    this.createCollisionCircles(levelState);
     this.createEnemies(levelState);
     this.createHoles(levelState);
   }
@@ -60,7 +66,7 @@ export class Level extends Phaser.Scene {
     this.userInput = new UserInput(this);
     this.listenForEvents();
     this.initLevel(this.levelIntro);
-    handleDebugInput(this);
+
     this.scene.launch(SceneKey.HUD);
   }
 
@@ -83,6 +89,19 @@ export class Level extends Phaser.Scene {
     this.initLevel(this.levelIntro);
   };
 
+  createCollisionCircles(levelState: LevelState) {
+    levelState.collisionCircles.forEach((c) => {
+      const circleGeom = new Phaser.Geom.Circle(c.startPos.x, c.startPos.y, c.radius);
+      const circle = this.matter.add.circle(c.startPos.x, c.startPos.y, c.radius, { isStatic: true });
+      const graphics = this.add.graphics({
+        fillStyle: { color: 0xff0066, alpha: 1 },
+        lineStyle: { width: 8, color: 0xff0066, alpha: 1 },
+      });
+      graphics.setDepth(DepthGroup.background);
+      graphics.fillCircleShape(circleGeom);
+      this.collisionCircles.push({ circle, graphics });
+    });
+  }
   createEnemies(levelState: LevelState) {
     // this.enemies.forEach(e => e.destroyEverything());
     // this.enemies = [];

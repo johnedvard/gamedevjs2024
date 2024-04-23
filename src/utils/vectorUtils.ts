@@ -5,7 +5,6 @@ import svgToPhaserPath from 'svg-to-phaser-path';
 import { BodyTypeLabel } from '~/enums/BodyTypeLabel';
 import { MyColor } from '~/enums/MyColor';
 import { SvgPath } from '~/types/SvgPath';
-import { GAME_WIDTH } from './gameUtils';
 
 type ButtonConfig = {
   x: number;
@@ -24,6 +23,13 @@ export const getPosFromSvgCircle = (circleElement: SVGElement): Phaser.Math.Vect
   const cy = circleElement.getAttribute('cy');
   if (!cx || !cy) return null;
   return new Phaser.Math.Vector2(~~cx, ~~cy);
+};
+
+export const getRadiusFromSvgCircle = (circleElement: SVGElement): number => {
+  if (!circleElement) 0;
+  const radius = circleElement.getAttribute('r');
+  if (!radius) return 0;
+  return ~~radius;
 };
 
 export const getPosFromSvgRect = (svgEl: SVGElement): Phaser.Math.Vector2 => {
@@ -157,6 +163,20 @@ export const getEnemiesFromSvg = (svgDoc: Document, offsetY = 0) => {
     enemies.push({ startPos: enemyPos });
   });
   return enemies;
+};
+
+export const createCollisionCirclesFromSvg = (svgDoc: Document, offsetY = 0) => {
+  const cicles = [];
+  const ciclesEl = svgDoc.querySelectorAll("circle[id^='_-collisionCircle']");
+  console.log('ciclesEl', ciclesEl);
+  ciclesEl.forEach((el) => {
+    const circlePos = getPosFromSvgCircle(el as SVGElement);
+    const radius = getRadiusFromSvgCircle(el as SVGElement);
+    circlePos.y += offsetY;
+    cicles.push({ startPos: circlePos, radius });
+  });
+  console.log('cicles', cicles);
+  return cicles;
 };
 
 export const getHolesFromSvg = (svgDoc: Document, offsetY = 0) => {

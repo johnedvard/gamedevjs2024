@@ -7,7 +7,7 @@ import { DepthGroup } from '~/enums/DepthGroup';
 import { GameEvent } from '~/enums/GameEvent';
 import { BodyTypeLabel } from './enums/BodyTypeLabel';
 
-const MAX_CHARGES = 3;
+export const MAX_CHARGES = 3;
 const START_CHARGES = 1;
 export class Battery {
   spineBattery: SpineGameObject;

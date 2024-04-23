@@ -10,6 +10,7 @@ import { GameEvent } from '~/enums/GameEvent';
 import { emit, off, on } from '~/utils/eventEmitterUtils';
 import { createText } from '~/utils/textUtils';
 import { startWaitRoutine } from '~/utils/gameUtils';
+import { MAX_CHARGES } from './Battery';
 
 type PlayerOptions = { startPos: Phaser.Math.Vector2 };
 type TrailParticle = { pos: Phaser.Math.Vector2; timeToLive: number; maxLifeTime: number };
@@ -129,16 +130,26 @@ export class Player {
     }
   };
 
+  batteryChange = ({ newValue, oldValue }) => {
+    if (newValue === MAX_CHARGES) {
+      this.spineObject.animationState.setAnimation(0, 'charged', true);
+    } else {
+      this.spineObject.animationState.setAnimation(0, 'idle');
+    }
+  };
+
   listenForEvents() {
     on(GameEvent.startBallThrow, this.onStartBallThrow);
     on(GameEvent.releaseBallThrow, this.onReleaseBallThrow);
     on(GameEvent.fallInHole, this.fallInHole);
+    on(GameEvent.batteryChange, this.batteryChange);
   }
 
   removeEventListeners() {
     off(GameEvent.startBallThrow, this.onStartBallThrow);
     off(GameEvent.releaseBallThrow, this.onReleaseBallThrow);
     off(GameEvent.fallInHole, this.fallInHole);
+    off(GameEvent.batteryChange, this.batteryChange);
   }
 
   update(time: number, delta: number) {

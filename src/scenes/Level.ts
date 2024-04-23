@@ -16,6 +16,7 @@ import { GAME_WIDTH } from '~/utils/gameUtils';
 
 export class Level extends Phaser.Scene {
   levelIntro!: LevelState;
+  levelStates: LevelState[] = [];
   levelSvgs: string[] = [];
   player!: Player;
   userInput!: UserInput;
@@ -60,6 +61,7 @@ export class Level extends Phaser.Scene {
     this.createCollisionCircles(levelState);
     this.createEnemies(levelState);
     this.createHoles(levelState);
+    this.levelStates.push(levelState);
   }
 
   create(): void {
@@ -176,8 +178,11 @@ export class Level extends Phaser.Scene {
     this.enemies = [];
     this.collisionCircles = [];
 
-    // TODO (johnedvard) Make it possible to remove and add walls similar to collisionCircles
-    // this.levelIntro.walls.mainBoxes.forEach(group => group.forEach(b => this.matter.world.remove(b)))
-    // this.levelIntro.walls.excessBoxes.forEach(group => group.forEach(b => this.matter.world.remove(b)))
+    // TODO (johnedvard) Let Level add walls to the scene, and then clean up
+    this.levelStates.forEach((l) => {
+      l.walls.mainBoxes.forEach((group) => group.forEach((b) => this.matter.world.remove(b)));
+      l.walls.excessBoxes.forEach((group) => group.forEach((b) => this.matter.world.remove(b)));
+    });
+    this.levelStates.length = 0;
   }
 }

@@ -45,7 +45,7 @@ export class Enemy {
       }
     };
     this.ball.onCollideEndCallback = ({ bodyA, bodyB }: CollideCallback) => {
-      if (bodyB.label === BodyTypeLabel.dischargeCircle) {
+      if (bodyA.label === BodyTypeLabel.dischargeCircle || bodyB.label === BodyTypeLabel.dischargeCircle) {
         this.isInisideDischargeArea = false;
       }
     };
@@ -123,11 +123,12 @@ export class Enemy {
   update(time: number, delta: number) {
     if (this.state === 'dead') return;
     this.spineObject.setPosition(this.ball.position.x, this.ball.position.y);
-    this.spineObject.setDepth(DepthGroup.player + this.ball.position.y / 10000000);
+    this.spineObject.setDepth(DepthGroup.player + 1 / Math.abs(this.ball.position.y));
     this.eyeGroup.rotation = Phaser.Math.RadToDeg(this.ball.angle) * -1;
   }
 
   private destroyPhysicsObjects() {
+    if (!this.ball) return;
     this.scene.matter.world.remove(this.ball);
     this.ball = null;
   }

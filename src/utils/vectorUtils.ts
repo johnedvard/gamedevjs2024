@@ -68,7 +68,8 @@ export const createPathsFromSvg = (svgDoc: Document): SvgPath[] => {
 };
 
 export const createCollisionBoxesFromPaths = (scene: Scene, svgPaths: SvgPath[], offsetY = 0) => {
-  const boxes: MatterJS.BodyType[][] = [];
+  const mainBoxes: MatterJS.BodyType[][] = [];
+  const excessBoxes: MatterJS.BodyType[][] = [];
   for (let x = 0; x < 2; x++) {
     // hack to overlap boxes, preventing puck from tunneling through cracks (most of the time)
     svgPaths.forEach(({ path, svgPathEl }) => {
@@ -90,18 +91,17 @@ export const createCollisionBoxesFromPaths = (scene: Scene, svgPaths: SvgPath[],
           friction: 0,
           frictionStatic: 0,
         });
-        //
-        if (x === 1) {
-          collisionGroup.push(box);
-        }
+        collisionGroup.push(box);
       }
       if (x === 1) {
-        boxes.push(collisionGroup);
+        mainBoxes.push(collisionGroup);
+      } else if (x === 0) {
+        excessBoxes.push(collisionGroup);
       }
     });
   }
-  scene.matter.bounds.create(boxes);
-  return boxes;
+  scene.matter.bounds.create(mainBoxes);
+  return { mainBoxes, excessBoxes };
 };
 
 export const createTextFromSvg = (scene: Scene, svgDoc: Document) => {

@@ -14,7 +14,7 @@ import { startWaitRoutine } from '~/utils/gameUtils';
 type PlayerOptions = { startPos: Phaser.Math.Vector2 };
 type TrailParticle = { pos: Phaser.Math.Vector2; timeToLive: number; maxLifeTime: number };
 const BALL_RADIUS = 23;
-const MAX_SHOTS = 50;
+const MAX_SHOTS = 5;
 const TEXT_OFFSET = new Phaser.Math.Vector2(2, 70);
 const RELASE_DEADZONE = 20;
 const VELOCITY_DEADZONE = 2;
@@ -30,7 +30,7 @@ export class Player {
   controlBone: Bone;
   waitBeforeDieSubscription: Subscription;
   state: '' | 'dead' = '';
-  shots = 50;
+  shots = 5;
   trailParticles: TrailParticle[] = [];
 
   handleShotsTxtTween: Phaser.Tweens.Tween;
@@ -145,7 +145,7 @@ export class Player {
     this.handleTrail(time, delta); // make trail animate even when we're dead
     if (this.state === 'dead') return;
     this.spineObject.setPosition(this.ball.position.x, this.ball.position.y);
-    this.spineObject.setDepth(DepthGroup.player + this.ball.position.y / 10000000);
+    this.spineObject.setDepth(DepthGroup.player + 1 / Math.abs(this.ball.position.y));
     if (this.shotsTxtContainer) {
       this.shotsTxtContainer.x = this.ball.position.x + TEXT_OFFSET.x;
       this.shotsTxtContainer.y = this.ball.position.y + TEXT_OFFSET.y;
@@ -201,6 +201,7 @@ export class Player {
   }
 
   private destroyPhysicsObjects() {
+    if (!this.ball) return;
     this.deadPos = new Phaser.Math.Vector2(this.ball.position.x, this.ball.position.y);
     this.scene.matter.world.remove(this.ball);
   }

@@ -25,7 +25,6 @@ export class Level extends Phaser.Scene {
   discharge: Discharge;
   playerPosZoneInterval = 3000; //load next zone for each 3000px
   currentZone = 0;
-  createdTime = Infinity;
 
   constructor() {
     super(SceneKey.Level);
@@ -47,6 +46,7 @@ export class Level extends Phaser.Scene {
   }
 
   initLevel(levelState: LevelState) {
+    this.currentZone = 0;
     this.player = new Player(this, { startPos: levelState.startPos });
     this.userInput.setPlayer(this.player);
     this.createEnemies(levelState);
@@ -119,7 +119,7 @@ export class Level extends Phaser.Scene {
   }
 
   update(time: number, delta: number): void {
-    if (this.createdTime === Infinity) this.createdTime = time;
+    if (!this.player) return;
     this.userInput?.update(time, delta);
     this.player?.update(time, delta);
 
@@ -133,7 +133,7 @@ export class Level extends Phaser.Scene {
     }
     this.holes.forEach((e) => e.update(time, delta));
     this.discharge?.update(time, delta);
-    if (time > this.createdTime + 3000) this.handleLevelZones();
+    this.handleLevelZones();
   }
 
   handleLevelZones() {
@@ -154,8 +154,19 @@ export class Level extends Phaser.Scene {
     this.player = null;
     this.enemies.forEach((e) => e.destroyEverything());
     this.holes.forEach((e) => e.destroyEverything());
+    this.collisionCircles.forEach((collisionCircle) => {
+      this.matter.world.remove(collisionCircle.circle);
+      collisionCircle.graphics.destroy();
+      collisionCircle.graphics = null;
+      collisionCircle.circle = null;
+    });
     this.discharge.destroy();
     this.holes = [];
     this.enemies = [];
+    this.collisionCircles = [];
+
+    // TODO (johnedvard) Make it possible to remove and add walls similar to collisionCircles
+    // this.levelIntro.walls.mainBoxes.forEach(group => group.forEach(b => this.matter.world.remove(b)))
+    // this.levelIntro.walls.excessBoxes.forEach(group => group.forEach(b => this.matter.world.remove(b)))
   }
 }

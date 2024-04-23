@@ -37,10 +37,10 @@ export function createLevelFromSvg(scene: Scene, svgText: string, offsetY = 0): 
   const enemies = getEnemiesFromSvg(svgDoc, offsetY);
   const holes = getHolesFromSvg(svgDoc, offsetY);
   const collisionCircles = createCollisionCirclesFromSvg(svgDoc, offsetY);
-  createWallGraphics(scene, walls, { strokeWidth: 25, color: MyColor.pink }); // pink
+  createWallGraphics(scene, walls.mainBoxes, { strokeWidth: 25, color: MyColor.pink }); // pink
   createBackgroundFromSvg(scene, svgPaths, offsetY);
   const startPos = getPosFromSvgCircle(svgDoc.querySelector(`#start`));
-  return { startPos, enemies, holes, collisionCircles };
+  return { startPos, enemies, holes, collisionCircles, walls };
 }
 
 export function createFlooring(scene: Scene, startY: number, endY: number, color: number = 0x1f1f1f) {

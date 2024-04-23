@@ -62,11 +62,13 @@ export class Hole {
     this.handleHoleShadowOffset();
   }
   private destroyPhysicsObjects() {
+    if (!this.hole) return;
     this.scene.matter.world.remove(this.hole);
     this.hole = null;
   }
 
   private destroy() {
+    if (!this.spineObject) return;
     this.spineObject.destroy();
     this.spineObject = null;
   }
@@ -77,6 +79,7 @@ export class Hole {
   }
 
   handleHoleShadowOffset() {
+    if (!this.player || !this.spineObject) return;
     const maxOffsetY = 18;
     const maxOffsetX = 15;
     const diffX = this.player.x - this.spineObject.x;

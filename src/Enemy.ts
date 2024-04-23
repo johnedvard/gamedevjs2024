@@ -36,11 +36,11 @@ export class Enemy {
 
   handleCollisions() {
     this.ball.onCollideCallback = ({ bodyA, bodyB }: CollideCallback) => {
-      if (bodyA.label === BodyTypeLabel.player) {
+      if (bodyA.label === BodyTypeLabel.player || bodyB.label === BodyTypeLabel.player) {
         this.spineObject.animationState.setAnimation(0, 'hit', false);
         playPuckHit();
       }
-      if (bodyB.label === BodyTypeLabel.dischargeCircle) {
+      if (bodyA.label === BodyTypeLabel.dischargeCircle || bodyB.label === BodyTypeLabel.dischargeCircle) {
         this.isInisideDischargeArea = true;
       }
     };
@@ -123,7 +123,7 @@ export class Enemy {
   update(time: number, delta: number) {
     if (this.state === 'dead') return;
     this.spineObject.setPosition(this.ball.position.x, this.ball.position.y);
-    this.spineObject.setDepth(DepthGroup.player + this.ball.position.y / 1000);
+    this.spineObject.setDepth(DepthGroup.player + this.ball.position.y / 10000000);
     this.eyeGroup.rotation = Phaser.Math.RadToDeg(this.ball.angle) * -1;
   }
 

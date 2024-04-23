@@ -61,7 +61,7 @@ export const createPathsFromSvg = (svgDoc: Document): SvgPath[] => {
   return svgPaths;
 };
 
-export const createCollisionBoxesFromPaths = (scene: Scene, svgPaths: SvgPath[]) => {
+export const createCollisionBoxesFromPaths = (scene: Scene, svgPaths: SvgPath[], offsetY = 0) => {
   const boxes: MatterJS.BodyType[][] = [];
   for (let x = 0; x < 2; x++) {
     // hack to overlap boxes, preventing puck from tunneling through cracks (most of the time)
@@ -69,6 +69,7 @@ export const createCollisionBoxesFromPaths = (scene: Scene, svgPaths: SvgPath[])
       if (!svgPathEl.getAttribute('serif:id')?.match('{collision}')) return;
       const collisionGroup = [];
       const allPoints = path.getPoints(9 + x * 3);
+      allPoints.forEach((p) => (p.y += offsetY));
       const offset = 30; // thichness of boxes
       for (let i = 0; i < allPoints.length - 1; i++) {
         const p0 = allPoints[i];
@@ -147,21 +148,23 @@ const getParallellLine = (
   return { l0, l1 };
 };
 
-export const getEnemiesFromSvg = (svgDoc: Document) => {
+export const getEnemiesFromSvg = (svgDoc: Document, offsetY = 0) => {
   const enemies = [];
   const enemiesEls = svgDoc.querySelectorAll("g[id^='Enemy']");
   enemiesEls.forEach((el) => {
     const enemyPos = getPosFromSvgCircle(el.querySelector(`circle[id^='enemyPos']`));
+    enemyPos.y += offsetY;
     enemies.push({ startPos: enemyPos });
   });
   return enemies;
 };
 
-export const getHolesFromSvg = (svgDoc: Document) => {
+export const getHolesFromSvg = (svgDoc: Document, offsetY = 0) => {
   const holes = [];
   const holesEl = svgDoc.querySelectorAll("g[id^='Hole']");
   holesEl.forEach((el) => {
     const holePos = getPosFromSvgCircle(el.querySelector(`circle[id^='holePos']`));
+    holePos.y += offsetY;
     holes.push({ startPos: holePos });
   });
   return holes;

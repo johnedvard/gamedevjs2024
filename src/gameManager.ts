@@ -2,21 +2,30 @@ import { Game } from 'phaser';
 import { debounce } from 'lodash';
 
 import { GAME_HEIGHT, GAME_WIDTH, centerScene } from '~/utils/gameUtils';
+import { SceneKey } from './enums/SceneKey';
+import { emit } from './utils/eventEmitterUtils';
+import { GameEvent } from './enums/GameEvent';
 
 let game: Game = null;
 
 function onResize() {
   scaleGame();
   game.scene.getScenes().forEach((s) => {
+    // since we are following the player, we don't want to center the Level scene as we do other scenes
+    if (s.scene.key === SceneKey.Level) return;
     centerScene(s);
   });
+  emit(GameEvent.resize);
 }
 
 function onFullscreenchange() {
   scaleGame();
   game.scene.getScenes().forEach((s) => {
+    // since we are following the player, we don't want to center the Level scene as we do other scenes
+    if (s.scene.key === SceneKey.Level) return;
     centerScene(s);
   });
+  emit(GameEvent.fullscreen);
 }
 
 const debounceResize = debounce(onResize, 150);

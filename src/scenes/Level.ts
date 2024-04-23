@@ -11,8 +11,8 @@ import { off, on } from '~/utils/eventEmitterUtils';
 import { GameEvent } from '~/enums/GameEvent';
 import { UserInput } from '~/UserInput';
 import { Discharge } from '~/Discharge';
-import { MyColor } from '~/enums/MyColor';
 import { DepthGroup } from '~/enums/DepthGroup';
+import { GAME_WIDTH } from '~/utils/gameUtils';
 
 export class Level extends Phaser.Scene {
   levelIntro!: LevelState;
@@ -70,14 +70,25 @@ export class Level extends Phaser.Scene {
     this.scene.launch(SceneKey.HUD);
   }
 
+  onResize = () => {
+    this.cameras.main.centerOnX(GAME_WIDTH / 2 + 2);
+  };
+  onFullscreen = () => {
+    console.log('on fullscreen');
+    this.cameras.main.centerOnX(GAME_WIDTH / 2 + 2);
+  };
   listenForEvents() {
     on(GameEvent.gameOver, this.onGameOver);
     on(GameEvent.replay, this.onReplay);
+    on(GameEvent.resize, this.onResize);
+    on(GameEvent.fullscreen, this.onFullscreen);
   }
 
   removeEventListeners() {
     off(GameEvent.gameOver, this.onGameOver);
     off(GameEvent.replay, this.onReplay);
+    off(GameEvent.resize, this.onResize);
+    off(GameEvent.fullscreen, this.onFullscreen);
   }
 
   onGameOver = () => {

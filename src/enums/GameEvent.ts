@@ -14,4 +14,6 @@ export enum GameEvent {
   dischargePreview = 'dischargePreview',
   dischargeDismissPreview = 'dischargeDismissPreview',
   enemyKilled = 'enemyKilled',
+  resize = 'resize',
+  fullscreen = 'fullscreen',
 }

@@ -13,6 +13,8 @@ import { Discharge } from '~/Discharge';
 import { DepthGroup } from '~/enums/DepthGroup';
 import { GAME_WIDTH } from '~/utils/gameUtils';
 import { Puck } from '~/Puck';
+import { shuffle } from 'lodash';
+import { getRandomFloorColor } from '~/utils/colorUtils';
 
 export class Level extends Phaser.Scene {
   levelIntro!: LevelState;
@@ -22,6 +24,8 @@ export class Level extends Phaser.Scene {
   userInput!: UserInput;
   pucks: Puck[] = [];
   holes: Hole[] = [];
+  levelCount = 3;
+  levelsLoaded = 0;
   levelGraphics: Phaser.GameObjects.Graphics[] = [];
   collisionCircles: { circle: MatterJS.BodyType; graphics: Phaser.GameObjects.Graphics }[] = [];
   discharge: Discharge;
@@ -39,11 +43,17 @@ export class Level extends Phaser.Scene {
         this.levelIntro = createLevelFromSvg(this, levelSvgText);
         createFlooring(this, this.playerPosZoneInterval, -this.playerPosZoneInterval);
       });
-    loadLevel(this, 'level-1')
-      .pipe(take(1))
-      .subscribe((levelSvgText) => {
-        this.levelSvgs.push(levelSvgText);
-      });
+    for (let i = 0; i < this.levelCount; i++) {
+      loadLevel(this, `level-${i + 1}`)
+        .pipe(take(1))
+        .subscribe((levelSvgText) => {
+          this.levelsLoaded++;
+          this.levelSvgs.push(levelSvgText);
+          if (this.levelsLoaded == this.levelCount) {
+            shuffle(this.levelSvgs); // make levels load randomly
+          }
+        });
+    }
     handleDebugInput(this);
   }
 
@@ -160,15 +170,15 @@ export class Level extends Phaser.Scene {
   handleLevelZones() {
     const zoneLine = this.playerPosZoneInterval * this.currentZone * -1;
     if (this.player.y - 1000 < zoneLine) {
-      const level1 = createLevelFromSvg(
+      const level = createLevelFromSvg(
         this,
-        this.levelSvgs[this.currentZone],
+        this.levelSvgs[this.currentZone % this.levelCount], //
         this.playerPosZoneInterval * ++this.currentZone * -1
       );
-      this.addLevel(level1);
-      const flooringGraphics = createFlooring(this, zoneLine, zoneLine - 3000, 0x021827);
+      this.addLevel(level);
+      const flooringGraphics = createFlooring(this, zoneLine, zoneLine - 3000, getRandomFloorColor());
       this.levelGraphics.push(flooringGraphics);
-      level1.backgrounds.forEach((g) => this.levelGraphics.push(g));
+      level.backgrounds.forEach((g) => this.levelGraphics.push(g));
     }
   }
 

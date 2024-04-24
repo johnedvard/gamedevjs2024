@@ -31,7 +31,7 @@ export class Player {
   controlBone: Bone;
   waitBeforeDieSubscription: Subscription;
   state: '' | 'dead' = '';
-  shots = 5;
+  shots = MAX_SHOTS;
   trailParticles: TrailParticle[] = [];
 
   handleShotsTxtTween: Phaser.Tweens.Tween;

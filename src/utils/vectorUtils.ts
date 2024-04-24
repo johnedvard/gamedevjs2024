@@ -154,40 +154,39 @@ const getParallellLine = (
   return { l0, l1 };
 };
 
-export const getEnemiesFromSvg = (svgDoc: Document, offsetY = 0) => {
-  const enemies = [];
-  const enemiesEls = svgDoc.querySelectorAll("g[id^='Enemy']");
-  enemiesEls.forEach((el) => {
-    const enemyPos = getPosFromSvgCircle(el.querySelector(`circle[id^='enemyPos']`));
-    enemyPos.y += offsetY;
-    enemies.push({ startPos: enemyPos });
+const getGameObjectsFromSvg = (svgDoc: Document, offsetY = 0, groupMatch: string, posMatch: string) => {
+  const objs = [];
+  const els = svgDoc.querySelectorAll(`g[id^='${groupMatch}']`);
+  els.forEach((el) => {
+    const pos = getPosFromSvgCircle(el.querySelector(`circle[id^='${posMatch}']`));
+    pos.y += offsetY;
+    objs.push({ startPos: pos });
   });
-  return enemies;
+  return objs;
 };
 
-export const createCollisionCirclesFromSvg = (svgDoc: Document, offsetY = 0) => {
+export const getEnemiesFromSvg = (svgDoc: Document, offsetY = 0) => {
+  return getGameObjectsFromSvg(svgDoc, offsetY, 'Enemy', 'enemyPos');
+};
+
+export const getPowerPucksFromSvg = (svgDoc: Document, offsetY = 0) => {
+  return getGameObjectsFromSvg(svgDoc, offsetY, 'PowerPuck', 'powerPos');
+};
+
+export const getHolesFromSvg = (svgDoc: Document, offsetY = 0) => {
+  return getGameObjectsFromSvg(svgDoc, offsetY, 'Hole', 'holePos');
+};
+
+export const getCollisionCirclesFromSvg = (svgDoc: Document, offsetY = 0) => {
   const cicles = [];
   const ciclesEl = svgDoc.querySelectorAll("circle[id^='_-collisionCircle']");
-  console.log('ciclesEl', ciclesEl);
   ciclesEl.forEach((el) => {
     const circlePos = getPosFromSvgCircle(el as SVGElement);
     const radius = getRadiusFromSvgCircle(el as SVGElement);
     circlePos.y += offsetY;
     cicles.push({ startPos: circlePos, radius });
   });
-  console.log('cicles', cicles);
   return cicles;
-};
-
-export const getHolesFromSvg = (svgDoc: Document, offsetY = 0) => {
-  const holes = [];
-  const holesEl = svgDoc.querySelectorAll("g[id^='Hole']");
-  holesEl.forEach((el) => {
-    const holePos = getPosFromSvgCircle(el.querySelector(`circle[id^='holePos']`));
-    holePos.y += offsetY;
-    holes.push({ startPos: holePos });
-  });
-  return holes;
 };
 
 export const createButtonGraphics = (scene: Scene, config?: ButtonConfig): Phaser.GameObjects.Graphics => {

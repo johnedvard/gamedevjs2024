@@ -5,7 +5,6 @@ import { createFlooring, createLevelFromSvg, loadLevel } from '~/utils/levelUtil
 import { LevelState } from '~/types/LevelState';
 import { handleDebugInput } from '~/debugInput';
 import { Player } from '~/Player';
-import { Enemy } from '~/Enemy';
 import { Hole } from '~/Hole';
 import { off, on } from '~/utils/eventEmitterUtils';
 import { GameEvent } from '~/enums/GameEvent';
@@ -13,6 +12,7 @@ import { UserInput } from '~/UserInput';
 import { Discharge } from '~/Discharge';
 import { DepthGroup } from '~/enums/DepthGroup';
 import { GAME_WIDTH } from '~/utils/gameUtils';
+import { Puck } from '~/Puck';
 
 export class Level extends Phaser.Scene {
   levelIntro!: LevelState;
@@ -20,7 +20,7 @@ export class Level extends Phaser.Scene {
   levelSvgs: string[] = [];
   player!: Player;
   userInput!: UserInput;
-  enemies: Enemy[] = [];
+  pucks: Puck[] = [];
   holes: Hole[] = [];
   collisionCircles: { circle: MatterJS.BodyType; graphics: Phaser.GameObjects.Graphics }[] = [];
   discharge: Discharge;
@@ -52,6 +52,7 @@ export class Level extends Phaser.Scene {
     this.userInput.setPlayer(this.player);
     this.createEnemies(levelState);
     this.createHoles(levelState);
+    this.createPowerPucks(levelState);
     this.createCollisionCircles(levelState);
     this.discharge = new Discharge(this);
     this.discharge.setPlayer(this.player);
@@ -61,6 +62,7 @@ export class Level extends Phaser.Scene {
     this.createCollisionCircles(levelState);
     this.createEnemies(levelState);
     this.createHoles(levelState);
+    this.createPowerPucks(levelState);
     this.levelStates.push(levelState);
   }
 
@@ -119,7 +121,7 @@ export class Level extends Phaser.Scene {
     // this.enemies.forEach(e => e.destroyEverything());
     // this.enemies = [];
     levelState.enemies.forEach((e) => {
-      this.enemies.push(new Enemy(this, { startPos: e.startPos }));
+      this.pucks.push(new Puck(this, { startPos: e.startPos, puckType: 'enemy' }));
     });
   }
 
@@ -131,17 +133,23 @@ export class Level extends Phaser.Scene {
     });
   }
 
+  createPowerPucks(levelState: LevelState) {
+    levelState.powerPucks.forEach((p) => {
+      this.pucks.push(new Puck(this, { startPos: p.startPos, puckType: 'powerpuck' }));
+    });
+  }
+
   update(time: number, delta: number): void {
     if (!this.player) return;
     this.userInput?.update(time, delta);
     this.player?.update(time, delta);
 
-    for (let i = this.enemies.length - 1; i >= 0; i--) {
-      const e = this.enemies[i];
+    for (let i = this.pucks.length - 1; i >= 0; i--) {
+      const e = this.pucks[i];
       e.update(time, delta);
       if (e.isDestroyed) {
-        this.enemies[i] = null;
-        this.enemies.splice(i, 1);
+        this.pucks[i] = null;
+        this.pucks.splice(i, 1);
       }
     }
     this.holes.forEach((e) => e.update(time, delta));
@@ -165,7 +173,7 @@ export class Level extends Phaser.Scene {
   destroyGameObjects() {
     // No need to destroy player, because it destroys itself
     this.player = null;
-    this.enemies.forEach((e) => e.destroyEverything());
+    this.pucks.forEach((e) => e.destroyEverything());
     this.holes.forEach((e) => e.destroyEverything());
     this.collisionCircles.forEach((collisionCircle) => {
       this.matter.world.remove(collisionCircle.circle);
@@ -175,7 +183,7 @@ export class Level extends Phaser.Scene {
     });
     this.discharge.destroy();
     this.holes = [];
-    this.enemies = [];
+    this.pucks = [];
     this.collisionCircles = [];
 
     // TODO (johnedvard) Let Level add walls to the scene, and then clean up

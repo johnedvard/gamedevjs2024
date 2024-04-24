@@ -13,7 +13,8 @@ import {
   getPosFromSvgCircle,
   getEnemiesFromSvg,
   getHolesFromSvg,
-  createCollisionCirclesFromSvg,
+  getCollisionCirclesFromSvg,
+  getPowerPucksFromSvg,
 } from '~/utils/vectorUtils';
 import { GAME_HEIGHT, GAME_WIDTH } from './gameUtils';
 
@@ -35,12 +36,13 @@ export function createLevelFromSvg(scene: Scene, svgText: string, offsetY = 0): 
   const svgPaths = createPathsFromSvg(svgDoc);
   const walls = createCollisionBoxesFromPaths(scene, svgPaths, offsetY);
   const enemies = getEnemiesFromSvg(svgDoc, offsetY);
+  const powerPucks = getPowerPucksFromSvg(svgDoc, offsetY);
   const holes = getHolesFromSvg(svgDoc, offsetY);
-  const collisionCircles = createCollisionCirclesFromSvg(svgDoc, offsetY);
+  const collisionCircles = getCollisionCirclesFromSvg(svgDoc, offsetY);
   createWallGraphics(scene, walls.mainBoxes, { strokeWidth: 25, color: MyColor.pink }); // pink
   createBackgroundFromSvg(scene, svgPaths, offsetY);
   const startPos = getPosFromSvgCircle(svgDoc.querySelector(`#start`));
-  return { startPos, enemies, holes, collisionCircles, walls };
+  return { startPos, enemies, holes, collisionCircles, walls, powerPucks };
 }
 
 export function createFlooring(scene: Scene, startY: number, endY: number, color: number = 0x1f1f1f) {

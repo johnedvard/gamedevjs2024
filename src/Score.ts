@@ -4,8 +4,8 @@ import { GAME_WIDTH } from '~/utils/gameUtils';
 import { off, on } from '~/utils/eventEmitterUtils';
 import { startAccumulateScoreRoutine } from '~/utils/animationUtils';
 import { GameEvent } from '~/enums/GameEvent';
-import { Enemy } from './Enemy';
-import { HIGH_SCORE_KEY, SCORE_KEY, getItem, setItem } from './utils/storageUtils';
+import { HIGH_SCORE_KEY, SCORE_KEY, getItem, setItem } from '~/utils/storageUtils';
+import { Puck } from '~/Puck';
 
 export class Score {
   scoreTxt: Phaser.GameObjects.Text;
@@ -21,7 +21,7 @@ export class Score {
     this.personalBestTxt = createText(this.scene, GAME_WIDTH / 2, 155, 50, '');
     this.listenForEvents();
   }
-  onEnemyKilled = (data: { emeny: Enemy }) => {
+  onPuckKilled = (data: { puck: Puck }) => {
     this.addScore(1);
   };
 
@@ -36,11 +36,11 @@ export class Score {
     }
   };
   listenForEvents() {
-    on(GameEvent.enemyKilled, this.onEnemyKilled);
+    on(GameEvent.puckKilled, this.onPuckKilled);
     on(GameEvent.gameOver, this.onGameOver);
   }
   removeEventListeners() {
-    off(GameEvent.enemyKilled, this.onEnemyKilled);
+    off(GameEvent.puckKilled, this.onPuckKilled);
     off(GameEvent.gameOver, this.onGameOver);
   }
   addScore(score: number) {

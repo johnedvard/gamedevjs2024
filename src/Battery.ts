@@ -77,7 +77,7 @@ export class Battery {
   }
 
   fallInHole = (data: { other: MatterJS.BodyType }) => {
-    if (data.other.label === BodyTypeLabel.enemy) {
+    if (data.other.label === BodyTypeLabel.enemy || data.other.label === BodyTypeLabel.powerPuck) {
       this.addCharge();
     }
   };

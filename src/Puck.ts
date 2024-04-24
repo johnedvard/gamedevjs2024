@@ -10,6 +10,7 @@ import { playPuckHit } from './utils/audioUtils';
 import { createBallByType, createPuckByType, getSkinByType } from './utils/puckUtils';
 import { startWaitRoutine } from './utils/gameUtils';
 import { take } from 'rxjs/internal/operators/take';
+import { playExplotionAnimation } from './utils/animationUtils';
 
 type PuckType = 'enemy' | 'powerpuck';
 type PuckOptions = { startPos: Phaser.Math.Vector2; puckType: PuckType };
@@ -21,7 +22,7 @@ export class Puck {
   spineObject: SpineGameObject;
   ball: MatterJS.BodyType;
   startPoint: Phaser.Math.Vector2 = new Phaser.Math.Vector2(200, 200);
-  state: '' | 'dead' = '';
+  state: '' | 'dead' | 'exploding' = '';
   isDestroyed = false;
   highlightAttachment: Attachment;
   displayHighlight = false;
@@ -42,6 +43,7 @@ export class Puck {
     this.init();
   }
   init() {
+    this.state = '';
     this.initSpineObject();
     this.initPhysics();
     this.listenForEvents();
@@ -50,19 +52,42 @@ export class Puck {
   }
 
   handlePuckHit() {
-    this.spineObject.animationState.setAnimation(0, 'hit', false);
+    if (this.state === 'dead') return;
     playPuckHit();
+    if (this.state === 'exploding') return;
+    this.spineObject.animationState.setAnimation(0, 'hit', false);
     if (this.puckType === 'powerpuck') {
+      this.state = 'exploding';
       // TODO get pucks in proximity, and apply force to each of them
-      startWaitRoutine(this.scene, 3000)
-        .pipe(take(1))
-        .subscribe(() => {
-          const force = new Phaser.Math.Vector2(1, 1).scale(0.1);
-          this.pucksInsidePowerField.forEach((p) => {
-            this.scene.matter.applyForce(p, force);
-          });
-          this.startDieRoutine('dead');
-        });
+      this.spineObject.animationState.timeScale = 2;
+      this.spineObject.animationState.setAnimation(0, 'explode', false);
+      const animationStateListeners = {
+        event: (entry, event) => {
+          if (this.state === 'dead') return;
+          if (entry.animation.name === 'explode' && event.data.name === 'playExplodeRing') {
+            playExplotionAnimation(
+              this.scene,
+              new Phaser.Math.Vector2(this.powerField.position.x, this.powerField.position.y)
+            );
+          }
+        },
+        complete: (trackEntry) => {
+          if (trackEntry.animation.name === 'explode') {
+            if (this.state === 'dead') return;
+            this.spineObject.animationState.timeScale = 0.5;
+            this.spineObject.animationState.removeListener(animationStateListeners);
+            const force = new Phaser.Math.Vector2(1, 1).scale(0.1);
+            this.pucksInsidePowerField.forEach((p) => {
+              const angle = Phaser.Math.Angle.BetweenPoints(this.powerField.position, p.position);
+              const distance = Phaser.Math.Distance.BetweenPoints(this.powerField.position, p.position);
+              const force = new Phaser.Math.Vector2(Math.cos(angle), Math.sin(angle)).scale(6 / distance);
+              this.scene.matter.applyForce(p, force);
+            });
+            this.startDieRoutine('dead');
+          }
+        },
+      };
+      this.spineObject.animationState.addListener(animationStateListeners);
     }
   }
 
@@ -94,7 +119,6 @@ export class Puck {
   handlePowerFieldCollision() {
     if (!this.powerField) return;
     this.powerField.onCollideCallback = ({ bodyA, bodyB }: CollideCallback) => {
-      console.log('collide inside powerfield');
       if (
         bodyA === this.powerField &&
         (bodyB.label === BodyTypeLabel.player ||

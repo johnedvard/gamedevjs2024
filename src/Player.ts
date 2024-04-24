@@ -131,6 +131,7 @@ export class Player {
   };
 
   batteryChange = ({ newValue, oldValue }) => {
+    if (this.state === 'dead') return;
     if (newValue === MAX_CHARGES) {
       this.spineObject.animationState.setAnimation(0, 'charged', true);
     } else {
@@ -249,6 +250,7 @@ export class Player {
   }
 
   startDieRoutine() {
+    if (this.state === 'dead') return;
     this.state = 'dead';
     this.spineObject.animationState.setAnimation(0, 'dead', false);
     this.destroyPhysicsObjects();

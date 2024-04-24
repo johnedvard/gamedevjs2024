@@ -2,10 +2,8 @@ import { Scene } from 'phaser';
 // TODO (johnedvard) move to scene plugin
 export function handleDebugInput(scene: Scene) {
   scene.matter.world.drawDebug = false;
-  console.log('handledebug input', scene.matter.world.drawDebug);
   if (scene.input && scene.input.keyboard) {
     scene.input.keyboard.on('keydown', (evt: KeyboardEvent) => {
-      console.log('toggle key down');
       if (evt.code === 'KeyT') {
         if (scene.matter.world.drawDebug) {
           scene.matter.world.drawDebug = false;

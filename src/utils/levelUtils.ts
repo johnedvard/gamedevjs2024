@@ -70,6 +70,7 @@ export function createFlooring(scene: Scene, startY: number, endY: number, color
     y = rect.y;
     color = orgColor;
   }
+  return graphics;
 }
 
 function createBackgroundFromSvg(scene: Scene, svgPaths: SvgPath[], offsetY = 0) {

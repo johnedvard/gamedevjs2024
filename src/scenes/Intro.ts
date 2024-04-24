@@ -41,10 +41,8 @@ export class Intro extends Phaser.Scene {
       .spine(GAME_WIDTH / 2, GAME_HEIGHT / 3, 'title-skel', 'title-atlas')
       .setDepth(DepthGroup.ui);
     this.spineObject.animationState.setAnimation(0, 'in', false);
-    this.spineObject.animationState.timeScale = 10;
     const animationStateListeners = {
       complete: (trackEntry) => {
-        console.log('complete', trackEntry);
         if (trackEntry.animation.name === 'in') {
           this.initText();
           this.addEventListeners();

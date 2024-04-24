@@ -22,7 +22,7 @@ export class Level extends Phaser.Scene {
   userInput!: UserInput;
   pucks: Puck[] = [];
   holes: Hole[] = [];
-  floorings: Phaser.GameObjects.Graphics[] = [];
+  levelGraphics: Phaser.GameObjects.Graphics[] = [];
   collisionCircles: { circle: MatterJS.BodyType; graphics: Phaser.GameObjects.Graphics }[] = [];
   discharge: Discharge;
   playerPosZoneInterval = 3000; //load next zone for each 3000px
@@ -167,7 +167,8 @@ export class Level extends Phaser.Scene {
       );
       this.addLevel(level1);
       const flooringGraphics = createFlooring(this, zoneLine, zoneLine - 3000, 0x021827);
-      this.floorings.push(flooringGraphics);
+      this.levelGraphics.push(flooringGraphics);
+      level1.backgrounds.forEach((g) => this.levelGraphics.push(g));
     }
   }
 
@@ -182,7 +183,8 @@ export class Level extends Phaser.Scene {
       collisionCircle.graphics = null;
       collisionCircle.circle = null;
     });
-    this.floorings.forEach((g) => {
+    this.levelGraphics.forEach((g) => {
+      g.clear();
       g.destroy();
       g = null;
     });
@@ -190,7 +192,7 @@ export class Level extends Phaser.Scene {
     this.holes = [];
     this.pucks = [];
     this.collisionCircles = [];
-    this.floorings = [];
+    this.levelGraphics = [];
 
     // TODO (johnedvard) Let Level add walls to the scene, and then clean up
     this.levelStates.forEach((l) => {

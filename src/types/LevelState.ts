@@ -5,4 +5,5 @@ export type LevelState = {
   powerPucks: { startPos: Phaser.Math.Vector2 }[];
   collisionCircles: { startPos: Phaser.Math.Vector2; radius: number }[];
   walls: { mainBoxes: MatterJS.BodyType[][]; excessBoxes: MatterJS.BodyType[][] };
+  backgrounds: Phaser.GameObjects.Graphics[];
 };

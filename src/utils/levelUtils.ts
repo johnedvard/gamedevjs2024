@@ -40,9 +40,9 @@ export function createLevelFromSvg(scene: Scene, svgText: string, offsetY = 0): 
   const holes = getHolesFromSvg(svgDoc, offsetY);
   const collisionCircles = getCollisionCirclesFromSvg(svgDoc, offsetY);
   createWallGraphics(scene, walls.mainBoxes, { strokeWidth: 25, color: MyColor.pink }); // pink
-  createBackgroundFromSvg(scene, svgPaths, offsetY);
+  const backgrounds = createBackgroundFromSvg(scene, svgPaths, offsetY);
   const startPos = getPosFromSvgCircle(svgDoc.querySelector(`#start`));
-  return { startPos, enemies, holes, collisionCircles, walls, powerPucks };
+  return { startPos, enemies, holes, collisionCircles, walls, powerPucks, backgrounds };
 }
 
 export function createFlooring(scene: Scene, startY: number, endY: number, color: number = 0x1f1f1f) {
@@ -74,6 +74,7 @@ export function createFlooring(scene: Scene, startY: number, endY: number, color
 }
 
 function createBackgroundFromSvg(scene: Scene, svgPaths: SvgPath[], offsetY = 0) {
+  const backgrounds = [];
   svgPaths.forEach(({ path, svgPathEl }) => {
     if (!svgPathEl.getAttribute('serif:id')?.match('{background}')) return;
     const graphics = scene.add.graphics().setDepth(DepthGroup.ui);
@@ -81,7 +82,9 @@ function createBackgroundFromSvg(scene: Scene, svgPaths: SvgPath[], offsetY = 0)
     const pathPoints = path.getPoints(10);
     pathPoints.forEach((p) => (p.y += offsetY));
     graphics.fillPoints(pathPoints);
+    backgrounds.push(graphics);
   });
+  return backgrounds;
 }
 function createWallGraphics(scene: Scene, walls: MatterJS.BodyType[][], { strokeWidth, color }) {
   walls.forEach((group) => {

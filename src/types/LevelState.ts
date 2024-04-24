@@ -6,4 +6,5 @@ export type LevelState = {
   collisionCircles: { startPos: Phaser.Math.Vector2; radius: number }[];
   walls: { mainBoxes: MatterJS.BodyType[][]; excessBoxes: MatterJS.BodyType[][] };
   backgrounds: Phaser.GameObjects.Graphics[];
+  wallGraphics: Phaser.GameObjects.Graphics[];
 };

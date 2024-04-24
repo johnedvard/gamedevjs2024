@@ -39,10 +39,10 @@ export function createLevelFromSvg(scene: Scene, svgText: string, offsetY = 0): 
   const powerPucks = getPowerPucksFromSvg(svgDoc, offsetY);
   const holes = getHolesFromSvg(svgDoc, offsetY);
   const collisionCircles = getCollisionCirclesFromSvg(svgDoc, offsetY);
-  createWallGraphics(scene, walls.mainBoxes, { strokeWidth: 25, color: MyColor.pink }); // pink
+  const wallGraphics = createWallGraphics(scene, walls.mainBoxes, { strokeWidth: 25, color: MyColor.pink }); // pink
   const backgrounds = createBackgroundFromSvg(scene, svgPaths, offsetY);
   const startPos = getPosFromSvgCircle(svgDoc.querySelector(`#start`));
-  return { startPos, enemies, holes, collisionCircles, walls, powerPucks, backgrounds };
+  return { startPos, enemies, holes, collisionCircles, walls, powerPucks, backgrounds, wallGraphics };
 }
 
 export function createFlooring(scene: Scene, startY: number, endY: number, color: number = 0x1f1f1f) {
@@ -87,12 +87,13 @@ function createBackgroundFromSvg(scene: Scene, svgPaths: SvgPath[], offsetY = 0)
   return backgrounds;
 }
 function createWallGraphics(scene: Scene, walls: MatterJS.BodyType[][], { strokeWidth, color }) {
+  const wallGraphics = [];
   walls.forEach((group) => {
     const graphics = scene.add.graphics().setDepth(DepthGroup.wall);
     const curve = new Phaser.Curves.Spline(group.flatMap((w) => [w.position.x, w.position.y]));
     graphics.lineStyle(strokeWidth, color, 1);
     curve.draw(graphics, 175);
+    wallGraphics.push(graphics);
   });
-  // graphics.fillStyle(MyColor.black);
-  // graphics.fillPoints(curve.getPoints(200))
+  return wallGraphics;
 }

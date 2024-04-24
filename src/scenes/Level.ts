@@ -16,9 +16,13 @@ import { Puck } from '~/Puck';
 import { shuffle } from 'lodash';
 import { getRandomFloorColor } from '~/utils/colorUtils';
 
+type LevelStateManagement = {
+  levelState: LevelState;
+  graphics: Phaser.GameObjects.Graphics[];
+};
 export class Level extends Phaser.Scene {
   levelIntro!: LevelState;
-  levelStates: LevelState[] = [];
+  levelStateMangement: LevelStateManagement[] = [];
   levelSvgs: string[] = [];
   player!: Player;
   userInput!: UserInput;
@@ -26,7 +30,6 @@ export class Level extends Phaser.Scene {
   holes: Hole[] = [];
   levelCount = 3;
   levelsLoaded = 0;
-  levelGraphics: Phaser.GameObjects.Graphics[] = [];
   collisionCircles: { circle: MatterJS.BodyType; graphics: Phaser.GameObjects.Graphics }[] = [];
   discharge: Discharge;
   playerPosZoneInterval = 3000; //load next zone for each 3000px
@@ -69,12 +72,18 @@ export class Level extends Phaser.Scene {
     this.discharge.setPlayer(this.player);
   }
 
-  addLevel(levelState: LevelState) {
-    this.createCollisionCircles(levelState);
-    this.createEnemies(levelState);
-    this.createHoles(levelState);
-    this.createPowerPucks(levelState);
-    this.levelStates.push(levelState);
+  addLevel(management: LevelStateManagement) {
+    this.createCollisionCircles(management.levelState);
+    this.createEnemies(management.levelState);
+    this.createHoles(management.levelState);
+    this.createPowerPucks(management.levelState);
+    this.levelStateMangement.push(management);
+
+    if (this.levelStateMangement.length >= 3 && this.currentZone >= 3) {
+      // TODO (johnedvard) also remove other game objects the same way.
+      this.destroyLevelState(this.levelStateMangement[0]);
+      this.levelStateMangement.splice(0, 1);
+    }
   }
 
   create(): void {
@@ -175,10 +184,12 @@ export class Level extends Phaser.Scene {
         this.levelSvgs[this.currentZone % this.levelCount], //
         this.playerPosZoneInterval * ++this.currentZone * -1
       );
-      this.addLevel(level);
       const flooringGraphics = createFlooring(this, zoneLine, zoneLine - 3000, getRandomFloorColor());
-      this.levelGraphics.push(flooringGraphics);
-      level.backgrounds.forEach((g) => this.levelGraphics.push(g));
+      const levelGraphics = [];
+      levelGraphics.push(flooringGraphics);
+      level.backgrounds.forEach((g) => levelGraphics.push(g));
+      level.wallGraphics.forEach((g) => levelGraphics.push(g));
+      this.addLevel({ levelState: level, graphics: levelGraphics });
     }
   }
 
@@ -190,35 +201,33 @@ export class Level extends Phaser.Scene {
     this.collisionCircles.forEach((collisionCircle) => {
       this.matter.world.remove(collisionCircle.circle);
       collisionCircle.graphics.destroy();
-      collisionCircle.graphics = null;
-      collisionCircle.circle = null;
     });
-    this.levelGraphics.forEach((g) => {
-      g.clear();
-      g.destroy();
-      g = null;
-    });
+
     this.discharge.destroy();
     this.holes = [];
     this.pucks = [];
     this.collisionCircles = [];
-    this.levelGraphics = [];
 
     // TODO (johnedvard) Let Level add walls to the scene, and then clean up
-    this.levelStates.forEach((l) => {
-      l.walls.mainBoxes.forEach((group) =>
-        group.forEach((b) => {
-          this.matter.world.remove(b);
-          b = null;
-        })
-      );
-      l.walls.excessBoxes.forEach((group) =>
-        group.forEach((b) => {
-          this.matter.world.remove(b);
-          b = null;
-        })
-      );
+    this.levelStateMangement.forEach((management) => {
+      this.destroyLevelState(management);
     });
-    this.levelStates = [];
+    this.levelStateMangement = [];
+  }
+  destroyLevelState(management: LevelStateManagement) {
+    management.levelState.walls.mainBoxes.forEach((group) =>
+      group.forEach((b) => {
+        this.matter.world.remove(b);
+      })
+    );
+    management.levelState.walls.excessBoxes.forEach((group) =>
+      group.forEach((b) => {
+        this.matter.world.remove(b);
+      })
+    );
+    management.graphics.forEach((g) => {
+      g.clear();
+      g.destroy();
+    });
   }
 }

@@ -28,11 +28,13 @@ export class Score {
   onGameOver = () => {
     setItem(SCORE_KEY, `${this.score}`);
     const highscore = (getItem(HIGH_SCORE_KEY) as number) || 0;
-    this.personalBestTxt.setText('BEST: ' + highscore);
     if (this.score > highscore) {
       // TODO (johnedvard) emit new record event
       // add confetty or similar;
       setItem(HIGH_SCORE_KEY, `${this.score}`);
+      this.personalBestTxt.setText('NEW BEST: ' + this.score);
+    } else {
+      this.personalBestTxt.setText('BEST: ' + highscore);
     }
   };
   listenForEvents() {

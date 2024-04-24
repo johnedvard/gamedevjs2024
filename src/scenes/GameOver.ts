@@ -32,8 +32,8 @@ export class GameOver extends Phaser.Scene {
 
   displayRetryScreen() {
     this.retryScreenObjects = [];
-    const tryAgainText = createText(this, GAME_WIDTH / 2, 290, 120, 'Game Over\nTry Again?', { align: 'center' });
-    const yesBtn = createButton(this, GAME_WIDTH / 2 - 190, 270, 200, 120, this.onReplay, 'YES');
+    const tryAgainText = createText(this, GAME_WIDTH / 2, 490, 120, 'Game Over\nTry Again?', { align: 'center' });
+    const yesBtn = createButton(this, GAME_WIDTH / 2 - 190, 370, 200, 120, this.onReplay, 'YES');
 
     [tryAgainText].forEach((text) => {
       this.tweens.add({

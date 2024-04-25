@@ -1,6 +1,7 @@
 import { DepthGroup } from '~/enums/DepthGroup';
 import { GameEvent } from '~/enums/GameEvent';
 import { SceneKey } from '~/enums/SceneKey';
+import { playUiClick } from '~/utils/audioUtils';
 import { emit } from '~/utils/eventEmitterUtils';
 import { GAME_WIDTH, centerScene } from '~/utils/gameUtils';
 import { createButton, createText } from '~/utils/textUtils';
@@ -20,6 +21,7 @@ export class GameOver extends Phaser.Scene {
   update(): void {}
 
   onReplay = () => {
+    playUiClick();
     emit(GameEvent.replay);
     this.scene.stop();
   };

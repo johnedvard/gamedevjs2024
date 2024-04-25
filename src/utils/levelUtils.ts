@@ -16,7 +16,7 @@ import {
   getCollisionCirclesFromSvg,
   getPowerPucksFromSvg,
 } from '~/utils/vectorUtils';
-import { GAME_HEIGHT, GAME_WIDTH } from './gameUtils';
+import { GAME_WIDTH } from '~/utils/gameUtils';
 
 const parser = new DOMParser();
 

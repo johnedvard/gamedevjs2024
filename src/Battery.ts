@@ -6,6 +6,7 @@ import { emit, off, on } from '~/utils/eventEmitterUtils';
 import { DepthGroup } from '~/enums/DepthGroup';
 import { GameEvent } from '~/enums/GameEvent';
 import { BodyTypeLabel } from '~/enums/BodyTypeLabel';
+import { playDischarge } from './utils/audioUtils';
 
 export const MAX_CHARGES = 3;
 const START_CHARGES = 1;
@@ -85,6 +86,7 @@ export class Battery {
     if (this.charges !== MAX_CHARGES) return;
     this.charges = 0;
     this.spineBattery.animationState.setAnimation(0, 'spend-all');
+    playDischarge();
     emit(GameEvent.discharge);
     emit(GameEvent.batteryChange, { oldValue: MAX_CHARGES, newValue: this.charges });
   }

@@ -5,7 +5,12 @@ let musicOn = true;
 let sfxOn = true;
 let backgroundMusic = null;
 const puckhitSounds = [];
-const bgVolume = 0.1;
+const fallInHoleSounds = [];
+const explotionSounds = [];
+const dischargeSounds = [];
+const playerDieSounds = [];
+const uiClickSounds = [];
+const bgVolume = 0.2;
 
 export function isMusicAndSfxInitialized() {
   return isInitialized;
@@ -27,6 +32,19 @@ export function initMusicAndSfx(scene: Scene) {
   puckhitSounds.push(scene.sound.add('click3'));
   puckhitSounds.push(scene.sound.add('click4'));
   puckhitSounds.push(scene.sound.add('click5'));
+
+  fallInHoleSounds.push(scene.sound.add('fallinhole1'));
+  fallInHoleSounds.push(scene.sound.add('fallinhole2'));
+  fallInHoleSounds.push(scene.sound.add('fallinhole3'));
+
+  explotionSounds.push(scene.sound.add('explotion1'));
+
+  playerDieSounds.push(scene.sound.add('player-die1'));
+
+  uiClickSounds.push(scene.sound.add('ui-click1'));
+
+  dischargeSounds.push(scene.sound.add('discharge1'));
+
   isInitialized = true;
 }
 
@@ -35,7 +53,37 @@ export function playPuckHit(volume = 1) {
   if (volume > 1) volume = 1;
   if (volume < 0) volume = 0;
   const soundIndex = Math.floor(Math.random() * puckhitSounds.length);
-  puckhitSounds[soundIndex]?.play({volume});
+  puckhitSounds[soundIndex]?.play({ volume });
+}
+
+export function playFallInHole() {
+  if (!sfxOn) return;
+  const soundIndex = Math.floor(Math.random() * fallInHoleSounds.length);
+  fallInHoleSounds[soundIndex]?.play();
+}
+
+export function playPlayerDie() {
+  if (!sfxOn) return;
+  const soundIndex = Math.floor(Math.random() * playerDieSounds.length);
+  playerDieSounds[soundIndex]?.play();
+}
+
+export function playDischarge() {
+  if (!sfxOn) return;
+  const soundIndex = Math.floor(Math.random() * dischargeSounds.length);
+  dischargeSounds[soundIndex]?.play();
+}
+
+export function playUiClick() {
+  if (!sfxOn) return;
+  const soundIndex = Math.floor(Math.random() * uiClickSounds.length);
+  uiClickSounds[soundIndex]?.play();
+}
+
+export function playExplotion() {
+  if (!sfxOn) return;
+  const soundIndex = Math.floor(Math.random() * explotionSounds.length);
+  explotionSounds[soundIndex]?.play({ volume: 0.5 });
 }
 
 export function playMusic() {

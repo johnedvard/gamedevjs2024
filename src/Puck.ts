@@ -6,7 +6,7 @@ import { DepthGroup } from '~/enums/DepthGroup';
 import { CollideCallback } from '~/types/CollideCallback';
 import { emit, off, on } from '~/utils/eventEmitterUtils';
 import { GameEvent } from '~/enums/GameEvent';
-import { playPuckHit } from '~/utils/audioUtils';
+import { playExplotion, playFallInHole, playPuckHit } from '~/utils/audioUtils';
 import { createBallByType, createPuckByType, getSkinByType } from '~/utils/puckUtils';
 import { playExplotionAnimation } from '~/utils/animationUtils';
 
@@ -52,7 +52,7 @@ export class Puck {
   handlePuckHit(impactSpeed = 0) {
     if (this.state === 'dead') return;
     const maxSpeedToConsider = 25;
-    playPuckHit(Math.min(impactSpeed,maxSpeedToConsider)/maxSpeedToConsider)
+    playPuckHit(Math.min(impactSpeed, maxSpeedToConsider) / maxSpeedToConsider);
     if (this.state === 'exploding') return;
     this.spineObject.animationState.setAnimation(0, 'hit', false);
     if (this.puckType === 'powerpuck') {
@@ -60,6 +60,7 @@ export class Puck {
       // TODO get pucks in proximity, and apply force to each of them
       this.spineObject.animationState.timeScale = 2;
       this.spineObject.animationState.setAnimation(0, 'explode', false);
+      playExplotion();
       const animationStateListeners = {
         event: (entry, event) => {
           if (this.state === 'dead') return;
@@ -102,7 +103,7 @@ export class Puck {
             bodyA.label === BodyTypeLabel.enemy ||
             bodyA.label === BodyTypeLabel.powerPuck))
       ) {
-        console.log('play puckhit', bodyA.speed, bodyB.speed)
+        console.log('play puckhit', bodyA.speed, bodyB.speed);
         const puckWithMaxSpeed = Math.max(bodyA.speed, bodyB.speed);
         this.handlePuckHit(puckWithMaxSpeed);
       }
@@ -180,6 +181,7 @@ export class Puck {
         y: data.hole.position.y,
         duration: 1000,
       });
+      playFallInHole();
       this.startDieRoutine('default');
     }
   };

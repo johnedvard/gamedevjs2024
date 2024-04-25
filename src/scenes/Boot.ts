@@ -20,6 +20,18 @@ export class Boot extends Phaser.Scene {
     this.load.audio('click3', 'sounds/click3.wav');
     this.load.audio('click4', 'sounds/click4.wav');
     this.load.audio('click5', 'sounds/click5.wav');
+
+    this.load.audio('fallinhole1', 'sounds/fallinhole1.wav');
+    this.load.audio('fallinhole2', 'sounds/fallinhole2.wav');
+    this.load.audio('fallinhole3', 'sounds/fallinhole3.wav');
+
+    this.load.audio('explotion1', 'sounds/explotion1.wav', { instances: 3 });
+
+    this.load.audio('player-die1', 'sounds/player-die1.wav');
+
+    this.load.audio('ui-click1', 'sounds/ui-click1.wav');
+
+    this.load.audio('discharge1', 'sounds/discharge1.wav');
   }
 
   preloadSpineAnimations() {

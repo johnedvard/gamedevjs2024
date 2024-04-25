@@ -1,7 +1,7 @@
 import { SpineGameObject } from '@esotericsoftware/spine-phaser';
 import { DepthGroup } from '~/enums/DepthGroup';
 import { SceneKey } from '~/enums/SceneKey';
-import { initMusicAndSfx, isMusicAndSfxInitialized, playMusic } from '~/utils/audioUtils';
+import { initMusicAndSfx, isMusicAndSfxInitialized, playMusic, playUiClick } from '~/utils/audioUtils';
 import { GAME_HEIGHT, GAME_WIDTH, centerScene } from '~/utils/gameUtils';
 import { createText } from '~/utils/textUtils';
 
@@ -81,6 +81,7 @@ export class Intro extends Phaser.Scene {
   }
 
   onPlayButtonClick = () => {
+    playUiClick();
     this.scene.start(SceneKey.Level, { freeplay: false });
     this.input.off('pointerdown', this.onPlayButtonClick);
   };

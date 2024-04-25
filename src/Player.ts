@@ -11,6 +11,7 @@ import { emit, off, on } from '~/utils/eventEmitterUtils';
 import { createText } from '~/utils/textUtils';
 import { startWaitRoutine } from '~/utils/gameUtils';
 import { MAX_CHARGES } from './Battery';
+import { playPlayerDie } from './utils/audioUtils';
 
 type PlayerOptions = { startPos: Phaser.Math.Vector2 };
 type TrailParticle = { pos: Phaser.Math.Vector2; timeToLive: number; maxLifeTime: number };
@@ -253,6 +254,7 @@ export class Player {
     if (this.state === 'dead') return;
     this.state = 'dead';
     this.spineObject.animationState.setAnimation(0, 'dead', false);
+    playPlayerDie();
     this.destroyPhysicsObjects();
     const animationStateListeners = {
       complete: (trackEntry) => {

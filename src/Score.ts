@@ -46,6 +46,7 @@ export class Score {
     off(GameEvent.gameOver, this.onGameOver);
   }
   addScore(score: number) {
+    // TODO (john) accumulate a combo score to count correctly (instead of counting from 0)
     const currentScore = this.score;
     this.score += score;
     this.accumulateScoreTween?.stop();

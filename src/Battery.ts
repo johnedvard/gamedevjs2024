@@ -31,7 +31,7 @@ export class Battery {
   };
   initClickArea() {
     const clickableGraphics = this.scene.add.graphics();
-    const clickableRect = new Phaser.Geom.Rectangle(GAME_WIDTH - 121, 75, 83, 50);
+    const clickableRect = new Phaser.Geom.Rectangle(GAME_WIDTH - 135, 60, 110, 75);
     clickableGraphics.setInteractive(clickableRect, Phaser.Geom.Rectangle.Contains);
     clickableGraphics.on('pointerup', this.onBatteryClick, this);
     // clickableGraphics.on('pointerdown', this.onDischargePreview, this);

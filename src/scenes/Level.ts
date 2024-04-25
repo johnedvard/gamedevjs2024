@@ -28,7 +28,7 @@ export class Level extends Phaser.Scene {
   userInput!: UserInput;
   pucks: Puck[] = [];
   holes: Hole[] = [];
-  levelCount = 3;
+  levelCount = 4;
   levelsLoaded = 0;
   collisionCircles: { circle: MatterJS.BodyType; graphics: Phaser.GameObjects.Graphics }[] = [];
   discharge: Discharge;

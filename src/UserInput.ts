@@ -84,7 +84,8 @@ export class UserInput {
     };
 
     const minDistance = 50;
-    const maxDistance = 250;
+    const minDistanceToDrawPotentialDistance = 80;
+    const maxDistance = 270;
     const maxLineWidth = 8;
     const minLineWidth = 3;
     const distance = line2.from.distance(line2.to);
@@ -96,7 +97,7 @@ export class UserInput {
     this.trajectoryGraphics.lineStyle(Math.max(minLineWidth, lineWidth), 0xffffff, 1);
     this.trajectorypotentialGraphics.lineStyle(Math.max(minLineWidth, lineWidth), 0xffffff, 0.4);
     // draw the potential to max length
-    if (distance > minDistance) {
+    if (distance > minDistanceToDrawPotentialDistance) {
       this.trajectorypotentialGraphics.moveTo(line2.from.x, line2.from.y);
       this.trajectorypotentialGraphics.lineTo(line2.from.x + diffNormalized.x, line2.from.y + diffNormalized.y);
     }
@@ -116,9 +117,10 @@ export class UserInput {
       this.player.eyeGroup.rotation =
         Phaser.Math.RadToDeg(line2.from.clone().subtract(line2.to).angle() - Math.PI / 2) * -1;
     }
-
-    this.trajectoryGraphics.stroke();
-    this.trajectorypotentialGraphics.stroke();
+    if (distance > minDistance) {
+      this.trajectoryGraphics.stroke();
+      this.trajectorypotentialGraphics.stroke();
+    }
   }
 
   setPlayer(player: Player) {

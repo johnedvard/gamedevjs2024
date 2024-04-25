@@ -15,7 +15,11 @@ export class Boot extends Phaser.Scene {
 
   loadSounds() {
     this.load.audio('bgm', 'sounds/bgm-half.mp3');
-    this.load.audio('puckhit1', 'sounds/puckhit1.wav');
+    this.load.audio('click1', 'sounds/click1.wav');
+    this.load.audio('click2', 'sounds/click2.wav');
+    this.load.audio('click3', 'sounds/click3.wav');
+    this.load.audio('click4', 'sounds/click4.wav');
+    this.load.audio('click5', 'sounds/click5.wav');
   }
 
   preloadSpineAnimations() {

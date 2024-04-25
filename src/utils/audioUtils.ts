@@ -22,17 +22,21 @@ export function initMusicAndSfx(scene: Scene) {
   const backgroundMusicId = `bgm`;
 
   backgroundMusic = scene.sound.add(backgroundMusicId, { loop: true, volume: bgVolume }) as Phaser.Sound.WebAudioSound;
-  puckhitSounds.push(scene.sound.add('puckhit1'));
+  puckhitSounds.push(scene.sound.add('click1'));
+  puckhitSounds.push(scene.sound.add('click2'));
+  puckhitSounds.push(scene.sound.add('click3'));
+  puckhitSounds.push(scene.sound.add('click4'));
+  puckhitSounds.push(scene.sound.add('click5'));
   isInitialized = true;
 }
 
 export function playPuckHit() {
   if (!sfxOn) return;
-  // const soundIndex = Math.floor(Math.random() * puckhitSounds.length);
-  // puckhitSounds[soundIndex]?.play();
+  const soundIndex = Math.floor(Math.random() * puckhitSounds.length);
+  puckhitSounds[soundIndex]?.play();
 }
 
-export function playMusic () {
+export function playMusic() {
   backgroundMusic?.play();
   if (!musicOn) backgroundMusic?.pause();
-};
+}

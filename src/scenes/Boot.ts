@@ -1,8 +1,10 @@
+import { ProgressBar } from '~/ProgressBar';
 import { SceneKey } from '~/enums/SceneKey';
 
 export class Boot extends Phaser.Scene {
   preload(): void {
     this.load.setPath('assets/gamedevjs2024');
+    new ProgressBar(this);
     this.loadImages();
     this.loadSounds();
     this.loadFonts();

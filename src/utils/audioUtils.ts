@@ -5,7 +5,7 @@ let musicOn = true;
 let sfxOn = true;
 let backgroundMusic = null;
 const puckhitSounds = [];
-const bgVolume = 0.4;
+const bgVolume = 0.1;
 
 export function isMusicAndSfxInitialized() {
   return isInitialized;
@@ -30,10 +30,12 @@ export function initMusicAndSfx(scene: Scene) {
   isInitialized = true;
 }
 
-export function playPuckHit() {
+export function playPuckHit(volume = 1) {
   if (!sfxOn) return;
+  if (volume > 1) volume = 1;
+  if (volume < 0) volume = 0;
   const soundIndex = Math.floor(Math.random() * puckhitSounds.length);
-  puckhitSounds[soundIndex]?.play();
+  puckhitSounds[soundIndex]?.play({volume});
 }
 
 export function playMusic() {

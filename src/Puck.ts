@@ -49,9 +49,10 @@ export class Puck {
     this.handlePowerFieldCollision();
   }
 
-  handlePuckHit() {
+  handlePuckHit(impactSpeed = 0) {
     if (this.state === 'dead') return;
-    playPuckHit();
+    const maxSpeedToConsider = 25;
+    playPuckHit(Math.min(impactSpeed,maxSpeedToConsider)/maxSpeedToConsider)
     if (this.state === 'exploding') return;
     this.spineObject.animationState.setAnimation(0, 'hit', false);
     if (this.puckType === 'powerpuck') {
@@ -101,7 +102,9 @@ export class Puck {
             bodyA.label === BodyTypeLabel.enemy ||
             bodyA.label === BodyTypeLabel.powerPuck))
       ) {
-        this.handlePuckHit();
+        console.log('play puckhit', bodyA.speed, bodyB.speed)
+        const puckWithMaxSpeed = Math.max(bodyA.speed, bodyB.speed);
+        this.handlePuckHit(puckWithMaxSpeed);
       }
       if (bodyA.label === BodyTypeLabel.dischargeCircle || bodyB.label === BodyTypeLabel.dischargeCircle) {
         this.isInisideDischargeArea = true;

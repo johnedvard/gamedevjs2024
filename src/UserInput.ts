@@ -1,9 +1,9 @@
 import { Scene } from 'phaser';
 
 import { GameEvent } from '~/enums/GameEvent';
+import { DepthGroup } from '~/enums/DepthGroup';
 import { emit } from '~/utils/eventEmitterUtils';
 import { Player } from '~/Player';
-import { DepthGroup } from './enums/DepthGroup';
 
 type Line = { from: Phaser.Math.Vector2; to: Phaser.Math.Vector2 };
 export class UserInput {

@@ -5,7 +5,7 @@ import { GAME_WIDTH } from '~/utils/gameUtils';
 import { emit, off, on } from '~/utils/eventEmitterUtils';
 import { DepthGroup } from '~/enums/DepthGroup';
 import { GameEvent } from '~/enums/GameEvent';
-import { BodyTypeLabel } from './enums/BodyTypeLabel';
+import { BodyTypeLabel } from '~/enums/BodyTypeLabel';
 
 export const MAX_CHARGES = 3;
 const START_CHARGES = 1;

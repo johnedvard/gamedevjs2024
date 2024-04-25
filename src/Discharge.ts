@@ -4,9 +4,8 @@ import { DepthGroup } from '~/enums/DepthGroup';
 import { BodyTypeLabel } from '~/enums/BodyTypeLabel';
 import { GameEvent } from '~/enums/GameEvent';
 import { emit, off, on } from '~/utils/eventEmitterUtils';
+import { startDischargeAnimation } from '~/utils/dischargeUtil';
 import { Player } from '~/Player';
-import { SpineGameObject } from '@esotericsoftware/spine-phaser';
-import { startDischargeAnimation } from './utils/dischargeUtil';
 
 const DISCARGE_CIRCLE_RADIUS = 270;
 

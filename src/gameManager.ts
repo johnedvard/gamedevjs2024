@@ -2,9 +2,9 @@ import { Game } from 'phaser';
 import { debounce } from 'lodash';
 
 import { GAME_HEIGHT, GAME_WIDTH, centerScene } from '~/utils/gameUtils';
-import { SceneKey } from './enums/SceneKey';
-import { emit } from './utils/eventEmitterUtils';
-import { GameEvent } from './enums/GameEvent';
+import { emit } from '~/utils/eventEmitterUtils';
+import { SceneKey } from '~/enums/SceneKey';
+import { GameEvent } from '~/enums/GameEvent';
 
 let game: Game = null;
 

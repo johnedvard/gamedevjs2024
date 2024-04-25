@@ -6,10 +6,8 @@ import { MatterFixedStepPlugin } from '~/plugins/MatterFixStepPlugin';
 
 import { setGame } from '~/gameManager';
 import { SceneKey } from '~/enums/SceneKey';
-import { GameEvent } from '~/enums/GameEvent';
 import { GAME_HEIGHT, GAME_WIDTH, getCanvas } from '~/utils/gameUtils';
 import { destroyMusicAndSfx, initMusicAndSfx } from '~/utils/audioUtils';
-import { emit } from '~/utils/eventEmitterUtils';
 import { Intro } from '~/scenes/Intro';
 import { MainMenu } from '~/scenes/MainMenu';
 import { UserInterface } from '~/scenes/UserInterface';
@@ -17,7 +15,7 @@ import { Boot } from '~/scenes/Boot';
 import { Level } from '~/scenes/Level';
 import { GameOver } from '~/scenes/GameOver';
 import { HUD } from '~/scenes/HUD';
-import { MyColor } from './enums/MyColor';
+import { MyColor } from '~/enums/MyColor';
 
 const addScenes = (game: Game) => {
   game.scene.add(SceneKey.Intro, Intro);

@@ -7,7 +7,7 @@ import { BodyTypeLabel } from '~/enums/BodyTypeLabel';
 import { CollideCallback } from '~/types/CollideCallback';
 import { GameEvent } from '~/enums/GameEvent';
 import { emit } from '~/utils/eventEmitterUtils';
-import { playRingAnimation } from './utils/animationUtils';
+import { playRingAnimation } from '~/utils/animationUtils';
 
 type HoleOptions = {
   startPos: Phaser.Math.Vector2;

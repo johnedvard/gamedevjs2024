@@ -10,7 +10,7 @@ const explotionSounds = [];
 const dischargeSounds = [];
 const playerDieSounds = [];
 const uiClickSounds = [];
-const bgVolume = 0.2;
+const bgVolume = 0.13;
 
 export function isMusicAndSfxInitialized() {
   return isInitialized;

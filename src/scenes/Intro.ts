@@ -1,7 +1,7 @@
 import { SpineGameObject } from '@esotericsoftware/spine-phaser';
 import { DepthGroup } from '~/enums/DepthGroup';
 import { SceneKey } from '~/enums/SceneKey';
-import { initMusicAndSfx } from '~/utils/audioUtils';
+import { initMusicAndSfx, isMusicAndSfxInitialized, playMusic } from '~/utils/audioUtils';
 import { GAME_HEIGHT, GAME_WIDTH, centerScene } from '~/utils/gameUtils';
 import { createText } from '~/utils/textUtils';
 
@@ -13,7 +13,11 @@ export class Intro extends Phaser.Scene {
     super(SceneKey.Intro);
   }
 
-  preload(): void {}
+  preload(): void {
+    if (isMusicAndSfxInitialized()) return;
+    initMusicAndSfx(this);
+    playMusic();
+  }
 
   create(): void {
     centerScene(this);

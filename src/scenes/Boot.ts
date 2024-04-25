@@ -14,6 +14,7 @@ export class Boot extends Phaser.Scene {
   }
 
   loadSounds() {
+    this.load.audio('bgm', 'sounds/bgm-half.mp3');
     this.load.audio('puckhit1', 'sounds/puckhit1.wav');
   }
 

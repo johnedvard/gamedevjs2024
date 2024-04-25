@@ -8,6 +8,7 @@ import { CollideCallback } from '~/types/CollideCallback';
 import { GameEvent } from '~/enums/GameEvent';
 import { emit } from '~/utils/eventEmitterUtils';
 import { playRingAnimation } from '~/utils/animationUtils';
+import { createText } from './utils/textUtils';
 
 type HoleOptions = {
   startPos: Phaser.Math.Vector2;
@@ -18,6 +19,9 @@ export class Hole {
   spineObject: SpineGameObject;
   controlBone: Bone;
   hole: MatterJS.BodyType;
+  pointsTxt: Phaser.GameObjects.Text;
+  points = 1;
+
   constructor(
     private scene: Scene,
     private player: Player,
@@ -28,9 +32,34 @@ export class Hole {
   }
 
   init() {
+    this.generatePointsMultiplier();
     this.initSpineObject();
     this.initPhysics();
     this.handleCollisions();
+    this.initPointsText();
+  }
+
+  generatePointsMultiplier() {
+    const doublePointsChance = 0.2;
+    if (Math.random() < doublePointsChance) {
+      this.points = 2;
+    }
+  }
+
+  initPointsText() {
+    if (this.points > 1) {
+      this.pointsTxt = createText(this.scene, this.startPoint.x, this.startPoint.y, 40, '2x', { color: '#ffffff' });
+      this.scene.tweens.add({
+        targets: this.pointsTxt,
+        scaleX: 0.38,
+        scaleY: 0.38,
+        repeat: -1,
+        yoyo: true,
+        y: this.startPoint.y + Math.random() * 2,
+        duration: 500 + Math.random() * 100,
+        ease: Phaser.Math.Easing.Sine.InOut,
+      });
+    }
   }
 
   handleCollisions() {
@@ -39,7 +68,7 @@ export class Hole {
         // this.spineObject.skeleton.setSkinByName('dead');
         if (bodyA.label === BodyTypeLabel.enemy) playRingAnimation(this.scene, this.startPoint);
 
-        emit(GameEvent.fallInHole, { other: bodyA, hole: bodyB });
+        emit(GameEvent.fallInHole, { other: bodyA, hole: bodyB, points: this.points });
       }
     };
   }
@@ -71,6 +100,10 @@ export class Hole {
     if (!this.spineObject) return;
     this.spineObject.destroy();
     this.spineObject = null;
+    if (this.pointsTxt) {
+      this.pointsTxt.destroy();
+      this.pointsTxt = null;
+    }
   }
 
   destroyEverything() {

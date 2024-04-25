@@ -117,7 +117,7 @@ export class Player {
     // this.spineObject.setScale(1,1);
   };
 
-  fallInHole = (data: { other: MatterJS.BodyType; hole: MatterJS.BodyType }) => {
+  fallInHole = (data: { other: MatterJS.BodyType; hole: MatterJS.BodyType; points: number }) => {
     if (data.other === this.ball) {
       this.scene.add.tween({
         targets: this.spineObject,
@@ -127,7 +127,7 @@ export class Player {
       });
       this.startDieRoutine();
     } else if (data.other.label === BodyTypeLabel.enemy) {
-      this.addShots(1);
+      this.addShots(data.points);
     }
   };
 

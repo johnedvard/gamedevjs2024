@@ -83,7 +83,7 @@ export class Puck {
               const force = new Phaser.Math.Vector2(Math.cos(angle), Math.sin(angle)).scale(6 / distance);
               this.scene.matter.applyForce(p, force);
             });
-            this.startDieRoutine('dead');
+            this.startDieRoutine('dead', 0);
           }
         },
       };
@@ -173,7 +173,7 @@ export class Puck {
     }
   }
 
-  fallInHole = (data: { other: MatterJS.BodyType; hole: MatterJS.BodyType }) => {
+  fallInHole = (data: { other: MatterJS.BodyType; hole: MatterJS.BodyType; points: number }) => {
     if (data.other === this.ball) {
       this.scene.add.tween({
         targets: this.spineObject,
@@ -182,11 +182,11 @@ export class Puck {
         duration: 1000,
       });
       playFallInHole();
-      this.startDieRoutine('default');
+      this.startDieRoutine('default', data.points);
     }
   };
 
-  startDieRoutine(skin: 'default' | 'dead') {
+  startDieRoutine(skin: 'default' | 'dead', points: number) {
     if (skin === 'default') {
       this.spineObject.skeleton.setSkinByName(getSkinByType(this.puckType));
     } else {
@@ -195,7 +195,7 @@ export class Puck {
     this.spineObject.animationState.setAnimation(0, 'dead', false);
     this.state = 'dead';
     this.destroyPhysicsObjects();
-    emit(GameEvent.puckKilled, { puck: this });
+    emit(GameEvent.puckKilled, { puck: this, points });
     const animationStateListeners = {
       complete: (trackEntry) => {
         this.spineObject.animationState.removeListener(animationStateListeners);
@@ -207,7 +207,7 @@ export class Puck {
   }
 
   onDischargeComplete = () => {
-    if (this.isInisideDischargeArea) this.startDieRoutine('dead');
+    if (this.isInisideDischargeArea) this.startDieRoutine('dead', 0);
   };
   onDischargePreview = () => {
     if (this.isInisideDischargeArea) this.showHighlight();

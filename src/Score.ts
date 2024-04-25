@@ -21,8 +21,8 @@ export class Score {
     this.personalBestTxt = createText(this.scene, GAME_WIDTH / 2, 155, 50, '');
     this.listenForEvents();
   }
-  onPuckKilled = (data: { puck: Puck }) => {
-    this.addScore(1);
+  onPuckKilled = (data: { puck: Puck; points: number }) => {
+    this.addScore(data.points);
   };
 
   onGameOver = () => {

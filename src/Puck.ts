@@ -103,7 +103,6 @@ export class Puck {
             bodyA.label === BodyTypeLabel.enemy ||
             bodyA.label === BodyTypeLabel.powerPuck))
       ) {
-        console.log('play puckhit', bodyA.speed, bodyB.speed);
         const puckWithMaxSpeed = Math.max(bodyA.speed, bodyB.speed);
         this.handlePuckHit(puckWithMaxSpeed);
       }
@@ -232,7 +231,7 @@ export class Puck {
   update(time: number, delta: number) {
     if (this.state === 'dead') return;
     this.spineObject.setPosition(this.ball.position.x, this.ball.position.y);
-    this.spineObject.setDepth(DepthGroup.player + 1 / Math.abs(this.ball.position.y));
+    this.spineObject.setDepth(DepthGroup.player + 1 / Math.abs(this.ball.position.y - 3000));
     this.eyeGroup.rotation = Phaser.Math.RadToDeg(this.ball.angle) * -1;
 
     if (this.powerField) {

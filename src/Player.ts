@@ -16,7 +16,7 @@ import { playPlayerDie } from './utils/audioUtils';
 type PlayerOptions = { startPos: Phaser.Math.Vector2 };
 type TrailParticle = { pos: Phaser.Math.Vector2; timeToLive: number; maxLifeTime: number };
 const BALL_RADIUS = 23;
-const MAX_SHOTS = 5;
+const MAX_SHOTS = 500;
 const TEXT_OFFSET = new Phaser.Math.Vector2(2, 70);
 const RELASE_DEADZONE = 40;
 const VELOCITY_DEADZONE = 2;
@@ -44,6 +44,7 @@ export class Player {
     playerOptions: PlayerOptions
   ) {
     this.startPoint = playerOptions.startPos;
+    console.log('startPos', playerOptions.startPos);
     this.init();
   }
   init() {
@@ -158,7 +159,7 @@ export class Player {
     this.handleTrail(time, delta); // make trail animate even when we're dead
     if (this.state === 'dead') return;
     this.spineObject.setPosition(this.ball.position.x, this.ball.position.y);
-    this.spineObject.setDepth(DepthGroup.player + 1 / Math.abs(this.ball.position.y));
+    this.spineObject.setDepth(DepthGroup.player + 1 / Math.abs(this.ball.position.y - 3000));
     if (this.shotsTxtContainer) {
       this.shotsTxtContainer.x = this.ball.position.x + TEXT_OFFSET.x;
       this.shotsTxtContainer.y = this.ball.position.y + TEXT_OFFSET.y;

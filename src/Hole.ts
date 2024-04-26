@@ -40,7 +40,7 @@ export class Hole {
   }
 
   generatePointsMultiplier() {
-    const doublePointsChance = 0.2;
+    const doublePointsChance = 0.25;
     if (Math.random() < doublePointsChance) {
       this.points = 2;
     }
@@ -51,12 +51,14 @@ export class Hole {
       this.pointsTxt = createText(this.scene, this.startPoint.x, this.startPoint.y, 40, '2x', { color: '#ffffff' });
       this.scene.tweens.add({
         targets: this.pointsTxt,
-        scaleX: 0.38,
-        scaleY: 0.38,
+        scaleX: 0.52,
+        scaleY: 0.52,
         repeat: -1,
+        alpha: 0,
         yoyo: true,
-        y: this.startPoint.y + Math.random() * 2,
-        duration: 500 + Math.random() * 100,
+        loopDelay: 100,
+        y: this.startPoint.y + 5,
+        duration: 2000,
         ease: Phaser.Math.Easing.Sine.InOut,
       });
     }

@@ -53,7 +53,7 @@ export class Level extends Phaser.Scene {
           this.levelsLoaded++;
           this.levelSvgs.push(levelSvgText);
           if (this.levelsLoaded == this.levelCount) {
-            shuffle(this.levelSvgs); // make levels load randomly
+            this.levelSvgs = shuffle(this.levelSvgs); // make levels load randomly
           }
         });
     }
@@ -121,6 +121,7 @@ export class Level extends Phaser.Scene {
   onReplay = () => {
     this.destroyGameObjects();
     this.initLevel(this.levelIntro);
+    this.levelSvgs = shuffle(this.levelSvgs);
   };
 
   createCollisionCircles(levelState: LevelState) {

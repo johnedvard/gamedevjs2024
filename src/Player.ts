@@ -16,7 +16,7 @@ import { playPlayerDie } from './utils/audioUtils';
 type PlayerOptions = { startPos: Phaser.Math.Vector2 };
 type TrailParticle = { pos: Phaser.Math.Vector2; timeToLive: number; maxLifeTime: number };
 const BALL_RADIUS = 23;
-const MAX_SHOTS = 500;
+const MAX_SHOTS = 5;
 const TEXT_OFFSET = new Phaser.Math.Vector2(2, 70);
 const RELASE_DEADZONE = 40;
 const VELOCITY_DEADZONE = 2;

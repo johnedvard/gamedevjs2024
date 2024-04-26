@@ -207,7 +207,7 @@ export class Puck {
   }
 
   onDischargeComplete = () => {
-    if (this.isInisideDischargeArea) this.startDieRoutine('dead', 0);
+    if (this.isInisideDischargeArea) this.startDieRoutine('dead', 1);
   };
   onDischargePreview = () => {
     if (this.isInisideDischargeArea) this.showHighlight();

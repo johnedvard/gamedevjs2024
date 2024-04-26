@@ -47,10 +47,10 @@ export class Score {
   }
   addScore(score: number) {
     // TODO (john) accumulate a combo score to count correctly (instead of counting from 0)
-    const currentScore = this.score;
+    const fromScore = Math.max(0, this.score - 10);
     this.score += score;
     this.accumulateScoreTween?.stop();
-    this.accumulateScoreTween = startAccumulateScoreRoutine(this.scene, this.score, currentScore, this.scoreTxt);
+    this.accumulateScoreTween = startAccumulateScoreRoutine(this.scene, this.score, fromScore, this.scoreTxt);
   }
   reset() {
     this.score = 0;

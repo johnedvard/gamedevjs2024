@@ -3,7 +3,7 @@
 A game made in 2 weeks for the annual [Gamedev.js](https://gamedevjs.com/jam/2024/) gamejam 2024.
 The theme is, `Power`, and in this game, you power up your puck to plunge the puny pawns into the pits. I call it _Puckit!_
 
-Play the game here: https://puckit.netlify.app/
+Play the game here: https://reitgames.itch.io/puckit
 
 Everything is made by me, including code, graphics, animations, and sound effects. The background music is not made entirely by me, as I took an existing track and made a remix of it.
 

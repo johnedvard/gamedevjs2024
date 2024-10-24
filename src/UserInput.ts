@@ -3,6 +3,7 @@ import { Scene } from 'phaser';
 import { GameEvent } from '~/enums/GameEvent';
 import { DepthGroup } from '~/enums/DepthGroup';
 import { emit } from '~/utils/eventEmitterUtils';
+import { getCanvas } from '~/utils/gameUtils';
 import { Player } from '~/Player';
 
 type Line = { from: Phaser.Math.Vector2; to: Phaser.Math.Vector2 };
@@ -25,6 +26,9 @@ export class UserInput {
 
   listenForPointer() {
     this.scene.input.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
+      // Capture the pointer to allow dragging even outside the browser window.
+      getCanvas().setPointerCapture(pointer.id);
+
       this.pointerStartPos = { x: pointer.position.x, y: pointer.position.y };
       this.isHoldingDown = true;
       emit(GameEvent.startBallThrow, { pos: new Phaser.Math.Vector2(pointer.position.x, pointer.position.y) });

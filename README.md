@@ -19,6 +19,13 @@ Everything is made by me, including code, graphics, animations, and sound effect
 - Open Source
 - Made with Phaser
 
-## License
+## Post Jam
 
-All rights reserved
+I have worked more on this game since the jam ended, and you can play the post jam version here
+- [Crazy Games](https://www.crazygames.com/game/puckit)
+
+## Copyright and Usage
+
+Copyright © 2024 John Edvard Reiten. All rights reserved.
+
+This project is not open source. No permission is granted to use, modify, or share this software without explicit written consent from the copyright holder. While this repository is publicly visible on GitHub, users may only view and fork it as per GitHub's Terms of Service. No additional permissions are granted beyond those specified in GitHub's Terms of Service.

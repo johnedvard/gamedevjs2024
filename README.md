@@ -23,6 +23,7 @@ Everything is made by me, including code, graphics, animations, and sound effect
 
 I have worked more on this game since the jam ended, and you can play the post jam version here
 - [Crazy Games](https://www.crazygames.com/game/puckit)
+- [Poki](https://poki.com/en/g/puckit)
 
 ## Copyright and Usage
 
